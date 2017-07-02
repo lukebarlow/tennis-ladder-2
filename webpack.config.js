@@ -58,20 +58,20 @@ const config = {
 // in production we remove the hot module plugins and insert
 // uglify instead
 
-// if (env == 'production') {
-//   config.entry = [
-//     'babel-polyfill',
-//     './index.js'
-//   ]
+if (env == 'production') {
+  config.entry = [
+    'babel-polyfill',
+    './index.js'
+  ]
 
-//   config.plugins = [
-//     new webpack.DefinePlugin({
-//       'process.env': {
-//         NODE_ENV: JSON.stringify('production')
-//       }
-//     }),
-//     new webpack.optimize.UglifyJsPlugin()
-//   ]
-// }
+  config.plugins = [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('production')
+      }
+    })//,
+    // new webpack.optimize.UglifyJsPlugin()
+  ]
+}
 
 module.exports = config
