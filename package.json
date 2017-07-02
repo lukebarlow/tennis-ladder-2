@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack",
     "build:watch": "webpack --watch",
+    "build:dev": "cross-env NODE_ENV=production webpack",
     "start": "node index.js",
     "postinstall": "npm run build"
   },
@@ -25,5 +26,8 @@
     "y-map": "^10.1.2",
     "y-websockets-client": "^8.0.15",
     "y-websockets-server": "^9.1.5"
+  },
+  "devDependencies": {
+    "cross-env": "^5.0.0"
   }
 }
