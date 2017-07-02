@@ -1,0 +1,24 @@
+{
+  "name": "tennis-ladder-2",
+  "version": "1.0.0",
+  "description": "Tennis Ladder for Heroku",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "start": "node index.js",
+    "postinstall": "npm run build"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "y-indexeddb": "^8.1.9",
+    "y-websockets-client": "^8.0.15",
+    "y-websockets-server": "^9.1.5",
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "webpack": "^2.4.1"
+  }
+}
