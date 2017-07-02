@@ -20,7 +20,7 @@ Y({
   connector: {
     name: 'websockets-client',
     room: 'y-plain-state-examples-basic',
-    url: `http://${window.location.hostname}:${window.location.port}`
+    url: `${window.location.protocol}//${window.location.hostname}:${window.location.port}`
   },
   share: { state: 'Map' }
 }).then((y) => {
