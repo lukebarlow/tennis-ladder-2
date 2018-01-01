@@ -1,0 +1,36 @@
+{
+  "presets": [
+    "env",
+    "stage-2", 
+    "react"
+  ],
+  "env": {
+    "commonjs": {
+      "presets": [
+        "env",
+        "stage-2", 
+        "react"
+      ]
+    },
+    "development" : {
+      "presets": [
+        [
+          "env",
+          { "modules" : false }
+        ],
+        "stage-2", 
+        "react"
+      ]
+    },
+    "production" : {
+      "presets": [
+        [
+          "env",
+          { "modules" : false }
+        ],
+        "stage-2", 
+        "react"
+      ]
+    }
+  }
+}

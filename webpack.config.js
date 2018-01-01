@@ -3,7 +3,7 @@ const webpack = require('webpack')
 var env = process.env.NODE_ENV
 
 const config = {
-  context: resolve(__dirname, 'src'),
+  context: resolve(__dirname, 'src/client/'),
 
   entry: [
     'babel-polyfill',
@@ -11,7 +11,7 @@ const config = {
   ],
   output: {
     filename: 'tennis-ladder.js',
-    path: resolve(__dirname, 'client/js'),
+    path: resolve(__dirname, 'public/js'),
     publicPath: '/js/'
   },
 
