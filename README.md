@@ -1,2 +1,2 @@
 # tennis-ladder-2
-Tennis ladder running on heroku and mongo
+A new version of the tennis ladder, using different technologies
