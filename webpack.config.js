@@ -11,7 +11,7 @@ const config = {
   ],
   output: {
     filename: 'tennis-ladder.js',
-    path: resolve(__dirname, 'client/js'),
+    path: resolve(__dirname, 'public/js'),
     publicPath: '/js/'
   },
 
