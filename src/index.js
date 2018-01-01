@@ -1,1 +1,1 @@
-console.log('client currently does nothing at all 2')
+console.log('compiling from the root folder (wrong)')
