@@ -3,7 +3,7 @@ const webpack = require('webpack')
 var env = process.env.NODE_ENV
 
 const config = {
-  context: resolve(__dirname, 'src'),
+  context: resolve(__dirname, 'src', 'client'),
 
   entry: [
     'babel-polyfill',
