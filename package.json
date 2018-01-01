@@ -17,18 +17,16 @@
     "express": "^4.15.3",
     "mongojs": "^2.4.1",
     "nodemailer": "^4.4.1",
-    "babel-preset-env": "^1.6.1"
-  },
-  "devDependencies": {
+    "babel-preset-env": "^1.6.1",
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-polyfill": "^6.23.0",
-    
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "cross-env": "^5.0.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "webpack": "^2.4.1"
-  }
+  },
+  "devDependencies": {}
 }
