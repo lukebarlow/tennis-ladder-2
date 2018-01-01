@@ -7,8 +7,7 @@
     "build": "webpack",
     "build:watch": "webpack --watch",
     "build:dev": "cross-env NODE_ENV=production webpack",
-    "start": "node index.js",
-    "postinstall": "npm run build"
+    "start": "node index.js"
   },
   "license": "ISC",
   "dependencies": {
