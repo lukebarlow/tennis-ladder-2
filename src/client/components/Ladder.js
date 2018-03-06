@@ -1,9 +1,9 @@
 import React from 'react'
 
 export default ({ rungs }) => {
-  return <center>
-    { rungs.map((rung) => (
-      <div key={rung.name}>{rung.ladderPosition} {rung.name}</div>
+  return <span>
+    { rungs.map((rung, i) => (
+      <span key={rung.name}>{i + 1}. {rung.name}<br /></span>
     ))}
-  </center>
+  </span>
 }

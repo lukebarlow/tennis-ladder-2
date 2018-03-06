@@ -32,7 +32,8 @@ const config = {
     rules: [
       {
         test: /\.js$/,
-        loaders: ['babel-loader']
+        loaders: ['babel-loader'],
+        exclude: /node_modules/
       },
       {
         test: /\.jsx?$/,
