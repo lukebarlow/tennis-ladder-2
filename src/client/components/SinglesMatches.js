@@ -25,7 +25,7 @@ export default class SinglesMatches extends React.Component {
       return 'loading...'
     } else {
       return <span>
-        <a class='button'>record a match</a><br />
+        <a className='button'>record a match</a><br />
         <br />
         <Matches matches={this.state.matches} />
       </span>

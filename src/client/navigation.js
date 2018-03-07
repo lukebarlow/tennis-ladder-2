@@ -73,18 +73,6 @@ function goTo (lon, lat) {
   }
 }
 
-document.getElementById('singles').addEventListener('click', () => {
-  goToLocation('singles')
-})
-
-document.getElementById('doubles').addEventListener('click', () => {
-  goToLocation('doubles')
-})
-
-document.getElementById('settings').addEventListener('click', () => {
-  goToLocation('settings')
-})
-
 function animate () {
   if (isAnimatingToLocation) {
     requestAnimationFrame(animate)
@@ -102,6 +90,8 @@ function animate () {
 }
 
 function goToLocation (location) {
+  console.log('going to location', location)
+
   if (locations[location]) {
     currentLocation = locations[location]
 

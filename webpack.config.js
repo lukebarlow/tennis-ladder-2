@@ -3,6 +3,7 @@ const webpack = require('webpack')
 var env = process.env.NODE_ENV
 
 const config = {
+  mode: 'development',
   context: resolve(__dirname, 'src', 'client'),
 
   entry: [
@@ -14,8 +15,6 @@ const config = {
     path: resolve(__dirname, 'public/js'),
     publicPath: '/js/'
   },
-
-  devtool: 'inline-source-map',
 
   devServer: {
     hot: true,
@@ -33,11 +32,6 @@ const config = {
       {
         test: /\.js$/,
         loaders: ['babel-loader'],
-        exclude: /node_modules/
-      },
-      {
-        test: /\.jsx?$/,
-        use: [ 'babel-loader' ],
         exclude: /node_modules/
       },
       {
@@ -60,6 +54,8 @@ const config = {
 // uglify instead
 
 if (env == 'production') {
+  config.mode = 'production'
+
   config.entry = [
     'babel-polyfill',
     './index.js'
@@ -70,9 +66,44 @@ if (env == 'production') {
       'process.env': {
         NODE_ENV: JSON.stringify('production')
       }
-    })//,
-    // new webpack.optimize.UglifyJsPlugin()
+    })
   ]
+
+  // config.optimization = {
+  //   minimizer: [
+  //     new UglifyJSPlugin({
+  //       uglifyOptions: {
+  //         output: {
+  //           comments: false
+  //         },
+  //         compress: {
+  //           unsafe_comps: true,
+  //           properties: true,
+  //           keep_fargs: false,
+  //           pure_getters: true,
+  //           collapse_vars: true,
+  //           unsafe: true,
+  //           warnings: false,
+  //           screw_ie8: true,
+  //           sequences: true,
+  //           dead_code: true,
+  //           drop_debugger: true,
+  //           comparisons: true,
+  //           conditionals: true,
+  //           evaluate: true,
+  //           booleans: true,
+  //           loops: true,
+  //           unused: true,
+  //           hoist_funs: true,
+  //           if_return: true,
+  //           join_vars: true,
+  //           cascade: true,
+  //           drop_console: true
+  //         }
+  //       }
+  //     }),
+  //   ]
+  // },
 }
 
 module.exports = config

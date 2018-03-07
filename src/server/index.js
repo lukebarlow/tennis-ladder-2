@@ -12,9 +12,16 @@ const app = express()
 // })
 
 // the webpack middleware for development
-const webpackMiddleware = require('webpack-dev-middleware')
-const webpack = require('webpack')
-const compiler = webpack(require('../../webpack.config'))
+
+if (process.env.NODE_ENV !== 'production') {
+  const webpackMiddleware = require('webpack-dev-middleware')
+  const webpack = require('webpack')
+  const compiler = webpack(require('../../webpack.config'))
+  app.use('/js', webpackMiddleware(compiler))
+  console.log('Using the webpack dev middleware')
+} else {
+  console.log('Not using the dev middlware')
+}
 
 app.use(session({
   secret: 'pregumption',
@@ -40,8 +47,6 @@ app.post('/changePassword', auth.checkAuth, auth.changePassword)
 app.get('/settings', auth.checkAuth, auth.getSettings)
 app.post('/saveSettings', auth.checkAuth, auth.saveSettings)
 app.use('/logout', auth.logout)
-
-app.use('/js', webpackMiddleware(compiler))
 
 var server = app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'))
