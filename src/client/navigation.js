@@ -1,7 +1,5 @@
 import { selectAll } from 'd3-selection'
 
-window.select = select
-
 let scenes = []
 
 let isUserInteracting = false
@@ -58,9 +56,11 @@ function onDocumentMouseUp (event) {
   isUserInteracting = false
 }
 
-document.addEventListener('mousedown', onDocumentMouseDown, false)
-document.addEventListener('mousemove', onDocumentMouseMove, false)
-document.addEventListener('mouseup', onDocumentMouseUp, false)
+const panoContainer = document.getElementById('panels')
+
+panoContainer.addEventListener('mousedown', onDocumentMouseDown, false)
+panoContainer.addEventListener('mousemove', onDocumentMouseMove, false)
+panoContainer.addEventListener('mouseup', onDocumentMouseUp, false)
 
 function setScenes (_scenes) {
   scenes = _scenes
@@ -90,8 +90,6 @@ function animate () {
 }
 
 function goToLocation (location) {
-  console.log('going to location', location)
-
   if (locations[location]) {
     currentLocation = locations[location]
 

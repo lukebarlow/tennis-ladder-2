@@ -1,19 +1,31 @@
 import React from 'react'
-import fetchJson from '../fetchJson'
+import { json } from 'd3-fetch'
 import Matches from './Matches'
+import NewMatchModeal from './NewMatchModal'
 
 export default class SinglesMatches extends React.Component {
   constructor () {
     super()
+    this.showNewMatchModal = this.showNewMatchModal.bind(this)
+    this.closeNewMatchModal = this.closeNewMatchModal.bind(this)
     this.state = {
       loading: true,
+      showNewMatchModal: false,
       matches: []
     }
     this._load()
   }
 
+  showNewMatchModal () {
+    this.setState({ showNewMatchModal: true })
+  }
+
+  closeNewMatchModal () {
+    this.setState({ showNewMatchModal: false })
+  }
+
   async _load () {
-    const matches = await fetchJson('./recentMatches')
+    const matches = await json('./recentMatches')
     this.setState({
       loading: false,
       matches: matches
@@ -25,9 +37,14 @@ export default class SinglesMatches extends React.Component {
       return 'loading...'
     } else {
       return <span>
-        <a className='button'>record a match</a><br />
+        { this.props.userId && <React.Fragment>
+            <a className='button' onClick={this.showNewMatchModal}>record a match</a>
+            <br/>
+          </React.Fragment>
+        }
         <br />
         <Matches matches={this.state.matches} />
+        <NewMatchModeal show={this.state.showNewMatchModal} onClose={this.closeNewMatchModal} />
       </span>
     }
   }

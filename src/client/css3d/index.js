@@ -15,7 +15,6 @@ import {
 
 import SinglesPanel from '../components/SinglesPanel'
 import DoublesLadderContainer from '../components/DoublesLadderContainer'
-import TestComponent from '../components/TestComponent'
 
 var camera, scene, renderer
 var geometry, material, mesh
@@ -26,8 +25,17 @@ var phi = 0, theta = 0
 
 var touchX, touchY
 
+let _userId = null
+let panelRenderings = []
+
 init()
 animate()
+
+function renderAllPanels () {
+  for (let { component, element} of panelRenderings) {
+    render(React.createElement(component, { userId: _userId }), element)
+  }
+}
 
 function init () {
   camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
@@ -38,12 +46,12 @@ function init () {
     {
       position: [ -512, 0, 0 ],
       rotation: [ 0, Math.PI / 2, 0 ],
-      component: <SinglesPanel />
+      component: SinglesPanel
     },
     {
       position: [ 512, 0, 0 ],
       rotation: [ 0, -Math.PI / 2, 0 ],
-      component: <DoublesLadderContainer />
+      component: DoublesLadderContainer
     }
     // {
     //   position: [ 0, 512, 0 ],
@@ -77,7 +85,11 @@ function init () {
     element.style.height = '50%'
 
     if (side.component) {
-      render(side.component, element)
+      // render(side.component, element)
+      panelRenderings.push({
+        component: side.component,
+        element: element
+      })
     } else {
       element.innerHTML = 'HELLO. This is some text which we will show'
     }
@@ -102,6 +114,7 @@ function init () {
   // document.addEventListener('touchmove', onDocumentTouchMove, false)
 
   window.addEventListener('resize', onWindowResize, false)
+  renderAllPanels()
 }
 
 function onWindowResize () {
@@ -182,4 +195,20 @@ function goTo (_lon, _lat) {
   lat = _lat
 }
 
-export default { goTo }
+function userId (__userId) {
+  if (!arguments.length) {
+    return _userId
+  }
+  _userId = __userId
+  return this
+}
+
+function update () {
+  renderAllPanels()
+}
+
+export default {
+  userId,
+  goTo,
+  update
+}

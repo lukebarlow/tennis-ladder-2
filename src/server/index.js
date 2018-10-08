@@ -2,8 +2,10 @@ const express = require('express')
 const session = require('express-session')
 const ladder = require('./ladder')
 const auth = require('./auth')
+const bodyParser = require('body-parser')
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // app.configure(function(){
 //     app.use(express.bodyParser());

@@ -7,7 +7,7 @@ const config = {
   context: resolve(__dirname, 'src', 'client'),
 
   entry: [
-    'babel-polyfill',
+    '@babel/polyfill',
     './index.js'
   ],
   output: {
@@ -57,7 +57,7 @@ if (env == 'production') {
   config.mode = 'production'
 
   config.entry = [
-    'babel-polyfill',
+    '@babel/polyfill',
     './index.js'
   ]
 

@@ -24,7 +24,6 @@ module.exports = {
   checkForExpiredChallenges : checkForExpiredChallenges
 }
 
-
 // private fn. Fills in player info, adding the player if necessary
 function getPlayer(player, callback){
 
