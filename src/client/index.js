@@ -2,7 +2,7 @@ import React from 'react'
 import { render } from 'react-dom'
 // import { fetchText } from './fetchHelpers'
 
-import App from './components/App'
+import App from './react/App'
 
 // import TopLinks from './components/TopLinks'
 // import Navigation from './navigation'
@@ -47,4 +47,4 @@ import App from './components/App'
 
 // init()
 
-  render(<App />, document.getElementById('main'))
+render(<App />, document.getElementById('main'))

@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { timeFormat } from 'd3-time-format'
-const formatTime = timeFormat('%a, %-e %b')
+const formatTime = timeFormat('%a %-e %b')
 
 export default ({ matches }) => {
   return <span>

@@ -61,9 +61,7 @@ export default class CssBall extends React.Component {
   }
 
   componentDidMount () {
-
-    
-    const camera = this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
+    this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
     const scene = this.scene = new Scene()
 
     //for (var i = 0; i < sides.length; i++) {
@@ -117,9 +115,6 @@ export default class CssBall extends React.Component {
   }
 
   renderAllPanels () {
-
-    console.log('panel renderings', this.panelRenderings)
-
     for (let { component, element } of this.panelRenderings) {
       render(React.createElement(component, this.props), element)
     }

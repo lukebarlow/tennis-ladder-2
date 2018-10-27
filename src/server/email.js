@@ -1,5 +1,6 @@
-var nodemailer = require('nodemailer'),
-  config = require('./config')
+var nodemailer = require('nodemailer')
+
+var config = require('./config')
 
 module.exports = {
   sendEmailsAboutChallenge: sendEmailsAboutChallenge,
@@ -46,17 +47,20 @@ function sendEmailsAboutChallenge (challengerId, challengedId, callback) {
       }
     })
 
-    var emailsSent = 0,
-      callbacksCounted = 0
+    var emailsSent = 0
+
+    var callbacksCounted = 0
 
     players.forEach(function (player, i) {
       player.settings = player.settings || {}
       // player gets an email if they're involved in the challenge and
       // have 'emailMyChallenge' preference, or they have 'emailAnyChallenge'
 
-      var isChallenger = player._id.equals(challengerId),
-        isChallenged = player._id.equals(challengedId),
-        isParticipant = isChallenger || isChallenged
+      var isChallenger = player._id.equals(challengerId)
+
+      var isChallenged = player._id.equals(challengedId)
+
+      var isParticipant = isChallenger || isChallenged
       replyTo = null
 
       if ((player.settings.emailMyChallenge && isParticipant) || player.settings.emailAnyChallenge) {
@@ -77,8 +81,8 @@ function sendEmailsAboutChallenge (challengerId, challengedId, callback) {
 function sendInvitationEmails (invitation, callback) {
   var db = require('./db')
 
-  db.getPlayer({_id: invitation.inviter}, function (error, inviter) {
-    db.getPlayer({_id: invitation.invited}, function (error, invited) {
+  db.getPlayer({ _id: invitation.inviter }, function (error, inviter) {
+    db.getPlayer({ _id: invitation.invited }, function (error, invited) {
       var sent = 0
       function sentHandler (error, result) {
         if (error) {
@@ -121,8 +125,9 @@ function sendInvitationEmails (invitation, callback) {
 function sendEmailsAboutMatch (match, callback) {
   var db = require('./db')
   db.getPlayers(function (error, players) {
-    var emailsSent = 0,
-      callbacksCounted = 0
+    var emailsSent = 0
+
+    var callbacksCounted = 0
 
     players.forEach(function (player, i) {
       player.settings = player.settings || {}
@@ -154,8 +159,9 @@ function sendChallenge (player, challenger, challenged, isParticipant, callback)
     return
   }
 
-  var replyTo,
-    isChallenger = player._id == challenger._id
+  var replyTo
+
+  var isChallenger = player._id == challenger._id
 
   // if you're in the game, then the reply to will reply to the opponent
   if (isParticipant) {

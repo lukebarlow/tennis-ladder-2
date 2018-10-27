@@ -1,7 +1,6 @@
 import React from 'react'
-import { json } from 'd3-fetch'
 import Matches from './Matches'
-import NewMatchModeal from './NewMatchModal'
+import NewMatchModal from './NewMatchModal'
 
 export default class SinglesMatches extends React.Component {
   constructor () {
@@ -9,11 +8,8 @@ export default class SinglesMatches extends React.Component {
     this.showNewMatchModal = this.showNewMatchModal.bind(this)
     this.closeNewMatchModal = this.closeNewMatchModal.bind(this)
     this.state = {
-      loading: true,
-      showNewMatchModal: false,
-      matches: []
+      showNewMatchModal: false
     }
-    this._load()
   }
 
   showNewMatchModal () {
@@ -24,27 +20,26 @@ export default class SinglesMatches extends React.Component {
     this.setState({ showNewMatchModal: false })
   }
 
-  async _load () {
-    const matches = await json('./recentMatches')
-    this.setState({
-      loading: false,
-      matches: matches
-    })
-  }
-
   render () {
-    if (this.state.loading) {
+    if (!this.props.matches) {
       return 'loading...'
     } else {
       return <span>
-        { this.props.userId && <React.Fragment>
+        {
+          this.props.userId && <>
             <a className='button' onClick={this.showNewMatchModal}>record a match</a>
-            <br/>
-          </React.Fragment>
+            <br />
+          </>
         }
         <br />
-        <Matches matches={this.state.matches} />
-        <NewMatchModeal show={this.state.showNewMatchModal} onClose={this.closeNewMatchModal} />
+        <Matches matches={this.props.matches} />
+        <NewMatchModal
+          userId={this.props.userId}
+          players={this.props.players}
+          show={this.state.showNewMatchModal}
+          onClose={this.closeNewMatchModal}
+          onAddMatch={this.props.onAddMatch}
+        />
       </span>
     }
   }
