@@ -1,33 +1,34 @@
-const db = require('./db')
+var db = require('./getDb')()
 const email = require('./email')
 const url = require('url')
 
 module.exports = {
-  ladder: ladder,
-  addMatch: addMatch,
+  players: players,
   addPlayer: addPlayer,
-  recentMatches: recentMatches,
-  addChallenge: addChallenge,
-  getChallenges: getChallenges,
-  invite: invite
+  addSinglesMatch: addSinglesMatch,
+  addDoublesMatch: addDoublesMatch,
+  recentSinglesMatches: recentSinglesMatches,
+  recentDoublesMatches: recentDoublesMatches
+  // addChallenge: addChallenge,
+  // getChallenges: getChallenges,
+  // invite: invite
 }
 
-//
-async function ladder (req, res) {
-  try {
-    await db.checkForExpiredChallenges()
-  } catch (e) {
-    console.warn('Error checking expired challenges')
-    res.statusCode = 503
-    res.send()
-  }
+async function players (req, res) {
+  // try {
+  //   await db.checkForExpiredChallenges()
+  // } catch (e) {
+  //   console.warn('Error checking expired challenges')
+  //   res.statusCode = 503
+  //   res.send()
+  //   return
+  // }
 
   try {
     console.log('getting players')
     const players = await db.getPlayers()
     res.send(JSON.stringify(players))
   } catch (e) {
-    // throw e
     console.warn('Error getting ladder')
     res.statusCode = 503
     res.send()
@@ -36,19 +37,36 @@ async function ladder (req, res) {
 }
 
 // adds a game, and returns the new ladder in order
-function addMatch (req, res) {
+async function addSinglesMatch (req, res) {
   var match = JSON.parse(url.parse(req.url, true).query.match)
-  db.addMatch(match, function (error, callback) {
-    ladder(req, res)
-  })
+  await db.addSinglesMatch(match)
+  res.send('true')
 }
 
-async function recentMatches (req, res) {
+async function addDoublesMatch (req, res) {
+  var match = JSON.parse(url.parse(req.url, true).query.match)
+
+  console.log('match is ', JSON.stringify(match, null, 2))
+
+  await db.addDoublesMatch(match)
+  res.send('true')
+}
+
+async function recentSinglesMatches (req, res) {
   try {
-    console.log('start of trying')
-    const matches = await db.getRecentMatches()
-    console.log('matches', matches)
-    console.log('got the matches, going to JSONify them')
+    const matches = await db.getRecentSinglesMatches()
+    res.send(JSON.stringify(matches))
+  } catch (e) {
+    console.warn('Error trying to get recent matches')
+    console.warn(e)
+    res.statusCode = 503
+    res.send()
+  }
+}
+
+async function recentDoublesMatches (req, res) {
+  try {
+    const matches = await db.getRecentDoublesMatches()
     res.send(JSON.stringify(matches))
   } catch (e) {
     console.warn('Error trying to get recent matches')
@@ -57,14 +75,14 @@ async function recentMatches (req, res) {
   }
 }
 
-function addChallenge (req, res) {
-  var challenge = JSON.parse(url.parse(req.url, true).query.challenge)
-  db.addChallenge(challenge, function (error, callback) {
-    res.send('true')
-  })
-}
+// function addChallenge (req, res) {
+//   var challenge = JSON.parse(url.parse(req.url, true).query.challenge)
+//   db.addChallenge(challenge, function (error, callback) {
+//     res.send('true')
+//   })
+// }
 
-function addPlayer (req, res) {
+async function addPlayer (req, res) {
   var { name, password, position, email } = url.parse(req.url, true).query
 
   console.log('adding')
@@ -73,20 +91,19 @@ function addPlayer (req, res) {
   console.log('position', position)
   console.log('email', email)
 
-  db.addPlayer(name, password, position, email, function (error, callback) {
-    res.send('true')
-  })
+  await db.addPlayer(name, password, position, email)
+  res.send('true')
 }
 
-function getChallenges (req, res) {
-  db.getOutstandingChallenges(function (error, challenges) {
-    res.send(JSON.stringify(challenges))
-  })
-}
+// function getChallenges (req, res) {
+//   db.getOutstandingChallenges(function (error, challenges) {
+//     res.send(JSON.stringify(challenges))
+//   })
+// }
 
-function invite (req, res) {
-  var invitation = JSON.parse(url.parse(req.url, true).query.invitation)
-  email.sendInvitationEmails(invitation, function () {
-    res.send('true')
-  })
-}
+// function invite (req, res) {
+//   var invitation = JSON.parse(url.parse(req.url, true).query.invitation)
+//   email.sendInvitationEmails(invitation, function () {
+//     res.send('true')
+//   })
+// }

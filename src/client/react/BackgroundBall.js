@@ -6,16 +6,13 @@ import {
   PerspectiveCamera,
   Mesh,
   MeshBasicMaterial,
-  Vector3,
   Scene,
-  SphereBufferGeometry,
-  Math as ThreeMath
+  SphereBufferGeometry
 } from 'three'
 
 export default class BackgroundBall extends React.Component {
   constructor () {
     super()
-    this.tick = this.tick.bind(this)
     this.main = React.createRef()
   }
 
@@ -37,34 +34,10 @@ export default class BackgroundBall extends React.Component {
     renderer.setSize(window.innerWidth, window.innerHeight)
     container.appendChild(renderer.domElement)
 
-    window.addEventListener('resize', this.windowResizeHandler.bind(this), false)
-  
-    // window.requestAnimationFrame(this.tick.bind(this))
-    this.tick()
-  }
-
-  windowResizeHandler () {
-    this.camera.aspect = window.innerWidth / window.innerHeight
-    this.camera.updateProjectionMatrix()
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
-  }
-
-  tick () {
-    const latitude = this.props.latitude || 0
-    const longitude = this.props.longitude || 180
-    const phi = ThreeMath.degToRad(90 - latitude)
-    const theta = ThreeMath.degToRad(longitude)
-    const x = Math.sin(phi) * Math.cos(theta)
-    const y = Math.cos(phi)
-    const z = Math.sin(phi) * Math.sin(theta)
-    const target = new Vector3(x, y, z)
-    this.camera.lookAt(target)
-    this.renderer.render(this.scene, this.camera)
-
-    window.requestAnimationFrame(this.tick)
+    this.props.onReady(scene, camera, renderer)
   }
 
   render () {
-    return <div id="background-ball" ref={this.main} />
+    return <div id='background-ball' ref={this.main} />
   }
 }

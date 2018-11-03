@@ -36,6 +36,7 @@ export default class SinglesMatches extends React.Component {
         <NewMatchModal
           userId={this.props.userId}
           players={this.props.players}
+          playersPerSide={this.props.playersPerSide}
           show={this.state.showNewMatchModal}
           onClose={this.closeNewMatchModal}
           onAddMatch={this.props.onAddMatch}

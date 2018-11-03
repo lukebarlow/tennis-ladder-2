@@ -1,28 +1,26 @@
 import React from 'react'
 import { json } from 'd3-fetch'
 
-// import SinglesLadder from './SinglesLadder'
 import Ladder from './Ladder'
-import SinglesMatches from './SinglesMatches'
+import MatchesPanel from './MatchesPanel'
+
+import css from './TwoPartPanel.css'
 
 export default class SinglesPanel extends React.Component {
   constructor () {
     super()
     this.addMatchHandler = this.addMatchHandler.bind(this)
     this.state = {
-      matches: null,
-      players: null
+      matches: null
     }
     this._load()
   }
 
   async _load () {
     try {
-      const matches = await json('./recentMatches')
-      const players = await json('./ladder')
+      const matches = await json('./recentSinglesMatches')
       this.setState({
         matches,
-        players,
         error: null
       })
     } catch (e) {
@@ -34,7 +32,7 @@ export default class SinglesPanel extends React.Component {
   }
 
   async addMatchHandler (match) {
-    await json(`./addMatch?match=${JSON.stringify(match)}`)
+    await json(`./addSinglesMatch?match=${JSON.stringify(match)}`)
     await this._load()
   }
 
@@ -43,24 +41,27 @@ export default class SinglesPanel extends React.Component {
       return <span style={{ color: 'red' }}>{this.state.error}</span>
     }
 
-    const { userId } = this.props
-    return <table width='100%'>
-      <tbody>
-        <tr>
-          <td width='50%'>
-            <h1>singles</h1>
-            <br />
-            <Ladder userId={userId} rungs={this.state.players} />
-          </td>
-          <td width='50%'>
-            <h1>recent matches</h1>
-            <SinglesMatches userId={userId} onAddMatch={this.addMatchHandler} {...this.state} />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    const { userId, players } = this.props
+
+    if (!players) {
+      return ''
+    }
+
+    return <div className={css.twoColumns}>
+      <div className={css.header1}>singles</div>
+      <div className={css.body1}>
+        <Ladder userId={userId} rungs={this.props.players} />
+      </div>
+      <div className={css.header2}>recent matches</div>
+      <div className={css.body2}>
+        <MatchesPanel
+          userId={userId}
+          players={players}
+          playersPerSide={1}
+          onAddMatch={this.addMatchHandler}
+          {...this.state}
+        />
+      </div>
+    </div>
   }
 }
-
-// export default ({ userId }) => (
-// )

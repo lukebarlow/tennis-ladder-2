@@ -34,7 +34,7 @@ function closeTransport () {
 // that email. Challenger and challenged arguments should be ObjectIds of
 // the players involved in the challenge
 function sendEmailsAboutChallenge (challengerId, challengedId, callback) {
-  var db = require('./db')
+  var db = require('./getDb')
 
   db.getPlayers(function (error, players) {
     var challenger, challenged
@@ -79,7 +79,7 @@ function sendEmailsAboutChallenge (challengerId, challengedId, callback) {
 }
 
 function sendInvitationEmails (invitation, callback) {
-  var db = require('./db')
+  var db = require('./getDb')
 
   db.getPlayer({ _id: invitation.inviter }, function (error, inviter) {
     db.getPlayer({ _id: invitation.invited }, function (error, invited) {
@@ -123,7 +123,7 @@ function sendInvitationEmails (invitation, callback) {
 }
 
 function sendEmailsAboutMatch (match, callback) {
-  var db = require('./db')
+  var db = require('./getDb')
   db.getPlayers(function (error, players) {
     var emailsSent = 0
 

@@ -75,7 +75,7 @@ function goTo (lon, lat) {
 
 function animate () {
   if (isAnimatingToLocation) {
-    requestAnimationFrame(animate)
+    window.requestAnimationFrame(animate)
   }
 
   let dLon = (currentLocation.lon - lon) / 50

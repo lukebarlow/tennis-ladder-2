@@ -1,8 +1,9 @@
 import React from 'react'
 import { render } from 'react-dom'
-// import { fetchText } from './fetchHelpers'
 
 import App from './react/App'
+
+render(<App />, document.getElementById('main'))
 
 // import TopLinks from './components/TopLinks'
 // import Navigation from './navigation'
@@ -46,5 +47,3 @@ import App from './react/App'
 // }
 
 // init()
-
-render(<App />, document.getElementById('main'))

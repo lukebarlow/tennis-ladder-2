@@ -1,0 +1,30 @@
+.twoColumns {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  grid-template-areas:
+    "header1 header2"
+    "body1 body2";
+  grid-template-rows: 50px 1fr;
+  grid-template-columns: 50% 50%;
+  font-size: 20px;
+}
+
+.header1 {
+  grid-area: header1;
+  font-size: 28px;
+}
+
+.header2 {
+  grid-area: header2;
+  font-size: 28px;
+}
+
+.body1 {
+  grid-area: body1;
+}
+
+.body2 {
+  grid-area: body2;
+  overflow-y: scroll;
+}

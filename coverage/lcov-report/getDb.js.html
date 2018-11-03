@@ -1,0 +1,1037 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for getDb.js</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="index.html">All files</a> getDb.js
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">93.94% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>93/99</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">82.14% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>23/28</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">96.15% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>25/26</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">93.55% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>87/93</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">35x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">41x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const mongoist = require('mongoist')
+const { sum, mean } = require('d3-array')
+const md5 = require('MD5')
+const email = require('./email')
+const salt = 'guacamole'
+&nbsp;
+const eloScoring = require('./eloScoring')
+const matchWinnerAndLoser = require('./matchWinnerAndLoser')
+&nbsp;
+// the db layer object for tenn16
+&nbsp;
+module.exports = (connectionString) =&gt; {
+  const db = mongoist(connectionString, { useNewUrlParser: true })
+&nbsp;
+  async function close () {
+    return db.close()
+  }
+&nbsp;
+  // private fn. Fills in player info, adding the player if necessary
+  async function getPlayer (player) {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if ('_id' in player &amp;&amp; typeof (player._id) !== 'object') {
+<span class="cstat-no" title="statement not covered" >      player._id = mongoist.ObjectId(player._id)</span>
+    }
+    return db.player.findOne(player, { password: 0 })
+  }
+&nbsp;
+  // moves the player to the right position, and moves everyone below down
+  // one place. The player argument should be a dictionary containing
+  // a name or id key sufficient to uniquely identify the player
+  async function moveToSinglesPosition (playerDetails, position) {
+    // get current position
+    const player = await db.player.findOne(playerDetails)
+&nbsp;
+    // everything inbetween moves up or down one step
+    // var move = position &gt; player.ladderPosition ? +1 : -1
+&nbsp;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (position &gt; player.ladderPosition) {
+<span class="cstat-no" title="statement not covered" >      await db.player.update(</span>
+        {
+          ladderPosition: {
+            $gt: player.ladderPosition,
+            $lte: position
+          }
+        },
+        { $inc: { ladderPosition: -1 } },
+        { multi: true }
+      )
+    } else {
+      db.player.update(
+        {
+          ladderPosition: {
+            $gte: position,
+            $lt: player.ladderPosition
+          }
+        },
+        { $inc: { ladderPosition: 1 } },
+        { multi: true }
+      )
+    }
+&nbsp;
+    // finally move the player to the right position
+    await db.player.update(
+      { _id: player._id },
+      { $set: { ladderPosition: position } }
+    )
+  }
+&nbsp;
+  async function addPlayer (name, password, position, email, otherDetails) {
+    // check name is unique
+    const existingPlayer = await db.player.findOne({ name: name })
+    if (existingPlayer) {
+      console.log('name already exists')
+      return existingPlayer
+    }
+&nbsp;
+    let playerDetails = {
+      name: name,
+      password: hashPassword(password),
+      ladderPosition: Infinity,
+      singlesRating: 1200,
+      doublesRating: 1200,
+      settings: {
+        email: email,
+        emailMyChallenge: true,
+        emailAnyChallenge: true,
+        emailMyMatch: true,
+        emailAnyMatch: true
+      }
+    }
+&nbsp;
+    if (otherDetails) {
+      playerDetails = Object.assign(playerDetails, otherDetails)
+    }
+&nbsp;
+    // now insert the player
+    const result = await db.player.insert(playerDetails)
+    await moveToSinglesPosition({ name: name }, position)
+    return result
+  }
+&nbsp;
+  /* adjust the ladder positions of players according to match results */
+  async function adjustSinglesLadder (match) {
+    var { winner, loser } = matchWinnerAndLoser(match)
+    // greater ladder position means lower down the ladder
+&nbsp;
+    if (!winner) {
+      console.log('no clear winner, so no movement')
+      return
+    }
+&nbsp;
+    const winnerDetails = await getPlayer({ _id: winner })
+    const loserDetails = await getPlayer({ _id: loser })
+&nbsp;
+    // change the ladder position
+    if (winnerDetails.ladderPosition &gt; loserDetails.ladderPosition) {
+      await moveToSinglesPosition({ _id: winner }, loserDetails.ladderPosition)
+    }
+&nbsp;
+    // update the singles ratings
+    const { newRatingA, newRatingB } = eloScoring(
+      winnerDetails.singlesRating, loserDetails.singlesRating, 1)
+&nbsp;
+    await db.player.update({ _id: winnerDetails._id },
+      { $set: { singlesRating: newRatingA } })
+&nbsp;
+    await db.player.update({ _id: loserDetails._id },
+      { $set: { singlesRating: newRatingB } })
+  }
+&nbsp;
+  async function changeDoublesRating (_id, rankingDelta) {
+    await db.player.update({ _id }, { $inc: { doublesRating: rankingDelta } })
+  }
+&nbsp;
+  /*
+    the doubles ladder is determined by the doublesScore for
+    each player
+  */
+  async function adjustDoublesLadder (match) {
+    var { winner, loser } = matchWinnerAndLoser(match)
+    // greater ladder position means lower down the ladder
+&nbsp;
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!winner) {
+<span class="cstat-no" title="statement not covered" >      console.log('no clear winner, so no change to doubles scores')</span>
+<span class="cstat-no" title="statement not covered" >      return</span>
+    }
+&nbsp;
+    const winners = await Promise.all(winner.map((id) =&gt; getPlayer({ _id: id })))
+    const losers = await Promise.all(loser.map((id) =&gt; getPlayer({ _id: id })))
+&nbsp;
+    const winnersMeanRating = mean(winners, w =&gt; w.doublesRating)
+    const losersMeanRating = mean(losers, l =&gt; l.doublesRating)
+&nbsp;
+    console.log('winnersMeanRating', winnersMeanRating)
+    console.log('losersMeanRating', losersMeanRating)
+&nbsp;
+    const { ratingsMoveBy } = eloScoring(winnersMeanRating, losersMeanRating, 1)
+&nbsp;
+    console.log('ratings move by ', ratingsMoveBy)
+&nbsp;
+    for (let winner of winners) {
+      await changeDoublesRating(winner._id, ratingsMoveBy)
+    }
+&nbsp;
+    for (let loser of losers) {
+      await changeDoublesRating(loser._id, -ratingsMoveBy)
+    }
+  }
+&nbsp;
+  async function lastPlayed (playerId) {
+    const result = await db.singlesMatch.aggregate([
+      { $match: { $or: [{ 'sideA._id': playerId }, { 'sideB._id': playerId }] } },
+      { $group: { _id: null, total: { $max: '$date' } } },
+      { $sort: { total: -1 } }
+    ])
+    return result.length ? <span class="branch-0 cbranch-no" title="branch not covered" >result[0].total </span>: null
+  }
+&nbsp;
+  // gets the players, sorted by ladder position
+  async function getPlayers () {
+    const players = await db.player.findAsCursor({}, { password: 0 })
+      .sort({ ladderPosition: 1 })
+      .toArray()
+&nbsp;
+    for (let player of players) {
+      player.lastPlayed = await lastPlayed(player._id)
+      player.daysSincePlayed = player.lastPlayed ? <span class="branch-0 cbranch-no" title="branch not covered" >Math.round((new Date() - new Date(player.lastPlayed)) / (1000 * 60 * 60 * 24)) </span>: null
+    }
+&nbsp;
+    return players
+&nbsp;
+    //   , function (error, players) {
+    //   async.each(players, function (player, cb) {
+    //     lastPlayed(player._id, function (_lastPlayed) {
+    //       player.lastPlayed = _lastPlayed
+    //       player.daysSincePlayed = _lastPlayed ? Math.round((new Date() - new Date(_lastPlayed)) / (1000 * 60 * 60 * 24)) : null
+    //       cb()
+    //     })
+    //   }, function () {
+    //     callback(error, players)
+    //   })
+    // })
+  }
+&nbsp;
+  async function getRecentSinglesMatches () {
+    return db.singlesMatch.findAsCursor().sort({ date: -1 }).limit(50).toArray()
+  }
+&nbsp;
+  async function getRecentDoublesMatches () {
+    return db.doublesMatch.findAsCursor().sort({ date: -1 }).limit(50).toArray()
+  }
+&nbsp;
+  // the format of score is an array of two element arrays. For example
+  // a scoreline of 6-4 3-6 2-6 would be [[6,4],[3-6],[2-6]]
+  // the sideA and sideB parameters can be names or ids. Date is
+  // optional and will default to now
+  // we store an entire copy of the player object each time. This gives
+  // us a record of the ladder positions of each player as they went
+  // into the match. May result in bloat - we will see
+  async function addSinglesMatch (match) {
+    match.date = match.date || Date.now()
+&nbsp;
+    match.sideA = mongoist.ObjectId(match.sideA)
+    match.sideB = mongoist.ObjectId(match.sideB)
+    match.recordedBy = mongoist.ObjectId(match.recordedBy)
+    await db.singlesMatch.insert(match)
+&nbsp;
+    // resolve any matching challenges
+    // await resolveChallengesBetween(a._id, b._id)
+&nbsp;
+    await adjustSinglesLadder(match)
+&nbsp;
+    // TODO. maybe return the function before sending emails
+    // email.sendEmailsAboutMatch(match)
+  }
+&nbsp;
+  async function addDoublesMatch (match) {
+    match.date = match.date || Date.now()
+&nbsp;
+    match.sideA = match.sideA.map((id) =&gt; mongoist.ObjectId(id))
+    match.sideB = match.sideB.map((id) =&gt; mongoist.ObjectId(id))
+&nbsp;
+    match.recordedBy = mongoist.ObjectId(match.recordedBy)
+    await db.doublesMatch.insert(match)
+&nbsp;
+    // // resolve any matching challenges
+    // // await resolveChallengesBetween(a._id, b._id)
+&nbsp;
+    await adjustDoublesLadder(match)
+&nbsp;
+    // // TODO. maybe return the function before sending emails
+    // // email.sendEmailsAboutMatch(match)
+  }
+&nbsp;
+  function hashPassword (password) {
+    return md5(password + salt)
+  }
+&nbsp;
+  // returns user id if successful, otherwise false
+  async function authenticate (name, password) {
+    const result = await db.player.find({ name: name, password: hashPassword(password) })
+    return result.length &gt; 0 ? result[0]._id.toString() : false
+  }
+&nbsp;
+  async function changePassword (userId, oldPassword, newPassword) {
+    // first we check the auth
+    userId = mongoist.ObjectId(userId)
+    var check = { _id: userId, password: hashPassword(oldPassword) }
+    const result = await db.player.findOne(check) //, function (error, result) {
+    if (!result) {
+      console.log('incorrect attempt to change password')
+      return false
+    }
+&nbsp;
+    // if auth checks out, then reset the password
+    await db.player.update(
+      { _id: userId },
+      { $set: { password: hashPassword(newPassword) } }
+    )
+    return true
+  }
+&nbsp;
+  async function setPassword (name, password) {
+    return db.player.update({ name: name }, { $set: { password: hashPassword(password) } })
+  }
+&nbsp;
+  // function getSettings (userId, callback) {
+  //   userId = mongoist.ObjectId(userId)
+  //   db.player.find({ _id: userId }, function (error, result) {
+  //     callback(null, result &amp;&amp; result[0] &amp;&amp; result[0].settings || {})
+  //   })
+  // }
+&nbsp;
+  async function <span class="fstat-no" title="function not covered" >saveSettings </span>(userId, settings) {
+<span class="cstat-no" title="statement not covered" >    userId = mongoist.ObjectId(userId)</span>
+<span class="cstat-no" title="statement not covered" >    return db.player.update({ _id: userId },</span>
+      { $set: { settings: settings }
+      })
+  }
+&nbsp;
+  function dropDatabase () {
+    db.dropDatabase()
+  }
+&nbsp;
+  return {
+    getPlayer,
+    getPlayers,
+    addPlayer,
+    moveToSinglesPosition,
+    addSinglesMatch,
+    addDoublesMatch,
+    setPassword,
+    authenticate,
+    getRecentSinglesMatches,
+    getRecentDoublesMatches,
+    changePassword,
+    saveSettings,
+    // getSettings,
+    // checkForExpiredChallenges,
+    // addChallenge,
+    // getOutstandingChallenges,
+    dropDatabase,
+    close
+  }
+}
+&nbsp;</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="https://istanbul.js.org/" target="_blank">istanbul</a> at Thu Nov 01 2018 21:29:53 GMT+0000 (GMT)
+</div>
+</div>
+<script src="prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="sorter.js"></script>
+</body>
+</html>

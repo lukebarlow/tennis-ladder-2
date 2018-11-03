@@ -15,15 +15,15 @@ export default class TopLinks extends React.Component {
   }
 
   closeModal () {
-    this.setState({isShowingModal: false})
+    this.setState({ isShowingModal: false })
   }
 
   openModal () {
-    this.setState({isShowingModal: true})
+    this.setState({ isShowingModal: true })
   }
 
   loginHandler (userId) {
-    this.setState({isShowingModal: false})
+    this.setState({ isShowingModal: false })
     this.props.onLogin(userId)
   }
 
@@ -33,17 +33,13 @@ export default class TopLinks extends React.Component {
   }
 
   render () {
-    const navigator = this.props.navigator
-
-    console.log('rendering top links', this.props.userId)
-
-    return <span id="top-links">
-      <a id='singles' onClick={() => navigator.goToLocation('singles')}>singles</a>
-      <a id='doubles' onClick={() => navigator.goToLocation('doubles')}>doubles</a>
+    return <span id='top-links'>
+      <a id='singles' onClick={() => this.props.onGoTo('singles')}>singles</a>
+      <a id='doubles' onClick={() => this.props.onGoTo('doubles')}>doubles</a>
       {
         this.props.userId
           ? <>
-            <a id='settings' onClick={() => navigator.goToLocation('settings')}>settings</a>
+            <a id='settings' onClick={() => this.props.onGoTo('settings')}>settings</a>
             <a id='logout' onClick={this.logoutHandler}>log out</a>
           </>
           : <a id='settings' onClick={this.openModal}>log in</a>

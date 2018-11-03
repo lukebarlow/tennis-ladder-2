@@ -1,4 +1,4 @@
-var db = require('./db')
+var db = require('./getDb')()
 
 // largely based on http://stackoverflow.com/questions/7990890/how-to-implement-login-auth-in-node-js/8003291#8003291
 
@@ -27,17 +27,12 @@ function checkAuth (req, res, next) {
   }
 }
 
-function login (req, res) {
+async function login (req, res) {
   var post = req.body
-
-  console.log('body is', req.body)
-  console.log('logging in with name', post.name, post.password)
-
-  db.authenticate(post.name, post.password, function (error, result) {
-    req.session.userId = result
-    res.send(result)
-  })
-};
+  const result = await db.authenticate(post.name, post.password)
+  req.session.userId = result
+  res.send(result)
+}
 
 function logout (req, res) {
   delete req.session.userId

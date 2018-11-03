@@ -1,27 +1,36 @@
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 
-import { json } from 'd3-fetch'
-
 import range from '../range'
 
 import CloseButton from './CloseButton'
 import PlayerSelect from './PlayerSelect'
 import ScoreSelect from './ScoreSelect'
 
+const validSet = ([a, b]) => a !== undefined && b !== undefined
+
 export default class NewMatchModal extends React.Component {
-  constructor ( { userId, players }) {
+  constructor ({ userId, players, playersPerSide }) {
     super()
     this.closeHandler = this.closeHandler.bind(this)
     this.scoreSelectHandler = this.scoreSelectHandler.bind(this)
     this.playerSelectHandler = this.playerSelectHandler.bind(this)
     this.addMatchHandler = this.addMatchHandler.bind(this)
-    this.playerASelect = React.createRef()
-    this.playerBSelect = React.createRef()
-    this.state = {
-      score: [],
-      playerA: userId,
-      playerB: players.filter((p) => p !== userId)[0]._id
+    this.sideASelect = React.createRef()
+    this.sideBSelect = React.createRef()
+
+    if (playersPerSide === 1) {
+      this.state = {
+        score: [[]],
+        sideA: [userId],
+        sideB: ['']
+      }
+    } else {
+      this.state = {
+        score: [[]],
+        sideA: [userId, ''],
+        sideB: ['', '']
+      }
     }
   }
 
@@ -29,34 +38,35 @@ export default class NewMatchModal extends React.Component {
     const playerIndex = player === 'a' ? 0 : 1
     return (event) => {
       const score = this.state.score
-      const games = event.target.options[event.target.selectedIndex].value
-      if (!this.score[set]) {
-        this.score.set = []
+      const games = parseInt(event.target.value)
+      if (!score[set]) {
+        score[set] = []
       }
-      this.score[set][playerIndex] = games
-      // even though we are mutating the score, we call setState to
-      // trigger the re-render
+      score[set][playerIndex] = games
 
-      console.log('score', score)
-
+      let enteredSets = score.filter(validSet).length
+      if (score.length < enteredSets + 1) {
+        score.push([])
+      }
       this.setState({ score })
     }
   }
 
-  playerSelectHandler (player) {
+  playerSelectHandler (side, playerIndex) {
     return (event) => {
       const value = event.target.options[event.target.selectedIndex].value
       const stateUpdate = {}
-      stateUpdate[player] = value
+      stateUpdate[side] = this.state[side]
+      stateUpdate[side][playerIndex] = value
       this.setState(stateUpdate)
     }
   }
 
   async addMatchHandler () {
     const match = {
-      playerA: this.state.playerA._id,
-      playerB: this.state.playerB._id,
-      score: this.score,
+      sideA: this.state.sideA,
+      sideB: this.state.sideB,
+      score: this.state.score.filter(validSet),
       recordedBy: this.props.userId
     }
     await this.props.onAddMatch(match)
@@ -64,15 +74,14 @@ export default class NewMatchModal extends React.Component {
   }
 
   closeHandler () {
-    this.score = {
-      a: [],
-      b: []
-    }
+    this.setState({
+      score: [[]]
+    })
     this.props.onClose()
   }
 
   render () {
-    const { players, userId } = this.props
+    const { players, playersPerSide } = this.props
     return (
       <Modal show={this.props.show} onHide={this.closeHandler}>
         <Modal.Header >
@@ -81,48 +90,69 @@ export default class NewMatchModal extends React.Component {
         <Modal.Body>
           <h1>record a match</h1>
           <br />
-          <div className="match" >
+          <div className='match' >
             <table>
               <tbody>
                 <tr>
                   <td>
-                    <PlayerSelect
-                      players={players}
-                      value={this.state.playerA}
-                      onChange={this.playerSelectHandler('playerA')} 
-                    />
+                    {
+                      range(playersPerSide).map((i) => (
+                        <React.Fragment key={i}>
+                          { i > 0 && ' ' }
+                          <PlayerSelect
+                            players={players}
+                            value={this.state.sideA[i]}
+                            onChange={this.playerSelectHandler('sideA', i)}
+                          />
+                        </React.Fragment>
+                      ))
+                    }
                   </td>
                   {
-                    range(this.state.sets).map((i) => (
+                    range(this.state.score.length).map((i) => (
                       <td key={i} >
-                        <ScoreSelect onChange={this.scoreSelectHandler('a', i)} />
+                        <ScoreSelect
+                          value={this.state.score[i] ? this.state.score[i][0] : ''}
+                          onChange={this.scoreSelectHandler('a', i)}
+                        />
                       </td>
-                      )
-                    )
+                    ))
                   }
                 </tr>
                 <tr>
                   <td>
-                    <PlayerSelect
-                      players={players}
-                      value={this.state.playerB}
-                      onChange={this.playerSelectHandler('playerB')}
-                    />
+                    {
+                      range(playersPerSide).map((i) => (
+                        <React.Fragment key={i}>
+                          { i > 0 && ' ' }
+                          <PlayerSelect
+                            players={players}
+                            value={this.state.sideB[i]}
+                            onChange={this.playerSelectHandler('sideB', i)}
+                          />
+                        </React.Fragment>
+                      ))
+                    }
                   </td>
                   {
-                    range(this.state.sets).map((i) => (
+                    range(this.state.score.length).map((i) => (
                       <td key={i} >
-                        <ScoreSelect onChange={this.scoreSelectHandler('b', i)} />
+                        <ScoreSelect
+                          value={this.state.score[i] ? this.state.score[i][1] : ''}
+                          onChange={this.scoreSelectHandler('b', i)}
+                        />
                       </td>
-                      )
-                    )
+                    ))
                   }
                 </tr>
               </tbody>
             </table>
           </div>
           <br />
-          <button id='addMatch' style={{float: 'right'}} onClick={this.addMatchHandler}>add match</button>
+          <button
+            id='addMatch'
+            style={{ float: 'right' }}
+            onClick={this.addMatchHandler}>add match</button>
         </Modal.Body>
       </Modal>
     )
