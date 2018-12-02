@@ -15,11 +15,11 @@ import {
 import {
   CSS3DObject,
   CSS3DRenderer
-} from '../CSS3DRenderer3'
+} from '../CSS3DRenderer2'
 
 import css from './CssBall.css'
 
-export default class CssBall extends React.Component {
+export default class CssBall2 extends React.Component {
   constructor () {
     super()
     this.main = React.createRef()
@@ -28,7 +28,7 @@ export default class CssBall extends React.Component {
 
   componentDidMount () {
     const camera = this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
-    
+ 
     window.cssCamera = camera
     const scene = this.scene = new Scene()
 
@@ -72,6 +72,6 @@ export default class CssBall extends React.Component {
   }
 
   render () {
-    return <div id='panels' className='new-panels' ref={this.main} />
+    return <div id='panels' className='new-panels-2' ref={this.main} />
   }
 }

@@ -14,10 +14,11 @@ export default class App extends React.Component {
     this.loginHandler = this.loginHandler.bind(this)
     this.logoutHandler = this.logoutHandler.bind(this)
     this.goToHandler = this.goToHandler.bind(this)
+    this.changeHandler = this.changeHandler.bind(this)
     this.init()
     this.state = {
       userId: null,
-      selectedPanel: 'doubles',
+      selectedPanel: 'singles',
       players: null
     }
   }
@@ -40,6 +41,11 @@ export default class App extends React.Component {
     this.setState({ selectedPanel: location })
   }
 
+  async changeHandler () {
+    const players = await json('./players')
+    this.setState({ players })
+  }
+
   render () {
     return <>
       <Ball
@@ -47,6 +53,7 @@ export default class App extends React.Component {
         panels={panels}
         selectedPanel={this.state.selectedPanel}
         players={this.state.players}
+        onChange={this.changeHandler}
       />
       <TopLinks
         userId={this.state.userId}

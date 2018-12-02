@@ -33,6 +33,7 @@ export default class SinglesPanel extends React.Component {
 
   async addMatchHandler (match) {
     await json(`./addSinglesMatch?match=${JSON.stringify(match)}`)
+    this.props.onChange()
     await this._load()
   }
 
@@ -47,20 +48,22 @@ export default class SinglesPanel extends React.Component {
       return ''
     }
 
-    return <div className={css.twoColumns}>
-      <div className={css.header1}>singles</div>
-      <div className={css.body1}>
-        <Ladder userId={userId} rungs={this.props.players} />
-      </div>
-      <div className={css.header2}>recent matches</div>
-      <div className={css.body2}>
-        <MatchesPanel
-          userId={userId}
-          players={players}
-          playersPerSide={1}
-          onAddMatch={this.addMatchHandler}
-          {...this.state}
-        />
+    return <div className={css.scrollContainer}>
+      <div className={css.twoColumns}>
+        <div className={css.header1}>singles ladder</div>
+        <div className={css.body1}>
+          <Ladder userId={userId} rungs={this.props.players} />
+        </div>
+        <div className={css.header2}>singles matches</div>
+        <div className={css.body2}>
+          <MatchesPanel
+            userId={userId}
+            players={players}
+            playersPerSide={1}
+            onAddMatch={this.addMatchHandler}
+            {...this.state}
+          />
+        </div>
       </div>
     </div>
   }

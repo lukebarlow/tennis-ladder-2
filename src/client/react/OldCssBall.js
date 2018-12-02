@@ -15,7 +15,7 @@ import {
 import {
   CSS3DObject,
   CSS3DRenderer
-} from '../CSS3DRenderer3'
+} from 'three-css3drenderer'
 
 import css from './CssBall.css'
 
@@ -72,6 +72,6 @@ export default class CssBall extends React.Component {
   }
 
   render () {
-    return <div id='panels' className='new-panels' ref={this.main} />
+    return <div id='panels' className='old-panels' ref={this.main} />
   }
 }

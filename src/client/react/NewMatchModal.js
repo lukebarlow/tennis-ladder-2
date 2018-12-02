@@ -7,11 +7,12 @@ import CloseButton from './CloseButton'
 import PlayerSelect from './PlayerSelect'
 import ScoreSelect from './ScoreSelect'
 
-const validSet = ([a, b]) => a !== undefined && b !== undefined
+const validSet = ([a, b]) => typeof a === 'number' && typeof b === 'number'
 
 export default class NewMatchModal extends React.Component {
-  constructor ({ userId, players, playersPerSide }) {
+  constructor ({ playersPerSide }) {
     super()
+    this.replaceUserId = this.replaceUserId.bind(this)
     this.closeHandler = this.closeHandler.bind(this)
     this.scoreSelectHandler = this.scoreSelectHandler.bind(this)
     this.playerSelectHandler = this.playerSelectHandler.bind(this)
@@ -19,32 +20,38 @@ export default class NewMatchModal extends React.Component {
     this.sideASelect = React.createRef()
     this.sideBSelect = React.createRef()
 
-    if (playersPerSide === 1) {
-      this.state = {
-        score: [[]],
-        sideA: [userId],
-        sideB: ['']
-      }
-    } else {
-      this.state = {
-        score: [[]],
-        sideA: [userId, ''],
-        sideB: ['', '']
-      }
+    this.state = this.getInitialState(playersPerSide)
+  }
+
+  getInitialState (playersPerSide) {
+    return {
+      score: [[]],
+      sideA: playersPerSide === 1 ? ['USER_ID'] : ['USER_ID', ''],
+      sideB: playersPerSide === 1 ? [''] : ['', '']
     }
+  }
+
+  replaceUserId (value) {
+    return value === 'USER_ID' ? this.props.userId : value
   }
 
   scoreSelectHandler (player, set) {
     const playerIndex = player === 'a' ? 0 : 1
     return (event) => {
       const score = this.state.score
-      const games = parseInt(event.target.value)
+      let games = parseInt(event.target.value)
+      if (isNaN(games)) {
+        games = ''
+      }
       if (!score[set]) {
         score[set] = []
       }
       score[set][playerIndex] = games
 
       let enteredSets = score.filter(validSet).length
+      if (score.length > enteredSets + 1) {
+        score.pop()
+      }
       if (score.length < enteredSets + 1) {
         score.push([])
       }
@@ -64,13 +71,14 @@ export default class NewMatchModal extends React.Component {
 
   async addMatchHandler () {
     const match = {
-      sideA: this.state.sideA,
-      sideB: this.state.sideB,
+      sideA: this.state.sideA.map(this.replaceUserId),
+      sideB: this.state.sideB.map(this.replaceUserId),
       score: this.state.score.filter(validSet),
       recordedBy: this.props.userId
     }
     await this.props.onAddMatch(match)
     this.props.onClose()
+    this.setState(this.getInitialState(this.props.playersPerSide))
   }
 
   closeHandler () {
@@ -82,6 +90,7 @@ export default class NewMatchModal extends React.Component {
 
   render () {
     const { players, playersPerSide } = this.props
+
     return (
       <Modal show={this.props.show} onHide={this.closeHandler}>
         <Modal.Header >
@@ -101,7 +110,7 @@ export default class NewMatchModal extends React.Component {
                           { i > 0 && ' ' }
                           <PlayerSelect
                             players={players}
-                            value={this.state.sideA[i]}
+                            value={this.replaceUserId(this.state.sideA[i])}
                             onChange={this.playerSelectHandler('sideA', i)}
                           />
                         </React.Fragment>
@@ -127,7 +136,7 @@ export default class NewMatchModal extends React.Component {
                           { i > 0 && ' ' }
                           <PlayerSelect
                             players={players}
-                            value={this.state.sideB[i]}
+                            value={this.replaceUserId(this.state.sideB[i])}
                             onChange={this.playerSelectHandler('sideB', i)}
                           />
                         </React.Fragment>

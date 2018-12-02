@@ -33,6 +33,7 @@ export default class DoublesPanel extends React.Component {
 
   async addMatchHandler (match) {
     await json(`./addDoublesMatch?match=${JSON.stringify(match)}`)
+    this.props.onChange()
     await this._load()
   }
 
@@ -50,24 +51,26 @@ export default class DoublesPanel extends React.Component {
     // sort by doubles rating
     players.sort((a, b) => (b.doublesRating || 1200) - (a.doublesRating || 1200))
 
-    return <div className={css.twoColumns}>
-      <div className={css.header1}>doubles</div>
-      <div className={css.body1}>
-        <Ladder
-          userId={userId}
-          rungs={this.props.players}
-          extraFields={['doublesRating']}
-        />
-      </div>
-      <div className={css.header2}>recent matches</div>
-      <div className={css.body2}>
-        <MatchesPanel
-          userId={userId}
-          players={players}
-          playersPerSide={2}
-          onAddMatch={this.addMatchHandler}
-          {...this.state}
-        />
+    return <div className={css.scrollContainer}>
+      <div className={css.twoColumns}>
+        <div className={css.header1}>doubles ladder</div>
+        <div className={css.body1}>
+          <Ladder
+            userId={userId}
+            rungs={this.props.players}
+            extraFields={['doublesRating']}
+          />
+        </div>
+        <div className={css.header2}>doubles matches</div>
+        <div className={css.body2}>
+          <MatchesPanel
+            userId={userId}
+            players={players}
+            playersPerSide={2}
+            onAddMatch={this.addMatchHandler}
+            {...this.state}
+          />
+        </div>
       </div>
     </div>
   }

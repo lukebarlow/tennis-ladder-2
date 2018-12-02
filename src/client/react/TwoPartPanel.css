@@ -1,11 +1,15 @@
+.scrollContainer {
+  height: 100%;
+}
+
 .twoColumns {
   display: grid;
-  height: 100%;
   width: 100%;
+  height: 100%;
   grid-template-areas:
     "header1 header2"
     "body1 body2";
-  grid-template-rows: 50px 1fr;
+  grid-template-rows: 50px auto;
   grid-template-columns: 50% 50%;
   font-size: 20px;
 }
@@ -22,9 +26,31 @@
 
 .body1 {
   grid-area: body1;
+  margin-bottom: 20px;
 }
 
 .body2 {
   grid-area: body2;
   overflow-y: scroll;
+}
+
+@media only screen and (max-width: 600px) {
+  .body2 {
+    overflow-y: initial;
+  }
+
+  .scrollContainer {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .twoColumns {
+    grid-template-areas:
+      "header1"
+      "body1"
+      "header2"
+      "body2";
+    grid-template-columns: 100%;
+    grid-template-rows: 50px fit-content 50px fit-content;
+  }
 }

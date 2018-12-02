@@ -50,7 +50,7 @@ module.exports = (connectionString) => {
         { multi: true }
       )
     } else {
-      db.player.update(
+      await db.player.update(
         {
           ladderPosition: {
             $gte: position,
@@ -116,11 +116,6 @@ module.exports = (connectionString) => {
 
     const winnerDetails = await getPlayer({ _id: winner })
     const loserDetails = await getPlayer({ _id: loser })
-
-    console.log('winner', winner)
-    console.log('loser', loser)
-    console.log('winnerDetails', winnerDetails)
-    console.log('loserDetails', loserDetails)
 
     // change the ladder position
     if (winnerDetails.ladderPosition > loserDetails.ladderPosition) {
@@ -215,6 +210,8 @@ module.exports = (connectionString) => {
     return db.doublesMatch.findAsCursor().sort({ date: -1 }).limit(50).toArray()
   }
 
+  const firstIfArray = (a) => Array.isArray(a) ? a[0] : a
+
   // the format of score is an array of two element arrays. For example
   // a scoreline of 6-4 3-6 2-6 would be [[6,4],[3-6],[2-6]]
   // the sideA and sideB parameters can be names or ids. Date is
@@ -223,14 +220,10 @@ module.exports = (connectionString) => {
   // us a record of the ladder positions of each player as they went
   // into the match. May result in bloat - we will see
   async function addSinglesMatch (match) {
-
-    console.log('adding singles match')
-    console.log(JSON.stringify(match, null, 2))
-
     match.date = match.date || Date.now()
 
-    match.sideA = mongoist.ObjectId(match.sideA)
-    match.sideB = mongoist.ObjectId(match.sideB)
+    match.sideA = mongoist.ObjectId(firstIfArray(match.sideA))
+    match.sideB = mongoist.ObjectId(firstIfArray(match.sideB))
     match.recordedBy = mongoist.ObjectId(match.recordedBy)
     await db.singlesMatch.insert(match)
 

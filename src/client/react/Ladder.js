@@ -8,7 +8,7 @@ export default ({ rungs, extraFields = [] }) => {
   } else {
     return <span>
       { rungs.map((rung, i) => {
-        const fields = extraFields.map((f) => <span className={css.extra} key={f}>({rung[f]}</span>)
+        const fields = extraFields.map((f) => <span className={css.extra} key={f}>({rung[f]})</span>)
         return <span key={rung.name}>{i + 1}. {rung.name} {fields}<br /></span>
       })}
     </span>

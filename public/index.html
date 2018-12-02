@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>tenn16.co.uk</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta charset="utf-8">
     <link rel="icon" src="tennis-icon-2.png" type="image/png">
     <link href="css/dialog.css" type="text/css" rel="stylesheet">
@@ -11,6 +12,7 @@
       body {
         background-color: #666;
         margin: 0;
+        position: fixed;
         overflow: hidden;
         font-family: 'Source Sans Pro', helvetica, sans-serif;
         font-weight: 200;
@@ -49,7 +51,7 @@
       }
 
       #top-links {
-        position: absolute;
+        position: fixed;
         top: 20px;
         right: 30px;
         cursor: pointer;
@@ -61,13 +63,13 @@
         margin-left: 20px;
       }
 
-      .card {
+      /* .card {
         border-radius: 5px;
         background-color: rgba(255, 255, 255, 0.8);
         color: black;
         padding: 30px;
         font-size: 20px;
-      }
+      } */
 
       .button {
         font-size: 12pt;
@@ -126,6 +128,15 @@
 
       .closeButton:hover {
         stroke: #888;
+      }
+
+      .new-panels > * > div {
+        background-color: rgba(255, 192, 203, 0.8);
+      }
+
+      .new-panels-2 > * > * > div {
+        background-color: rgba(203, 192, 255, 0.8);
+        border: 1pt solid blue;
       }
 
     </style>
