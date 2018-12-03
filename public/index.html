@@ -39,9 +39,9 @@
         font-weight: 200;
       }
 
-      td {
+      /* td {
         vertical-align: top;
-      }
+      } */
 
       #background-ball, #panels {
         position: absolute;
@@ -61,24 +61,32 @@
         color: white;
         transition: color 1s;
         margin-left: 20px;
+        font-weight: 500;
       }
 
-      /* .card {
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, 0.8);
-        color: black;
-        padding: 30px;
-        font-size: 20px;
-      } */
-
-      .button {
+      button {
         font-size: 12pt;
-        font-style: italic;
         cursor: pointer;
+        margin-bottom: 10px;
+        margin-left: 4px;
+        display: inline-block;
+        background-color: rgba(100, 100, 100, 0.6);
+        border-radius: 5px;
+        color: white;
       }
 
-      .button:hover {
-        text-decoration: underline;
+      button:hover {
+        background-color: rgba(100, 100, 100, 0.75);
+      }
+
+      @media only screen and (max-width: 700px) {
+        #top-links a {
+          font-size: 20px;
+        }
+
+        button {
+          font-size: 25px;
+        }
       }
 
       .match table {

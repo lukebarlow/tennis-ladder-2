@@ -16,7 +16,7 @@ import {
 
 import CssBall from './CssBall'
 import BackgroundBall from './BackgroundBall'
-import OldCssBall from './OldCssBall'
+// import OldCssBall from './OldCssBall'
 
 export default class Ball extends React.Component {
   constructor () {
@@ -28,10 +28,10 @@ export default class Ball extends React.Component {
     this.mouseUpHandler = this.mouseUpHandler.bind(this)
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this)
     this.scenes = []
-    this.latitude = 20
-    this.longitude = 10
-    this.targetLatitude = 20
-    this.targetLongitude = 10
+    this.latitude = 0
+    this.longitude = -90
+    this.targetLatitude = 0
+    this.targetLongitude = -90
   }
 
   componentDidMount () {
@@ -40,13 +40,20 @@ export default class Ball extends React.Component {
   }
 
   componentDidUpdate () {
-    // const { position } = this.props.panels[this.props.selectedPanel]
-    // const [x, y, z] = position
-    // const h = Math.sqrt(x * x + z * z)
-    // this.targetLongitude = ThreeMath.radToDeg(Math.atan2(x, -z))
-    // console.log('x', x, 'z', z)
-    // console.log('targetLongitude', this.targetLongitude)
-    // this.targetLatitude = ThreeMath.radToDeg(Math.atan2(y, h))
+    const { position } = this.props.panels[this.props.selectedPanel]
+    const [x, y, z] = position
+    const h = Math.sqrt(x * x + z * z)
+    this.targetLongitude = ThreeMath.radToDeg(Math.atan2(x, -z))
+
+    while (this.targetLongitude - this.longitude > 180) {
+      this.targetLongitude -= 360
+    }
+
+    while (this.longitude - this.targetLongitude > 180) {
+      this.targetLongitude += 360
+    }
+
+    this.targetLatitude = ThreeMath.radToDeg(Math.atan2(-y, h))
   }
 
   windowResizeHandler () {
@@ -75,7 +82,17 @@ export default class Ball extends React.Component {
 
   tick () {
     this.latitude += (this.targetLatitude - this.latitude) / 30
+
+    // const flip = Math.abs(this.targetLongitude - this.longitude) > Math.PI
+    // if (this.targetLongitude - this.longitude > Math.PI) {
+    //   this.longitude +=
+    // }
+
+    // if (flip) {
     this.longitude += (this.targetLongitude - this.longitude) / 30
+    // } else {
+    // this.longitude += (this.targetLongitude - this.longitude) / 30
+    // }
 
     const phi = ThreeMath.degToRad(90 - this.latitude)
     const theta = ThreeMath.degToRad(this.longitude)
@@ -88,10 +105,8 @@ export default class Ball extends React.Component {
       camera.lookAt(target)
       renderer.render(scene, camera)
     }
-    // i++
-    // if (i < 10) {
+
     window.requestAnimationFrame(this.tick)
-    // }
   }
 
   mouseDownHandler () {
@@ -107,12 +122,14 @@ export default class Ball extends React.Component {
   mouseMoveHandler (event) {
     const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0
     const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0
-    // console.log(movementX, movementY)
 
-    this.longitude += movementX
+    this.longitude -= movementX / 5
     this.targetLongitude = this.longitude
 
-    this.latitude += movementY
+    this.latitude += movementY / 4
+    if (Math.abs(this.latitude) > 89) {
+      this.latitude = Math.sign(this.latitude) * 89
+    }
     this.targetLatitude = this.latitude
   }
 

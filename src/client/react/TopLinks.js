@@ -39,7 +39,7 @@ export default class TopLinks extends React.Component {
       {
         this.props.userId
           ? <>
-            <a id='settings' onClick={() => this.props.onGoTo('settings')}>settings</a>
+            {/* <a id='settings' onClick={() => this.props.onGoTo('settings')}>settings</a> */}
             <a id='logout' onClick={this.logoutHandler}>log out</a>
           </>
           : <a id='settings' onClick={this.openModal}>log in</a>

@@ -34,6 +34,7 @@
   overflow-y: scroll;
 }
 
+
 @media only screen and (max-width: 600px) {
   .body2 {
     overflow-y: initial;
@@ -45,12 +46,33 @@
   }
 
   .twoColumns {
+    font-size: 30px;
+    grid-template-columns: 100%;
+    grid-template-rows: 80px auto 80px auto;
     grid-template-areas:
       "header1"
       "body1"
       "header2"
       "body2";
-    grid-template-columns: 100%;
-    grid-template-rows: 50px fit-content 50px fit-content;
+  }
+
+  .header1, .header2 {
+    font-size: 40px;
+  }
+}
+
+@media only screen and (orientation: landscape) and (max-width: 700px) {
+  .header1, .header2 {
+    font-size: 50px;
+  }
+  
+  .twoColumns {
+    grid-template-rows: 80px auto;
+    font-size: 40px;
+  }
+
+  .body1, .body2 {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
   }
 }

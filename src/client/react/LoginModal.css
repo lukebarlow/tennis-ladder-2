@@ -1,0 +1,8 @@
+.loginGrid {
+  margin: 15px;
+  position: relative;
+}
+
+.loginGrid input {
+  border: 1pt solid gray;
+}

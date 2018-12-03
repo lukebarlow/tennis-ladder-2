@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Button,
   Modal
 } from 'react-bootstrap'
 import { select } from 'd3-selection'
@@ -8,16 +7,21 @@ import 'd3-transition'
 import { text } from 'd3-fetch'
 import { easeLinear } from 'd3-ease'
 
+import CloseButton from './CloseButton'
 import encodeForPost from '../encodeForPost'
+
+import css from './LoginModal.css'
 
 export default class LoginModal extends React.Component {
   constructor (props) {
     super()
     this.login = this.login.bind(this)
+    this.shaker = React.createRef()
+    this.shakeLogin = this.shakeLogin.bind(this)
   }
 
   shakeLogin () {
-    select(this.loginTable)
+    select(this.shaker.current)
       .transition()
       .duration(500)
       .ease(easeLinear)
@@ -35,14 +39,14 @@ export default class LoginModal extends React.Component {
     }
 
     const response = await text('login', {
-      headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+      headers: { 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       method: 'POST',
       body: encodeForPost(data)
     })
 
     let userId
 
-    if (response == 'false') {
+    if (response === 'false') {
       userId = null
     } else {
       userId = response
@@ -55,53 +59,29 @@ export default class LoginModal extends React.Component {
     } else {
       this.shakeLogin()
     }
-
-
-    // text('login')
-    //   .header('Content-type', 'application/x-www-form-urlencoded')
-    //   .post(name = `name=${this.nameInput.value}&password=${this.passwordInput.value}`, (error, response) => {
-    //     // console.log('got the result', error, text)
-    //     let userId
-
-    //     if (response == 'false') {
-    //       userId = null
-    //     } else {
-    //       userId = response
-    //     }
-
-    //     if (userId) {
-    //       this.nameInput.value = ''
-    //       this.passwordInput.value = ''
-    //       this.props.onLogin(userId)
-    //     } else {
-    //       this.shakeLogin()
-    //     }
-    //   })
   }
 
   render () {
     return (
       <Modal show={this.props.show} onHide={this.props.onClose}>
         <Modal.Header >
-          <Button onClick={this.props.onClose}>Close</Button>
+          <CloseButton onClick={this.props.onClose} />
         </Modal.Header>
         <Modal.Body>
-          <table id='loginTable' style={{position: 'relative'}} ref={(el) => { this.loginTable = el }}>
-            <tbody>
-              <tr>
-                <td style={{textAlign: 'right'}}>name</td>
-                <td><input ref={(input) => { this.nameInput = input }} type='text' id='name' /></td>
-              </tr>
-              <tr>
-                <td>password</td>
-                <td><input ref={(input) => { this.passwordInput = input }} type='password' id='password' /></td>
-              </tr>
-              <tr>
-                <td />
-                <td style={{textAlign: 'right'}}><button id='loginButton' onClick={this.login}>login</button></td>
-              </tr>
-            </tbody>
-          </table>
+          <div className={css.loginGrid} ref={this.shaker}>
+            <div className={css.prompt}>name</div>
+            <div>
+              <input ref={(input) => { this.nameInput = input }} type='text' id='name' />
+            </div>
+            <div className={css.prompt}>password</div>
+            <div>
+              <input ref={(input) => { this.passwordInput = input }} type='password' id='password' />
+            </div>
+            <div />
+            <div>
+              <button id='loginButton' onClick={this.login}>login</button>
+            </div>
+          </div>
         </Modal.Body>
       </Modal>
     )

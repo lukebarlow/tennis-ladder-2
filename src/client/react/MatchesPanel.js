@@ -27,11 +27,10 @@ export default class SinglesMatches extends React.Component {
       return <span>
         {
           this.props.userId && <>
-            <a className='button' onClick={this.showNewMatchModal}>record a match</a>
+            <button onClick={this.showNewMatchModal}>record a match</button>
             <br />
           </>
         }
-        <br />
         <Matches matches={this.props.matches} players={this.props.players} />
         <NewMatchModal
           userId={this.props.userId}

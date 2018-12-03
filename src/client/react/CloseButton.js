@@ -6,7 +6,7 @@ class CloseButton extends React.Component {
     return <svg
       className='closeButton'
       onClick={this.props.onClick}
-      style={{ width: size, height: size }}
+      style={{ width: size, height: size, verticalAlign: 'bottom' }}
     >
       <title>Close</title>
       <line x1={0} y1={0} x2={size} y2={size} />

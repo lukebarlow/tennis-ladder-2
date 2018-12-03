@@ -22,9 +22,20 @@
   }
 }  */
 
+@media only screen and (orientation: landscape) and (max-width: 700px) {
+  .card {
+    height: 140%;
+    width: 180%;
+    margin-top: 20px;
+    max-width: initial;
+    min-width: initial;
+  }
+}
+
 @media only screen and (max-width: 600px) {
   .card {
-    height: calc(100% - 100px);
-    margin-top: -30px;
+    height: 105%;
+    width: 100%;
+    margin-top: 20px;
   }
 }
