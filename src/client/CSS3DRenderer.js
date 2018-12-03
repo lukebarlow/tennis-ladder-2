@@ -38,27 +38,15 @@ function CSS3DRenderer () {
   var _width, _height
   var _widthHalf, _heightHalf
 
-  var matrix = new THREE.Matrix4()
-
   var cache = {
     camera: { fov: 0, style: '' },
-    objects: {}
+    objects: new WeakMap()
   }
 
   var domElement = document.createElement('div')
   domElement.style.overflow = 'hidden'
 
   this.domElement = domElement
-
-  var cameraElement = document.createElement('div')
-
-  cameraElement.style.WebkitTransformStyle = 'preserve-3d'
-  cameraElement.style.MozTransformStyle = 'preserve-3d'
-  cameraElement.style.transformStyle = 'preserve-3d'
-
-  domElement.appendChild(cameraElement)
-
-  var isIE = /Trident/i.test(navigator.userAgent)
 
   this.setClearColor = function () {}
 
@@ -77,163 +65,61 @@ function CSS3DRenderer () {
 
     domElement.style.width = width + 'px'
     domElement.style.height = height + 'px'
-
-    cameraElement.style.width = width + 'px'
-    cameraElement.style.height = height + 'px'
   }
 
   function epsilon (value) {
     return Math.abs(value) < 1e-10 ? 0 : value
   }
 
-  function getCameraCSSMatrix (matrix) {
-    var elements = matrix.elements
-
-    return 'matrix3d(' +
-      epsilon(elements[ 0 ]) + ',' +
-      epsilon(-elements[ 1 ]) + ',' +
-      epsilon(elements[ 2 ]) + ',' +
-      epsilon(elements[ 3 ]) + ',' +
-      epsilon(elements[ 4 ]) + ',' +
-      epsilon(-elements[ 5 ]) + ',' +
-      epsilon(elements[ 6 ]) + ',' +
-      epsilon(elements[ 7 ]) + ',' +
-      epsilon(elements[ 8 ]) + ',' +
-      epsilon(-elements[ 9 ]) + ',' +
-      epsilon(elements[ 10 ]) + ',' +
-      epsilon(elements[ 11 ]) + ',' +
-      epsilon(elements[ 12 ]) + ',' +
-      epsilon(-elements[ 13 ]) + ',' +
-      epsilon(elements[ 14 ]) + ',' +
-      epsilon(elements[ 15 ]) +
-    ')'
-  }
-
   function getObjectCSSMatrix (matrix) {
-    var elements = matrix.elements
-    var matrix3d = 'matrix3d(' +
-      epsilon(elements[ 0 ]) + ',' +
-      epsilon(elements[ 1 ]) + ',' +
-      epsilon(elements[ 2 ]) + ',' +
-      epsilon(elements[ 3 ]) + ',' +
-      epsilon(elements[ 4 ]) + ',' +
-      epsilon(elements[ 5 ]) + ',' +
-      epsilon(elements[ 6 ]) + ',' +
-      epsilon(elements[ 7 ]) + ',' +
-      epsilon(elements[ 8 ]) + ',' +
-      epsilon(elements[ 9 ]) + ',' +
-      epsilon(elements[ 10 ]) + ',' +
-      epsilon(elements[ 11 ]) + ',' +
-      epsilon(elements[ 12 ]) + ',' +
-      epsilon(elements[ 13 ]) + ',' +
-      epsilon(elements[ 14 ]) + ',' +
-      epsilon(elements[ 15 ]) +
-    ')'
-
-    window.getObjectCSSMatrix = getObjectCSSMatrix
-
-    // epsilon(-elements[ 4 ]) + ',' +
-    // epsilon(-elements[ 5 ]) + ',' +
-    // epsilon(-elements[ 6 ]) + ',' +
-    // epsilon(-elements[ 7 ]) + ',' +
-
-    // if (isIE) {
-    //   return 'translate(-50%,-50%)' +
-    //     'translate(' + _widthHalf + 'px,' + _heightHalf + 'px)' +
-    //     cameraCSSMatrix +
-    //     matrix3d
-    // }
-
-    // return `
-    //   matrix3d(
-    //     1, 0, 0, 0, 
-    //     0, 1, 0, 0, 
-    //     0, 0, 1, 0, 
-    //     0, 0, -512, 1)
-    // `
-    // console.log('matrix3d is', matrix3d)
-    // return 'matrix3d(1,0,0,0,0,1,0,0,0,0,1,0,0,0,-200,1)'
-    return matrix3d
-
-    // return 'translate(-50%,-50%)' + matrix3d
+    var elements = matrix.elements.map(epsilon)
+    return `matrix3d(${elements.join(',')})`
   }
 
   function renderObject (object, camera, cameraCSSMatrix) {
-    var fov = camera.projectionMatrix.elements[ 5 ] * _heightHalf
-    
     if (object instanceof CSS3DObject) {
       var style
 
-      // if (object instanceof CSS3DSprite) {
-      //   // http://swiftcoder.wordpress.com/2008/11/25/constructing-a-billboard-matrix/
+      var fov = camera.projectionMatrix.elements[ 5 ] * _heightHalf
 
-      //   matrix.copy(camera.matrixWorldInverse)
-      //   matrix.transpose()
-      //   matrix.copyPosition(object.matrixWorld)
-      //   matrix.scale(object.scale)
+      const mPosition = new THREE.Matrix4().setPosition(new THREE.Vector3(_widthHalf, _heightHalf, fov))
 
-      //   matrix.elements[ 3 ] = 0
-      //   matrix.elements[ 7 ] = 0
-      //   matrix.elements[ 11 ] = 0
-      //   matrix.elements[ 15 ] = 1
+      const mCamera = camera.matrixWorldInverse.clone()
 
-      //   style = getObjectCSSMatrix(matrix)
-      // } else {
+      // flip the x rotation of the camera
+      mCamera.elements[6] = -mCamera.elements[6]
+      mCamera.elements[9] = -mCamera.elements[9]
 
-      // console.log('object.matrixWorld', object.matrixWorld)
+      // flip z rotation
+      mCamera.elements[1] = -mCamera.elements[1]
+      mCamera.elements[4] = -mCamera.elements[4]
 
-      // const m = new THREE.Matrix4()
-      // m.setPosition(new THREE.Vector3(0, 0, -200))
-
-      const mCameraWorldInverse = camera.matrixWorldInverse.clone()
-
-      window.camera = camera
-      window.object = object
-
-      let mObject = object.matrixWorld.clone()
-
-      // debugger
-
-      const mTranslate = new THREE.Matrix4().setPosition(new THREE.Vector3(446, 382, 0))
-      const mZCorrection = new THREE.Matrix4().setPosition(new THREE.Vector3(0, 0, fov))
-      const m50Percent = new THREE.Matrix4().setPosition(new THREE.Vector3(-376, -312, 0))
+      const mObject = object.matrixWorld
 
       const final = new THREE.Matrix4()
-      
-      final.multiply(mZCorrection)
-      final.multiply(mCameraWorldInverse)
-      final.multiply(mTranslate)
-      final.multiply(m50Percent)
+      final.multiply(mPosition)
+      final.multiply(mCamera)
       final.multiply(mObject)
 
-      const matrix3d = getObjectCSSMatrix(final)
-      // const translateZ = `translateZ(${fov}px)`
-      // const translate = `translate(-50%, -50%)`
-
-      style = `${matrix3d}`
-      // }
+      style = 'translate(-50%,-50%) ' + getObjectCSSMatrix(final)
 
       var element = object.element
 
-      window.objectElement = object.element
+      window.objectElement = element
 
-      var cachedStyle = cache.objects[ object.id ] && cache.objects[ object.id ].style
+      var cachedStyle = cache.objects.get(object)
 
       if (cachedStyle === undefined || cachedStyle !== style) {
-        // element.style.WebkitTransform = style
-        // element.style.MozTransform = style
-
+        element.style.WebkitTransform = style
         element.style.transform = style
 
-        // cache.objects[ object.id ] = { style: style }
+        var objectData = { style: style }
 
-        if (isIE) {
-          cache.objects[ object.id ].distanceToCameraSquared = getDistanceToSquared(camera, object)
-        }
+        cache.objects.set(object, objectData)
       }
 
-      if (element.parentNode !== cameraElement) {
-        cameraElement.appendChild(element)
+      if (element.parentNode !== domElement) {
+        domElement.appendChild(element)
       }
     }
 
@@ -242,40 +128,14 @@ function CSS3DRenderer () {
     }
   }
 
-  var getDistanceToSquared = (function () {
-    var a = new THREE.Vector3()
-    var b = new THREE.Vector3()
-
-    return function (object1, object2) {
-      a.setFromMatrixPosition(object1.matrixWorld)
-      b.setFromMatrixPosition(object2.matrixWorld)
-
-      return a.distanceToSquared(b)
-    }
-  }())
-
-  function zOrder (scene) {
-    var order = Object.keys(cache.objects).sort(function (a, b) {
-      return cache.objects[ a ].distanceToCameraSquared - cache.objects[ b ].distanceToCameraSquared
-    })
-    var zMax = order.length
-
-    scene.traverse(function (object) {
-      var index = order.indexOf(object.id + '')
-
-      if (index !== -1) {
-        object.element.style.zIndex = zMax - index
-      }
-    })
-  }
-
   this.render = function (scene, camera) {
     var fov = camera.projectionMatrix.elements[ 5 ] * _heightHalf
 
     if (cache.camera.fov !== fov) {
-      domElement.style.WebkitPerspective = fov + 'px'
-      domElement.style.MozPerspective = fov + 'px'
-      domElement.style.perspective = fov + 'px'
+      if (camera.isPerspectiveCamera) {
+        domElement.style.WebkitPerspective = fov + 'px'
+        domElement.style.perspective = fov + 'px'
+      }
 
       cache.camera.fov = fov
     }
@@ -284,31 +144,7 @@ function CSS3DRenderer () {
 
     if (camera.parent === null) camera.updateMatrixWorld()
 
-    var cameraCSSMatrix = 'translateZ(' + fov + 'px)' +
-      getCameraCSSMatrix(camera.matrixWorldInverse)
-
-    // var style = cameraCSSMatrix +
-    //   'translate(' + _widthHalf + 'px,' + _heightHalf + 'px)'
-
-    // const style = 'translate(' + _widthHalf + 'px,' + _heightHalf + 'px)'
-
-    // if (cache.camera.style !== style && !isIE) {
-    //   cameraElement.style.WebkitTransform = style
-    //   cameraElement.style.MozTransform = style
-    //   cameraElement.style.transform = style
-
-    //   cache.camera.style = style
-    // }
-
-    renderObject(scene, camera, cameraCSSMatrix)
-
-    if (isIE) {
-      // IE10 and 11 does not support 'preserve-3d'.
-      // Thus, z-order in 3D will not work.
-      // We have to calc z-order manually and set CSS z-index for IE.
-      // FYI: z-index can't handle object intersection
-      zOrder(scene)
-    }
+    renderObject(scene, camera)
   }
 };
 

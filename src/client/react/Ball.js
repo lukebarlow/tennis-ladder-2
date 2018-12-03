@@ -15,12 +15,8 @@ import {
 } from 'three'
 
 import CssBall from './CssBall'
-import CssBall2 from './CssBall2'
 import BackgroundBall from './BackgroundBall'
 import OldCssBall from './OldCssBall'
-// import panels from './panels'
-
-let i = 0
 
 export default class Ball extends React.Component {
   constructor () {
@@ -32,10 +28,10 @@ export default class Ball extends React.Component {
     this.mouseUpHandler = this.mouseUpHandler.bind(this)
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this)
     this.scenes = []
-    this.latitude = 0
-    this.longitude = 0
-    this.targetLatitude = 0
-    this.targetLongitude = 0
+    this.latitude = 20
+    this.longitude = 10
+    this.targetLatitude = 20
+    this.targetLongitude = 10
   }
 
   componentDidMount () {
@@ -94,7 +90,7 @@ export default class Ball extends React.Component {
     }
     // i++
     // if (i < 10) {
-      window.requestAnimationFrame(this.tick)
+    window.requestAnimationFrame(this.tick)
     // }
   }
 
@@ -110,11 +106,14 @@ export default class Ball extends React.Component {
 
   mouseMoveHandler (event) {
     const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0
-    // const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0
+    const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0
     // console.log(movementX, movementY)
 
     this.longitude += movementX
     this.targetLongitude = this.longitude
+
+    this.latitude += movementY
+    this.targetLatitude = this.latitude
   }
 
   render () {
@@ -131,13 +130,6 @@ export default class Ball extends React.Component {
         onReady={this.ballReadyHandler}
         onChange={this.props.onChange}
       />
-      {/* <CssBall2
-        userId={userId}
-        players={players}
-        panels={panels}
-        onReady={this.ballReadyHandler}
-        onChange={this.props.onChange}
-      /> */}
       {/* <OldCssBall
         userId={userId}
         players={players}
