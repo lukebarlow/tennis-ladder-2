@@ -4,9 +4,9 @@
     <title>tenn16.co.uk</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta charset="utf-8">
-    <link rel="icon" src="tennis-icon-2.png" type="image/png">
+    <link rel="icon" src="tennis-icon.png" type="image/png">
     <link href="css/dialog.css" type="text/css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400" rel="stylesheet">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style>
       body {
@@ -95,12 +95,26 @@
         border-collapse:collapse;
       }
 
-      .match table tr td{
+      .match table tr td {
         border-bottom:1px solid gray;
         border-right:1px solid gray;
         min-width:20px;
         text-align:center;
         padding:4px;
+      }
+
+      @media only screen and (orientation: landscape) and (max-height: 800px) {
+        .match table tr td {
+          min-width: 40px;
+        }
+
+        /* button {
+          font-size: 25px;
+        } */
+
+        #top-links a {
+          font-size: 20px;
+        }
       }
 
       .match table tr:first-child td {
@@ -126,20 +140,6 @@
 
       .winner {
         font-weight:bold;
-      }
-
-      .closeButton {
-        stroke: #ddd;
-        cursor: pointer;
-        transition: all 0.3s;
-      }
-
-      .closeButton:hover {
-        stroke: #888;
-      }
-
-      .old-panels {
-        opacity: 0.5;
       }
 
     </style>

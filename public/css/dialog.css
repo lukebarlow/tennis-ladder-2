@@ -44,10 +44,10 @@ See http://twitter.github.io/bootstrap/
 
 .modal {
   top: 25%;
-  left: 20%;
+  left: calc(50% - 200px);
   width: 60%;
+  max-width: 400px;
   position: fixed;
-  max-width:60%;
   z-index: 1050;
   background-color: #fff;
   border: 1px solid #999;
@@ -77,8 +77,6 @@ See http://twitter.github.io/bootstrap/
   transition: opacity .3s linear,top .3s ease-out;
 }
 
-
-
 #link-dialog .modal-header {
   background-color: #f7f7f7;
   border-radius: 5px 5px 0 0;
@@ -86,7 +84,6 @@ See http://twitter.github.io/bootstrap/
 
 .modal-header {
   padding: 9px 15px;
-  border-bottom: 1px solid #eee;
 }
 
 .modal-body {

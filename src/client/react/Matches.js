@@ -17,6 +17,17 @@ function getPlayerNames (ids, players) {
 }
 
 export default ({ matches, players }) => {
+
+  function ratingMoveCell (match, side) {
+    // only show ratings movements for doubles at the moment
+    if (!Array.isArray(match.sideA)) {
+      return null
+    }
+    return <td style={{ borderWidth: 0, fontSize: '60%' }}>
+      ({side === match.wonBy ? '+' : '-'} {match.ratingsMoveBy})
+    </td>
+  }
+
   return <span>
     { matches.map((match, i) => (
       <div key={i} className='match'>
@@ -24,20 +35,22 @@ export default ({ matches, players }) => {
         <table>
           <tbody>
             <tr>
-              <td>{getPlayerNames(match.sideA, players)}</td>
+              <td style={{ fontWeight: match.wonBy === 'sideA' ? '400' : 'inherit' }}>{getPlayerNames(match.sideA, players)}</td>
               {
                 match.score.map((set, j) => (
                   <td key={j}>{set[0]}</td>
                 ))
               }
+              { ratingMoveCell(match, 'sideA') }
             </tr>
             <tr>
-              <td>{getPlayerNames(match.sideB, players)}</td>
+              <td style={{ fontWeight: match.wonBy === 'sideB' ? '400' : 'inherit' }}>{getPlayerNames(match.sideB, players)}</td>
               {
                 match.score.map((set, j) => (
                   <td key={j}>{set[1]}</td>
                 ))
               }
+              { ratingMoveCell(match, 'sideB') }
             </tr>
           </tbody>
         </table>

@@ -102,13 +102,8 @@ module.exports = (connectionString) => {
     return result
   }
 
-  /* adjust the ladder positions of players according to match results */
-  async function adjustSinglesLadder (match) {
-    console.log('match is', JSON.stringify(match, null, 2))
-
-    var { winner, loser } = matchWinnerAndLoser(match)
-    // greater ladder position means lower down the ladder
-
+  async function getSinglesMatchDetails (match) {
+    var { winner, loser, wonBy } = matchWinnerAndLoser(match)
     if (!winner) {
       console.log('no clear winner, so no movement')
       return
@@ -117,32 +112,51 @@ module.exports = (connectionString) => {
     const winnerDetails = await getPlayer({ _id: winner })
     const loserDetails = await getPlayer({ _id: loser })
 
-    // change the ladder position
-    if (winnerDetails.ladderPosition > loserDetails.ladderPosition) {
-      await moveToSinglesPosition({ _id: winner }, loserDetails.ladderPosition)
-    }
-
     // update the singles ratings
-    const { newRatingA, newRatingB } = eloScoring(
+    const { newRatingA, newRatingB, ratingsMoveBy } = eloScoring(
       winnerDetails.singlesRating, loserDetails.singlesRating, 1)
 
-    await db.player.update({ _id: winnerDetails._id },
-      { $set: { singlesRating: newRatingA } })
+    return {
+      winner: winnerDetails,
+      loser: loserDetails,
+      wonBy,
+      winnerNewRating: newRatingA,
+      loserNewRating: newRatingB,
+      ratingsMoveBy
+    }
+  }
 
-    await db.player.update({ _id: loserDetails._id },
-      { $set: { singlesRating: newRatingB } })
+  /* adjust the ladder positions of players according to match results */
+  async function adjustSinglesLadder (winner, loser, winnerNewRating, loserNewRating) {
+    // var { winner, loser } = matchWinnerAndLoser(match)
+    // // greater ladder position means lower down the ladder
+
+    // if (!winner) {
+    //   console.log('no clear winner, so no movement')
+    //   return
+    // }
+
+    // const winnerDetails = await getPlayer({ _id: winner })
+    // const loserDetails = await getPlayer({ _id: loser })
+
+    // change the ladder position
+    if (winner.ladderPosition > loser.ladderPosition) {
+      await moveToSinglesPosition({ _id: winner._id }, loser.ladderPosition)
+    }
+
+    await db.player.update({ _id: winner._id },
+      { $set: { singlesRating: winnerNewRating } })
+
+    await db.player.update({ _id: loser._id },
+      { $set: { singlesRating: loserNewRating } })
   }
 
   async function changeDoublesRating (_id, rankingDelta) {
     await db.player.update({ _id }, { $inc: { doublesRating: rankingDelta } })
   }
 
-  /*
-    the doubles ladder is determined by the doublesScore for
-    each player
-  */
-  async function adjustDoublesLadder (match) {
-    var { winner, loser } = matchWinnerAndLoser(match)
+  async function getDoublesMatchDetails (match) {
+    var { winner, loser, wonBy } = matchWinnerAndLoser(match)
     // greater ladder position means lower down the ladder
 
     if (!winner) {
@@ -158,7 +172,16 @@ module.exports = (connectionString) => {
 
     const { ratingsMoveBy } = eloScoring(winnersMeanRating, losersMeanRating, 1)
 
+    return { winners, losers, ratingsMoveBy, wonBy }
+  }
+
+  /*
+    the doubles ladder is determined by the doublesScore for
+    each player
+  */
+  async function adjustDoublesLadder (winners, losers, ratingsMoveBy) {
     for (let winner of winners) {
+      // console.log('goint to change winner', winner._id)
       await changeDoublesRating(winner._id, ratingsMoveBy)
     }
 
@@ -188,18 +211,6 @@ module.exports = (connectionString) => {
     }
 
     return players
-
-    //   , function (error, players) {
-    //   async.each(players, function (player, cb) {
-    //     lastPlayed(player._id, function (_lastPlayed) {
-    //       player.lastPlayed = _lastPlayed
-    //       player.daysSincePlayed = _lastPlayed ? Math.round((new Date() - new Date(_lastPlayed)) / (1000 * 60 * 60 * 24)) : null
-    //       cb()
-    //     })
-    //   }, function () {
-    //     callback(error, players)
-    //   })
-    // })
   }
 
   async function getRecentSinglesMatches () {
@@ -225,15 +236,29 @@ module.exports = (connectionString) => {
     match.sideA = mongoist.ObjectId(firstIfArray(match.sideA))
     match.sideB = mongoist.ObjectId(firstIfArray(match.sideB))
     match.recordedBy = mongoist.ObjectId(match.recordedBy)
+
+    const {
+      winner,
+      loser,
+      wonBy,
+      ratingsMoveBy,
+      winnerNewRating,
+      loserNewRating
+    } = await getSinglesMatchDetails(match)
+
+    match.wonBy = wonBy
+    match.ratingsMoveBy = ratingsMoveBy
+
     await db.singlesMatch.insert(match)
 
     // resolve any matching challenges
     // await resolveChallengesBetween(a._id, b._id)
 
-    await adjustSinglesLadder(match)
+    await adjustSinglesLadder(winner, loser, winnerNewRating, loserNewRating)
 
     // TODO. maybe return the function before sending emails
-    // email.sendEmailsAboutMatch(match)
+    const players = await getPlayers()
+    email.sendEmailsAboutMatch(players, match)
   }
 
   async function addDoublesMatch (match) {
@@ -243,15 +268,25 @@ module.exports = (connectionString) => {
     match.sideB = match.sideB.map((id) => mongoist.ObjectId(id))
 
     match.recordedBy = mongoist.ObjectId(match.recordedBy)
+
+    const { winners, losers, ratingsMoveBy, wonBy } = await getDoublesMatchDetails(match)
+
+    match.ratingsMoveBy = ratingsMoveBy
+    match.wonBy = wonBy
+
     await db.doublesMatch.insert(match)
 
     // // resolve any matching challenges
     // // await resolveChallengesBetween(a._id, b._id)
 
-    await adjustDoublesLadder(match)
+    if (winners && losers) {
+      await adjustDoublesLadder(winners, losers, ratingsMoveBy)
+    }
 
-    // // TODO. maybe return the function before sending emails
-    // // email.sendEmailsAboutMatch(match)
+    // TODO. maybe return the function before sending emails
+
+    const players = await getPlayers()
+    email.sendEmailsAboutMatch(players, match)
   }
 
   function hashPassword (password) {

@@ -6,6 +6,6 @@ module.exports = function (match) {
     return { winner: null, loser: null }
   }
   return aWins > bWins
-    ? { winner: match.sideA, loser: match.sideB }
-    : { winner: match.sideB, loser: match.sideA }
+    ? { winner: match.sideA, loser: match.sideB, wonBy: 'sideA' }
+    : { winner: match.sideB, loser: match.sideA, wonBy: 'sideB' }
 }

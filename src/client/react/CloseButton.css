@@ -1,0 +1,11 @@
+.closeButton {
+  vertical-align: bottom;
+  stroke: #ddd;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding-left: calc(100% - 12px);
+}
+
+.closeButton:hover {
+  stroke: #888;
+}
