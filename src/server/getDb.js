@@ -1,9 +1,8 @@
 const mongoist = require('mongoist')
 const { mean } = require('d3-array')
-const md5 = require('MD5')
-const email = require('./email')
-const salt = 'guacamole'
 
+const hashPassword = require('./hashPassword')
+const email = require('./email')
 const eloScoring = require('./eloScoring')
 const matchWinnerAndLoser = require('./matchWinnerAndLoser')
 
@@ -289,10 +288,6 @@ module.exports = (connectionString) => {
     email.sendEmailsAboutMatch(players, match)
   }
 
-  function hashPassword (password) {
-    return md5(password + salt)
-  }
-
   // returns user id if successful, otherwise false
   async function authenticate (name, password) {
     const result = await db.player.find({ name: name, password: hashPassword(password) })
@@ -357,6 +352,7 @@ module.exports = (connectionString) => {
     // addChallenge,
     // getOutstandingChallenges,
     dropDatabase,
-    close
+    close,
+    hashPassword
   }
 }
