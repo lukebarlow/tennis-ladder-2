@@ -1,9 +1,14 @@
 const express = require('express')
 const session = require('express-session')
+const bodyParser = require('body-parser')
+const path = require('path')
+
+const app = express()
+
 const ladder = require('./ladder')
 const auth = require('./auth')
 
-const app = express()
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // app.configure(function(){
 //     app.use(express.bodyParser());
@@ -31,23 +36,29 @@ app.use(session({
 }))
 
 app.set('port', (process.env.PORT || 5000))
-app.use(express.static(__dirname + '/../../public'))
+app.use(express.static(path.join(__dirname, '/../../public')))
 
 app.use('/userId', auth.userId)
-app.use('/ladder', ladder.ladder)
+app.use('/players', ladder.players)
 app.use('/addPlayer', ladder.addPlayer)
-app.get('/challenges', ladder.getChallenges)
-app.use('/recentMatches', ladder.recentMatches)
+// app.get('/challenges', ladder.getChallenges)
+app.use('/recentSinglesMatches', ladder.recentSinglesMatches)
+app.use('/recentDoublesMatches', ladder.recentDoublesMatches)
 
-app.get('/addMatch', auth.checkAuth, ladder.addMatch)
-app.get('/addChallenge', auth.checkAuth, ladder.addChallenge)
-app.get('/invite', auth.checkAuth, ladder.invite)
+// app.get('/addSinglesMatch', auth.checkAuth, ladder.addSinglesMatch)
+// app.get('/addDoublesMatch', auth.checkAuth, ladder.addDoublesMatch)
+
+app.get('/addSinglesMatch', ladder.addSinglesMatch)
+app.get('/addDoublesMatch', ladder.addDoublesMatch)
+
+// app.get('/addChallenge', auth.checkAuth, ladder.addChallenge)
+// app.get('/invite', auth.checkAuth, ladder.invite)
 app.post('/login', auth.login)
 app.post('/changePassword', auth.checkAuth, auth.changePassword)
-app.get('/settings', auth.checkAuth, auth.getSettings)
+// app.get('/settings', auth.checkAuth, auth.getSettings)
 app.post('/saveSettings', auth.checkAuth, auth.saveSettings)
 app.use('/logout', auth.logout)
 
-var server = app.listen(app.get('port'), function () {
+app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'))
 })

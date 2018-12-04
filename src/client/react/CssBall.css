@@ -1,0 +1,55 @@
+.card {
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  padding: 30px;
+  font-size: 20px;
+  width: calc(100% - 200px);
+  height: calc(100% - 300px);
+  max-width: 800px;
+  min-width: 300px;
+}
+
+@media only screen and (orientation: portrait) and (max-width: 800px)  {
+  .card {
+    width: calc(100% - 300px);
+    height: calc(100% - 380px);
+    margin-top: 16px;
+    max-width: initial;
+    min-width: initial;
+  }
+} 
+
+/* @media only screen and (max-width: 700px) {
+  .card {
+    height: calc(100% - 200px);
+  }
+}  */
+
+/* @media only screen and (orientation: landscape) and (max-height: 780px) {
+  .card {
+    width: calc(100% - 100px);
+    height: calc(100% - 140px);
+    margin-top: 20px;
+    max-width: initial;
+    min-width: initial;
+  }
+} */
+
+@media only screen and (orientation: landscape) and (max-width: 700px) {
+  .card {
+    height: 140%;
+    width: 180%;
+    margin-top: 20px;
+    max-width: initial;
+    min-width: initial;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .card {
+    height: 105%;
+    width: 100%;
+    margin-top: 20px;
+  }
+}

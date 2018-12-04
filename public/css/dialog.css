@@ -43,10 +43,11 @@ See http://twitter.github.io/bootstrap/
 }
 
 .modal {
+  top: 25%;
+  left: calc(50% - 200px);
+  width: 60%;
+  max-width: 400px;
   position: fixed;
-  top: 10%;
-  left: 20%;
-  max-width:60%;
   z-index: 1050;
   background-color: #fff;
   border: 1px solid #999;
@@ -64,9 +65,8 @@ See http://twitter.github.io/bootstrap/
   color:black;
 }
 
-
 .modal.fade.in {
-  top: 20%;
+  top: 25%;
 }
 
 .modal.fade {
@@ -84,7 +84,6 @@ See http://twitter.github.io/bootstrap/
 
 .modal-header {
   padding: 9px 15px;
-  border-bottom: 1px solid #eee;
 }
 
 .modal-body {
@@ -92,12 +91,45 @@ See http://twitter.github.io/bootstrap/
   padding: 45px;
   padding-top:20px;
   min-width: 300px;
+  font-size: 30px;
 }
 
-#dialog {
-  
+.modal-body input {
+  font-size: 20px;
 }
 
-.winner {
-  font-weight:bold;
+.modal button {
+  cursor: pointer;
+  background-color: #ddd;
+  border-radius: 4px;
+  font-size: 15px;
+  font-family: 'Source Sans Pro', helvetica, sans-serif;
+  transition: all 0.3s;
+}
+
+.modal button:hover {
+  background-color: #aaa;
+}
+
+@media only screen and (max-width: 700px) {
+  .modal {
+    top: 10%;
+    left: 10%;
+    width: 80%;
+    max-width:80%;
+  }
+
+  .modal.fade.in {
+    top: 10%;
+  }
+
+  .modal-body {
+    position: relative;
+    padding: initial;
+    padding-bottom: 25px;
+    margin: 15px;
+    padding-top: initial;
+    min-width: initial;
+    font-size: 30px;
+  }
 }
