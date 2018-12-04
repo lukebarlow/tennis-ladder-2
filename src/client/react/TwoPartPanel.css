@@ -39,7 +39,7 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .body2 {
+  .body1, .body2 {
     overflow-y: initial;
   }
 
