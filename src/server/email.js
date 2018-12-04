@@ -45,11 +45,11 @@ async function sendMatchReport (player, match, players) {
     html: body()
   }
 
-  try {
-    await sgMail.send(emailDetails)
-  } catch (e) {
-    // console.log('failed to send email', emailDetails.subject)
-  }
+  // try {
+  await sgMail.send(emailDetails)
+  // } catch (e) {
+  //   // console.log('failed to send email', emailDetails.subject)
+  // }
 }
 
 function body () {
