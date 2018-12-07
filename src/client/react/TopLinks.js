@@ -1,6 +1,7 @@
 import React from 'react'
-import LoginModal from './LoginModal'
 import { text } from 'd3-fetch'
+import LoginModal from './LoginModal'
+import SettingsButton from './SettingsButton'
 
 export default class TopLinks extends React.Component {
   constructor () {
@@ -39,7 +40,9 @@ export default class TopLinks extends React.Component {
       {
         this.props.userId
           ? <>
-            {/* <a id='settings' onClick={() => this.props.onGoTo('settings')}>settings</a> */}
+            <span style={{ paddingLeft: '15px', position: 'relative', top: '3px' }}>
+              <SettingsButton onClick={() => this.props.onGoTo('settings')} />
+            </span>
             <a id='logout' onClick={this.logoutHandler}>log out</a>
           </>
           : <a id='settings' onClick={this.openModal}>log in</a>

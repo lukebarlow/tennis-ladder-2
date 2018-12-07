@@ -316,12 +316,11 @@ module.exports = (connectionString) => {
     return db.player.update({ name: name }, { $set: { password: hashPassword(password) } })
   }
 
-  // function getSettings (userId, callback) {
-  //   userId = mongoist.ObjectId(userId)
-  //   db.player.find({ _id: userId }, function (error, result) {
-  //     callback(null, result && result[0] && result[0].settings || {})
-  //   })
-  // }
+  async function getSettings (userId) {
+    userId = mongoist.ObjectId(userId)
+    const result = await db.player.find({ _id: userId })
+    return (result && result[0] && result[0].settings) || {}
+  }
 
   async function saveSettings (userId, settings) {
     userId = mongoist.ObjectId(userId)
@@ -347,7 +346,7 @@ module.exports = (connectionString) => {
     getRecentDoublesMatches,
     changePassword,
     saveSettings,
-    // getSettings,
+    getSettings,
     // checkForExpiredChallenges,
     // addChallenge,
     // getOutstandingChallenges,

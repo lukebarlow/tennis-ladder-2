@@ -1,0 +1,23 @@
+.button {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.button g g {
+  animation-name: rotateCog;
+  animation-duration: 2s;
+  animation-play-state: paused;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+}
+
+.button:hover g g {
+ animation-play-state: running;
+}
+
+@keyframes rotateCog {
+  to {
+    transform: rotate(360deg);
+  }
+}

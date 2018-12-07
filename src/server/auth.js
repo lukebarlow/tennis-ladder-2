@@ -13,9 +13,6 @@ module.exports = {
 }
 
 function userId (req, res) {
-  console.log('******** GOT A REQUEST FOR THE USER ID ********')
-  console.log('which is ', req.session.userId)
-
   res.send(req.session.userId || '')
 }
 
@@ -39,22 +36,25 @@ function logout (req, res) {
   res.send('true')
 };
 
-function changePassword (req, res) {
+async function changePassword (req, res) {
   var post = req.body
-  db.changePassword(req.session.userId, post.old, post.new, function (error, result) {
-    res.send(result)
-  })
+  const result = await db.changePassword(req.session.userId, post.oldPassword, post.newPassword)
+  res.send(result)
 }
 
-function getSettings (req, res) {
-  db.getSettings(req.session.userId, function (error, result) {
-    res.send(JSON.stringify(result || {}))
-  })
+async function getSettings (req, res) {
+  const result = db.getSettings(req.session.userId)
+  res.send(JSON.stringify(result || {}))
 }
 
-function saveSettings (req, res) {
+async function saveSettings (req, res) {
+
+  console.log('settings', req.body.settings)
+
   var settings = JSON.parse(req.body.settings)
-  db.saveSettings(req.session.userId, settings, function (error, result) {
-    res.send(true)
-  })
+
+  console.log('parsed settings', settings)
+
+  await db.saveSettings(req.session.userId, settings)
+  res.send(true)
 }
