@@ -132,4 +132,9 @@ See http://twitter.github.io/bootstrap/
     min-width: initial;
     font-size: 30px;
   }
+
+  .modal button {
+    margin-top: 10px;
+    font-size: 25px;
+  }
 }

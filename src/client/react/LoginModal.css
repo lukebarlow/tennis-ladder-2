@@ -6,3 +6,8 @@
 .loginGrid input {
   border: 1pt solid gray;
 }
+
+.loginButtonContainer {
+  width: 200px;
+  text-align: right;
+}

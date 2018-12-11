@@ -78,8 +78,8 @@ export default class LoginModal extends React.Component {
               <input ref={(input) => { this.passwordInput = input }} type='password' id='password' />
             </div>
             <div />
-            <div>
-              <button id='loginButton' onClick={this.login}>login</button>
+            <div className={css.loginButtonContainer}>
+              <button className={css.loginButton} onClick={this.login}>login</button>
             </div>
           </div>
         </Modal.Body>
