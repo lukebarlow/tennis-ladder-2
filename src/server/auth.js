@@ -48,13 +48,7 @@ async function getSettings (req, res) {
 }
 
 async function saveSettings (req, res) {
-
-  console.log('settings', req.body.settings)
-
   var settings = JSON.parse(req.body.settings)
-
-  console.log('parsed settings', settings)
-
   await db.saveSettings(req.session.userId, settings)
   res.send(true)
 }

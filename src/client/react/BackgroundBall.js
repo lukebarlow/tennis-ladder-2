@@ -14,9 +14,6 @@ export default class BackgroundBall extends React.Component {
   constructor () {
     super()
     this.main = React.createRef()
-    this.onMouseDown = this.onMouseDown.bind(this)
-    this.onMouseUp = this.onMouseUp.bind(this)
-    this.onMouseMove = this.onMouseMove.bind(this)
   }
 
   componentDidMount () {
@@ -38,31 +35,12 @@ export default class BackgroundBall extends React.Component {
     container.appendChild(renderer.domElement)
 
     this.props.onReady(scene, camera, renderer)
-
-    console.log('ready with mouse down')
-  }
-
-  onMouseDown () {
-    console.log('got mouse down')
-    this.dragging = true
-    document.addEventListener('mouseup', this.onMouseUp, false)
-    document.addEventListener('mousemove', this.onMouseMove, false)
-  }
-
-  onMouseUp () {
-    document.removeEventListener('mousemove', this.onMouseMove)
-    document.removeEventListener('mouseup', this.onMouseUp)
-  }
-
-  onMouseMove () {
-    console.log('moving the mouse')
   }
 
   render () {
     return <div
       id='background-ball'
       ref={this.main}
-      onMouseDown={this.onMouseDown}
     />
   }
 }

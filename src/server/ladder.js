@@ -1,18 +1,5 @@
 var db = require('./getDb')()
-const email = require('./email')
 const url = require('url')
-
-module.exports = {
-  players: players,
-  addPlayer: addPlayer,
-  addSinglesMatch: addSinglesMatch,
-  addDoublesMatch: addDoublesMatch,
-  recentSinglesMatches: recentSinglesMatches,
-  recentDoublesMatches: recentDoublesMatches
-  // addChallenge: addChallenge,
-  // getChallenges: getChallenges,
-  // invite: invite
-}
 
 async function players (req, res) {
   // try {
@@ -25,7 +12,6 @@ async function players (req, res) {
   // }
 
   try {
-    console.log('getting players')
     const players = await db.getPlayers()
     res.send(JSON.stringify(players))
   } catch (e) {
@@ -45,9 +31,6 @@ async function addSinglesMatch (req, res) {
 
 async function addDoublesMatch (req, res) {
   var match = JSON.parse(url.parse(req.url, true).query.match)
-
-  console.log('match is ', JSON.stringify(match, null, 2))
-
   await db.addDoublesMatch(match)
   res.send('true')
 }
@@ -75,31 +58,29 @@ async function recentDoublesMatches (req, res) {
   }
 }
 
-// function addChallenge (req, res) {
-//   var challenge = JSON.parse(url.parse(req.url, true).query.challenge)
-//   db.addChallenge(challenge, function (error, callback) {
-//     res.send('true')
-//   })
-// }
-
-async function addPlayer (req, res) {
-  var { name, password, position, email } = url.parse(req.url, true).query
-
-  console.log('adding')
-  console.log('ame', name)
-  console.log('password', password)
-  console.log('position', position)
-  console.log('email', email)
-
-  await db.addPlayer(name, password, position, email)
+async function addSinglesChallenge (req, res) {
+  var challenge = JSON.parse(url.parse(req.url, true).query.challenge)
+  await db.addSinglesChallenge(challenge)
   res.send('true')
 }
 
-// function getChallenges (req, res) {
-//   db.getOutstandingChallenges(function (error, challenges) {
-//     res.send(JSON.stringify(challenges))
-//   })
+// async function addPlayer (req, res) {
+//   var { name, password, position, email } = url.parse(req.url, true).query
+
+//   console.log('adding')
+//   console.log('ame', name)
+//   console.log('password', password)
+//   console.log('position', position)
+//   console.log('email', email)
+
+//   await db.addPlayer(name, password, position, email)
+//   res.send('true')
 // }
+
+async function singlesChallenges (req, res) {
+  const challenges = await db.getOutstandingSinglesChallenges()
+  res.send(JSON.stringify(challenges || []))
+}
 
 // function invite (req, res) {
 //   var invitation = JSON.parse(url.parse(req.url, true).query.invitation)
@@ -107,3 +88,15 @@ async function addPlayer (req, res) {
 //     res.send('true')
 //   })
 // }
+
+module.exports = {
+  players,
+  // addPlayer: addPlayer,
+  addSinglesMatch,
+  addDoublesMatch,
+  recentSinglesMatches,
+  recentDoublesMatches,
+  addSinglesChallenge,
+  singlesChallenges
+  // invite: invite
+}

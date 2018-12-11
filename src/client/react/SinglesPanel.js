@@ -1,15 +1,17 @@
 import React from 'react'
 import { json } from 'd3-fetch'
 
-import Ladder from './Ladder'
+import SinglesLadder from './SinglesLadder'
 import MatchesPanel from './MatchesPanel'
+import ChallengesPanel from './ChallengesPanel'
 
-import css from './TwoPartPanel.css'
+import css from './ThreePartPanel.css'
 
 export default class SinglesPanel extends React.Component {
   constructor () {
     super()
     this.addMatchHandler = this.addMatchHandler.bind(this)
+    this.addChallengeHandler = this.addChallengeHandler.bind(this)
     this.state = {
       matches: null
     }
@@ -19,8 +21,10 @@ export default class SinglesPanel extends React.Component {
   async _load () {
     try {
       const matches = await json('./recentSinglesMatches')
+      const challenges = await json('./singlesChallenges')
       this.setState({
         matches,
+        challenges,
         error: null
       })
     } catch (e) {
@@ -37,6 +41,11 @@ export default class SinglesPanel extends React.Component {
     await this._load()
   }
 
+  async addChallengeHandler () {
+    this.props.onChange()
+    await this._load()
+  }
+
   render () {
     if (this.state.error) {
       return <span style={{ color: 'red' }}>{this.state.error}</span>
@@ -48,11 +57,19 @@ export default class SinglesPanel extends React.Component {
       return ''
     }
 
+    const cutoff = this.props.config.daysSincePlayedCutoffSingles
+
     return <div className={css.scrollContainer}>
-      <div className={css.twoColumns}>
+      <div className={css.threeColumns}>
         <div className={css.header1}>singles ladder</div>
         <div className={css.body1}>
-          <Ladder userId={userId} rungs={this.props.players} />
+          <SinglesLadder
+            userId={userId}
+            players={players}
+            cutoff={cutoff}
+            challenges={this.state.challenges}
+            onAddChallenge={this.addChallengeHandler}
+          />
         </div>
         <div className={css.header2}>singles matches</div>
         <div className={css.body2}>
@@ -62,6 +79,13 @@ export default class SinglesPanel extends React.Component {
             playersPerSide={1}
             onAddMatch={this.addMatchHandler}
             {...this.state}
+          />
+        </div>
+        <div className={css.header3}>challenges</div>
+        <div className={css.body3}>
+          <ChallengesPanel
+            players={players}
+            challenges={this.state.challenges}
           />
         </div>
       </div>
