@@ -14,3 +14,35 @@
   font-size: 80%;
   width: 200px;
 }
+
+.saveButtonContainer {
+  width: 200px;
+  text-align: right;
+}
+
+@media only screen and (max-width: 600px) {
+  .settingsGrid {
+    grid-template-columns: 100%;
+    grid-template-rows: repeat(fr);
+    font-size: 120%;
+    grid-row-gap: 20px;
+  }
+  
+  .prompt {
+    text-align: initial;
+    font-size: 150%;
+    position: relative;
+  }
+
+  .settingsGrid input[type=text] {
+    width: 90%;
+  }
+
+  .saveButtonContainer {
+    width: initial;
+  }
+
+  .saveButton {
+    float: right;
+  }
+}

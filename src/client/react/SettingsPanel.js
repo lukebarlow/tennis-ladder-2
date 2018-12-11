@@ -68,11 +68,11 @@ export default class SettingsPanel extends React.Component {
         <input type='text' ref={(input) => { this.email = input }} defaultValue={user.settings.email} />
       </div>
       <div />
-      <div style={{ textAlign: 'right', width: 200 }}>
+      <div className={css.saveButtonContainer}>
         {
           this.state.saving
             ? 'saving...'
-            : <button onClick={this.saveChanges}>save changes</button>
+            : <button className={css.saveButton} onClick={this.saveChanges}>save changes</button>
         }
       </div>
       <ChangePasswordModal
