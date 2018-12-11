@@ -104,8 +104,7 @@ module.exports = (connectionString) => {
   async function getSinglesMatchDetails (match) {
     var { winner, loser, wonBy } = matchWinnerAndLoser(match)
     if (!winner) {
-      console.log('no clear winner, so no movement')
-      return
+      return {}
     }
 
     const winnerDetails = await getPlayer({ _id: winner })
@@ -189,13 +188,28 @@ module.exports = (connectionString) => {
     }
   }
 
-  async function lastPlayed (playerId) {
-    const result = await db.singlesMatch.aggregate([
-      { $match: { $or: [{ 'sideA._id': playerId }, { 'sideB._id': playerId }] } },
+  async function lastPlayed (collection, playerId) {
+    const result = await collection.aggregate([
+      { $match: { $or: [{ 'sideA': playerId }, { 'sideB': playerId }] } },
       { $group: { _id: null, total: { $max: '$date' } } },
       { $sort: { total: -1 } }
     ])
     return result.length ? result[0].total : null
+  }
+
+  async function lastPlayedSingles (playerId) {
+    return lastPlayed(db.singlesMatch, playerId)
+  }
+
+  async function lastPlayedDoubles (playerId) {
+    return lastPlayed(db.doublesMatch, playerId)
+  }
+
+  function daysSince (date) {
+    if (!date) {
+      return null
+    }
+    return Math.round((new Date() - new Date(date)) / (1000 * 60 * 60 * 24))
   }
 
   // gets the players, sorted by ladder position
@@ -205,8 +219,11 @@ module.exports = (connectionString) => {
       .toArray()
 
     for (let player of players) {
-      player.lastPlayed = await lastPlayed(player._id)
-      player.daysSincePlayed = player.lastPlayed ? Math.round((new Date() - new Date(player.lastPlayed)) / (1000 * 60 * 60 * 24)) : null
+      player.lastPlayedSingles = await lastPlayedSingles(player._id)
+      player.daysSincePlayedSingles = daysSince(player.lastPlayedSingles)
+
+      player.lastPlayedDoubles = await lastPlayedDoubles(player._id)
+      player.daysSincePlayedDoubles = daysSince(player.lastPlayedDoubles)
     }
 
     return players
@@ -226,15 +243,14 @@ module.exports = (connectionString) => {
   // a scoreline of 6-4 3-6 2-6 would be [[6,4],[3-6],[2-6]]
   // the sideA and sideB parameters can be names or ids. Date is
   // optional and will default to now
-  // we store an entire copy of the player object each time. This gives
-  // us a record of the ladder positions of each player as they went
-  // into the match. May result in bloat - we will see
   async function addSinglesMatch (match) {
     match.date = match.date || Date.now()
-
     match.sideA = mongoist.ObjectId(firstIfArray(match.sideA))
     match.sideB = mongoist.ObjectId(firstIfArray(match.sideB))
-    match.recordedBy = mongoist.ObjectId(match.recordedBy)
+
+    if (match.recordedBy) {
+      match.recordedBy = mongoist.ObjectId(match.recordedBy)
+    }
 
     const {
       winner,
@@ -251,12 +267,15 @@ module.exports = (connectionString) => {
     await db.singlesMatch.insert(match)
 
     // resolve any matching challenges
-    // await resolveChallengesBetween(a._id, b._id)
+    await resolveSinglesChallengesBetween(match.sideA, match.sideB)
 
-    await adjustSinglesLadder(winner, loser, winnerNewRating, loserNewRating)
+    if (winner && loser) {
+      await adjustSinglesLadder(winner, loser, winnerNewRating, loserNewRating)
+    }
 
     // TODO. maybe return the function before sending emails
     const players = await getPlayers()
+
     email.sendEmailsAboutMatch(players, match)
   }
 
@@ -275,9 +294,6 @@ module.exports = (connectionString) => {
 
     await db.doublesMatch.insert(match)
 
-    // // resolve any matching challenges
-    // // await resolveChallengesBetween(a._id, b._id)
-
     if (winners && losers) {
       await adjustDoublesLadder(winners, losers, ratingsMoveBy)
     }
@@ -290,7 +306,8 @@ module.exports = (connectionString) => {
 
   // returns user id if successful, otherwise false
   async function authenticate (name, password) {
-    const result = await db.player.find({ name: name, password: hashPassword(password) })
+    const reNameAnyCase = new RegExp(`^${name}$`, 'i')
+    const result = await db.player.find({ name: reNameAnyCase, password: hashPassword(password) })
     return result.length > 0 ? result[0]._id.toString() : false
   }
 
@@ -329,6 +346,76 @@ module.exports = (connectionString) => {
       })
   }
 
+  async function findSinglesChallengesBetween (idA, idB) {
+    // console.log('query is')
+    // console.log({ $or: [
+    //   {
+    //     challenger: idA,
+    //     challenged: idB,
+    //     resolved: false
+    //   },
+    //   {
+    //     challenger: idB,
+    //     challenged: idA,
+    //     resolved: false
+    //   }
+    // ] })
+
+    // const challenges = await db.singlesChallenge.find({ resolved: false })
+    // console.log('***** challenges ****', challenges.length)
+    // return challenges
+
+    return db.singlesChallenge.find({ $or: [
+      {
+        challenger: idA,
+        challenged: idB,
+        resolved: false
+      },
+      {
+        challenger: idB,
+        challenged: idA,
+        resolved: false
+      }
+    ] })
+  }
+
+  async function addSinglesChallenge (challenge) {
+    challenge.challenger = mongoist.ObjectId(challenge.challenger)
+    challenge.challenged = mongoist.ObjectId(challenge.challenged)
+
+    // if an unresolved challenge exists between these two, then we do nothing
+    const existingChallenges = await findSinglesChallengesBetween(challenge.challenger, challenge.challenged)
+
+    if (existingChallenges.length > 0) {
+      return null
+    }
+
+    challenge.date = challenge.date || Date.now()
+    challenge.resolved = false
+    await db.singlesChallenge.insert(challenge)
+
+    const challenger = await getPlayer({ _id: challenge.challenger })
+    const challenged = await getPlayer({ _id: challenge.challenged })
+    const players = await getPlayers()
+
+    await email.sendEmailsAboutChallenge(challenger, challenged, players)
+  }
+
+  async function getOutstandingSinglesChallenges () {
+    return db.singlesChallenge.find({ resolved: false })
+  }
+
+  async function resolveSinglesChallengesBetween (idA, idB) {
+    const challenges = await findSinglesChallengesBetween(idA, idB)
+    if (challenges.length === 0) {
+      return []
+    }
+
+    return Promise.all(challenges.map((challenge) => (
+      db.singlesChallenge.update({ _id: challenge._id }, { $set: { resolved: true } })
+    )))
+  }
+
   function dropDatabase () {
     db.dropDatabase()
   }
@@ -348,8 +435,8 @@ module.exports = (connectionString) => {
     saveSettings,
     getSettings,
     // checkForExpiredChallenges,
-    // addChallenge,
-    // getOutstandingChallenges,
+    addSinglesChallenge,
+    getOutstandingSinglesChallenges,
     dropDatabase,
     close,
     hashPassword

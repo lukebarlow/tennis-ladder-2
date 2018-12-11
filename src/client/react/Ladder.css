@@ -1,3 +1,14 @@
 .extra {
-  font-size: 60%; 
+  font-size: 60%;
+  padding-left: 10px;
+}
+
+.challenge {
+  font-size: 50%;
+  display: inline-block;
+  margin-bottom: 0px;
+  margin-left: 8px;
+  vertical-align: middle;
+  position: relative;
+  top: -2px;
 }

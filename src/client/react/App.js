@@ -26,7 +26,8 @@ export default class App extends React.Component {
   async init () {
     const userId = await text('./userId')
     const players = await json('./players')
-    this.setState({ userId, players })
+    const config = await json('./config')
+    this.setState({ userId, players, config })
   }
 
   loginHandler (userId) {
@@ -50,6 +51,7 @@ export default class App extends React.Component {
     return <>
       <Ball
         userId={this.state.userId}
+        config={this.state.config}
         panels={panels}
         selectedPanel={this.state.selectedPanel}
         players={this.state.players}

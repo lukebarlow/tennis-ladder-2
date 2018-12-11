@@ -1,0 +1,95 @@
+.scrollContainer {
+  height: 100%;
+}
+
+.threeColumns {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-areas:
+    "header1 header2 header3"
+    "body1 body2 body3";
+  grid-template-rows: 50px auto;
+  grid-template-columns: 33% 33% 33%;
+  font-size: 20px;
+  column-gap: 10px;
+}
+
+.header1, .header2, .header3 {
+  font-size: 28px;
+}
+
+.header1 {
+  grid-area: header1;
+}
+
+.header2 {
+  grid-area: header2;
+}
+
+.body1 {
+  grid-area: body1;
+  margin-bottom: 20px;
+}
+
+.body2 {
+  grid-area: body2;
+}
+
+.body1, .body2 {
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media only screen and (max-width: 600px) {
+  .body1, .body2 {
+    overflow-y: initial;
+    margin-bottom: 40px;
+  }
+
+  .scrollContainer {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .threeColumns {
+    font-size: 30px;
+    grid-template-columns: 100%;
+    grid-template-rows: 80px auto 80px auto 80px auto;
+    grid-template-areas:
+      "header1"
+      "body1"
+      "header2"
+      "body2"
+      "header3"
+      "body3";
+  }
+
+  .header1, .header2, .header3 {
+    font-size: 40px;
+  }
+}
+
+/* phone landscape */
+@media only screen and (orientation: landscape) and (max-width: 700px) {
+  .header1, .header2, .header3 {
+    font-size: 50px;
+  }
+  
+  .threeColumns {
+    grid-template-rows: 80px auto;
+    font-size: 40px;
+  }
+}
+
+/* ipad landscape */
+/* @media only screen and (orientation: landscape) and (max-height: 800px) {
+  .header1, .header2 {
+    font-size: 40px;
+  }
+  
+  .threeColumns {
+    grid-template-rows: 80px auto;
+    font-size: 30px;
+  }
+} */

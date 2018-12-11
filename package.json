@@ -10,8 +10,8 @@
     "postinstall": "npm run build",
     "standard": "standard ./src/**/*.js --verbose | snazzy",
     "standard:fix": "standard ./src/**/*.js --fix --verbose | snazzy",
-    "test-old": "jest --forceExit --coverage --verbose",
-    "test": "jest --verbose -i --coverage"
+    "test": "jest --verbose -i --coverage",
+    "test:watch": "jest -i --watch"
   },
   "license": "ISC",
   "dependencies": {

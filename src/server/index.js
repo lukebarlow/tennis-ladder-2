@@ -10,14 +10,6 @@ const auth = require('./auth')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 
-// app.configure(function(){
-//     app.use(express.bodyParser());
-//     app.use(express.cookieParser());
-//     app.use(express.cookieSession({ secret: 'tupperware', cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 }}));
-// })
-
-// the webpack middleware for development
-
 if (process.env.NODE_ENV !== 'production') {
   const webpackMiddleware = require('webpack-dev-middleware')
   const webpack = require('webpack')
@@ -38,24 +30,33 @@ app.use(session({
 app.set('port', (process.env.PORT || 5000))
 app.use(express.static(path.join(__dirname, '/../../public')))
 
+app.use('/config', (req, res) => {
+  res.send(JSON.stringify({
+    daysSincePlayedCutoffSingles: parseInt(process.env.DAYS_SINCE_PLAYED_CUTOFF_SINGLES),
+    daysSincePlayedCutoffDoubles: parseInt(process.env.DAYS_SINCE_PLAYED_CUTOFF_DOUBLES)
+  }))
+})
+
 app.use('/userId', auth.userId)
 app.use('/players', ladder.players)
-app.use('/addPlayer', ladder.addPlayer)
-// app.get('/challenges', ladder.getChallenges)
+
+// app.use('/addPlayer', ladder.addPlayer)
+app.get('/singlesChallenges', ladder.singlesChallenges)
+
 app.use('/recentSinglesMatches', ladder.recentSinglesMatches)
 app.use('/recentDoublesMatches', ladder.recentDoublesMatches)
 
 // app.get('/addSinglesMatch', auth.checkAuth, ladder.addSinglesMatch)
 // app.get('/addDoublesMatch', auth.checkAuth, ladder.addDoublesMatch)
+// app.get('/invite', auth.checkAuth, ladder.invite)
 
 app.get('/addSinglesMatch', ladder.addSinglesMatch)
 app.get('/addDoublesMatch', ladder.addDoublesMatch)
 
-// app.get('/addChallenge', auth.checkAuth, ladder.addChallenge)
-// app.get('/invite', auth.checkAuth, ladder.invite)
+app.get('/addSinglesChallenge', auth.checkAuth, ladder.addSinglesChallenge)
+
 app.post('/login', auth.login)
 app.post('/changePassword', auth.checkAuth, auth.changePassword)
-// app.get('/settings', auth.checkAuth, auth.getSettings)
 app.post('/saveSettings', auth.checkAuth, auth.saveSettings)
 app.use('/logout', auth.logout)
 

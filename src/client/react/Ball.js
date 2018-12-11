@@ -16,7 +16,6 @@ import {
 
 import CssBall from './CssBall'
 import BackgroundBall from './BackgroundBall'
-// import OldCssBall from './OldCssBall'
 
 export default class Ball extends React.Component {
   constructor () {
@@ -68,32 +67,9 @@ export default class Ball extends React.Component {
     this.scenes.push({ scene, camera, renderer })
   }
 
-  // const lat = this.targetLatitude - this.latitude
-  // const lon = this.targetLongitude - this.longitude
-
-  // const dLat = Math.sign(lat) * Math.min(Math.abs(lon), 1)
-  // const dLon = Math.sign(lon) * Math.min(Math.abs(lon, 1))
-
-  // // this.latitude += 
-
-  // if (dLat !== 0 || dLon !== 0) {
-  //   this.latitude += dLat
-  //   this.longitude += dLon
-
   tick () {
     this.latitude += (this.targetLatitude - this.latitude) / 30
-
-    // const flip = Math.abs(this.targetLongitude - this.longitude) > Math.PI
-    // if (this.targetLongitude - this.longitude > Math.PI) {
-    //   this.longitude +=
-    // }
-
-    // if (flip) {
     this.longitude += (this.targetLongitude - this.longitude) / 30
-    // } else {
-    // this.longitude += (this.targetLongitude - this.longitude) / 30
-    // }
-
     const phi = ThreeMath.degToRad(90 - this.latitude)
     const theta = ThreeMath.degToRad(this.longitude)
     const x = Math.sin(phi) * Math.sin(theta)
@@ -134,7 +110,7 @@ export default class Ball extends React.Component {
   }
 
   render () {
-    const { userId, players, panels } = this.props
+    const { userId, players, panels, config } = this.props
     return <div onMouseDown={this.mouseDownHandler}>
       <BackgroundBall
         panels={panels}
@@ -144,16 +120,10 @@ export default class Ball extends React.Component {
         userId={userId}
         players={players}
         panels={panels}
+        config={config}
         onReady={this.ballReadyHandler}
         onChange={this.props.onChange}
       />
-      {/* <OldCssBall
-        userId={userId}
-        players={players}
-        panels={panels}
-        onReady={this.ballReadyHandler}
-        onChange={this.props.onChange}
-      /> */}
     </div>
   }
 }

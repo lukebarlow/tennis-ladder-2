@@ -1,7 +1,7 @@
 import React from 'react'
 import { json } from 'd3-fetch'
 
-import Ladder from './Ladder'
+import DoublesLadder from './DoublesLadder'
 import MatchesPanel from './MatchesPanel'
 
 import css from './TwoPartPanel.css'
@@ -48,17 +48,16 @@ export default class DoublesPanel extends React.Component {
       return ''
     }
 
-    // sort by doubles rating
-    players.sort((a, b) => (b.doublesRating || 1200) - (a.doublesRating || 1200))
+    const cutoff = this.props.config.daysSincePlayedCutoffDoubles
 
     return <div className={css.scrollContainer}>
       <div className={css.twoColumns}>
         <div className={css.header1}>doubles ladder</div>
         <div className={css.body1}>
-          <Ladder
+          <DoublesLadder
             userId={userId}
-            rungs={this.props.players}
-            extraFields={['doublesRating']}
+            players={players}
+            cutoff={cutoff}
           />
         </div>
         <div className={css.header2}>doubles matches</div>
