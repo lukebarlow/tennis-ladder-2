@@ -3,9 +3,8 @@ import { json } from 'd3-fetch'
 
 import SinglesLadder from './SinglesLadder'
 import MatchesPanel from './MatchesPanel'
-import ChallengesPanel from './ChallengesPanel'
 
-import css from './ThreePartPanel.css'
+import css from './TwoPartPanel.css'
 
 export default class SinglesPanel extends React.Component {
   constructor () {
@@ -60,7 +59,7 @@ export default class SinglesPanel extends React.Component {
     const cutoff = this.props.config.daysSincePlayedCutoffSingles
 
     return <div className={css.scrollContainer}>
-      <div className={css.threeColumns}>
+      <div className={css.twoColumns}>
         <div className={css.header1}>singles ladder</div>
         <div className={css.body1}>
           <SinglesLadder
@@ -79,13 +78,6 @@ export default class SinglesPanel extends React.Component {
             playersPerSide={1}
             onAddMatch={this.addMatchHandler}
             {...this.state}
-          />
-        </div>
-        <div className={css.header3}>challenges</div>
-        <div className={css.body3}>
-          <ChallengesPanel
-            players={players}
-            challenges={this.state.challenges}
           />
         </div>
       </div>

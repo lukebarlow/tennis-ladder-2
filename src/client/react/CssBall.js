@@ -28,7 +28,7 @@ export default class CssBall extends React.Component {
 
   componentDidMount () {
     const camera = this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
-    
+
     window.cssCamera = camera
     const scene = this.scene = new Scene()
 

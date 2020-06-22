@@ -5,9 +5,16 @@
 
 .loginGrid input {
   border: 1pt solid gray;
+  max-width: 100%;
 }
 
 .loginButtonContainer {
   width: 200px;
   text-align: right;
+}
+
+@media only screen and (max-width: 700px) {
+  .loginButtonContainer {
+    width: 100%;
+  }
 }
