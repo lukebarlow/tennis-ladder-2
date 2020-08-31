@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-handler-names */
+
 import React from 'react'
 import { Modal } from 'react-bootstrap'
 
@@ -48,7 +50,7 @@ export default class NewMatchModal extends React.Component {
       }
       score[set][playerIndex] = games
 
-      let enteredSets = score.filter(validSet).length
+      const enteredSets = score.filter(validSet).length
       if (score.length > enteredSets + 1) {
         score.pop()
       }
@@ -93,13 +95,13 @@ export default class NewMatchModal extends React.Component {
 
     return (
       <Modal show={this.props.show} onHide={this.closeHandler}>
-        <Modal.Header >
+        <Modal.Header>
           <CloseButton onClick={this.closeHandler} />
         </Modal.Header>
         <Modal.Body>
           <h1>record a match</h1>
           <br />
-          <div className='match' >
+          <div className='match'>
             <table>
               <tbody>
                 <tr>
@@ -107,7 +109,7 @@ export default class NewMatchModal extends React.Component {
                     {
                       range(playersPerSide).map((i) => (
                         <React.Fragment key={i}>
-                          { i > 0 && ' ' }
+                          {i > 0 && ' '}
                           <PlayerSelect
                             players={players}
                             value={this.replaceUserId(this.state.sideA[i])}
@@ -119,7 +121,7 @@ export default class NewMatchModal extends React.Component {
                   </td>
                   {
                     range(this.state.score.length).map((i) => (
-                      <td key={i} >
+                      <td key={i}>
                         <ScoreSelect
                           value={this.state.score[i] ? this.state.score[i][0] : ''}
                           onChange={this.scoreSelectHandler('a', i)}
@@ -133,7 +135,7 @@ export default class NewMatchModal extends React.Component {
                     {
                       range(playersPerSide).map((i) => (
                         <React.Fragment key={i}>
-                          { i > 0 && ' ' }
+                          {i > 0 && ' '}
                           <PlayerSelect
                             players={players}
                             value={this.replaceUserId(this.state.sideB[i])}
@@ -145,7 +147,7 @@ export default class NewMatchModal extends React.Component {
                   </td>
                   {
                     range(this.state.score.length).map((i) => (
-                      <td key={i} >
+                      <td key={i}>
                         <ScoreSelect
                           value={this.state.score[i] ? this.state.score[i][1] : ''}
                           onChange={this.scoreSelectHandler('b', i)}
@@ -161,7 +163,9 @@ export default class NewMatchModal extends React.Component {
           <button
             id='addMatch'
             style={{ float: 'right' }}
-            onClick={this.addMatchHandler}>add match</button>
+            onClick={this.addMatchHandler}
+          >add match
+          </button>
         </Modal.Body>
       </Modal>
     )

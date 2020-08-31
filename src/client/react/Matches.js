@@ -1,7 +1,16 @@
 import React from 'react'
 
 import { timeFormat } from 'd3-time-format'
-const formatTime = timeFormat('%a %-e %b')
+const formatTimeWithoutYear = timeFormat('%a %-e %b')
+const formatTimeWithYear = timeFormat('%a %-e %b %Y')
+
+function formatTime (value) {
+  if (value.getYear() === new Date().getYear()) {
+    return formatTimeWithoutYear(value)
+  } else {
+    return formatTimeWithYear(value)
+  }
+}
 
 function getPlayerName (id, players) {
   const f = players.find(p => p._id === id)
@@ -17,44 +26,47 @@ function getPlayerNames (ids, players) {
 }
 
 export default ({ matches, players }) => {
-
   function ratingMoveCell (match, side) {
     // only show ratings movements for doubles at the moment
     if (!Array.isArray(match.sideA)) {
       return null
     }
-    return <td style={{ borderWidth: 0, fontSize: '60%' }}>
-      ({side === match.wonBy ? '+' : '-'} {match.ratingsMoveBy})
-    </td>
+    return (
+      <td style={{ borderWidth: 0, fontSize: '60%' }}>
+        ({side === match.wonBy ? '+' : '-'} {match.ratingsMoveBy})
+      </td>
+    )
   }
 
-  return <span>
-    { matches.map((match, i) => (
-      <div key={i} className='match'>
-        {formatTime(new Date(match.date))}
-        <table>
-          <tbody>
-            <tr>
-              <td style={{ fontWeight: match.wonBy === 'sideA' ? '400' : 'inherit' }}>{getPlayerNames(match.sideA, players)}</td>
-              {
-                match.score.map((set, j) => (
-                  <td key={j}>{set[0]}</td>
-                ))
-              }
-              { ratingMoveCell(match, 'sideA') }
-            </tr>
-            <tr>
-              <td style={{ fontWeight: match.wonBy === 'sideB' ? '400' : 'inherit' }}>{getPlayerNames(match.sideB, players)}</td>
-              {
-                match.score.map((set, j) => (
-                  <td key={j}>{set[1]}</td>
-                ))
-              }
-              { ratingMoveCell(match, 'sideB') }
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    ))}
-  </span>
+  return (
+    <span>
+      {matches.map((match, i) => (
+        <div key={i} className='match'>
+          {formatTime(new Date(match.date))}
+          <table>
+            <tbody>
+              <tr>
+                <td style={{ fontWeight: match.wonBy === 'sideA' ? '400' : 'inherit' }}>{getPlayerNames(match.sideA, players)}</td>
+                {
+                  match.score.map((set, j) => (
+                    <td key={j}>{set[0]}</td>
+                  ))
+                }
+                {ratingMoveCell(match, 'sideA')}
+              </tr>
+              <tr>
+                <td style={{ fontWeight: match.wonBy === 'sideB' ? '400' : 'inherit' }}>{getPlayerNames(match.sideB, players)}</td>
+                {
+                  match.score.map((set, j) => (
+                    <td key={j}>{set[1]}</td>
+                  ))
+                }
+                {ratingMoveCell(match, 'sideB')}
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </span>
+  )
 }

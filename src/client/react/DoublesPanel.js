@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-handler-names */
+
 import React from 'react'
 import { json } from 'd3-fetch'
 
@@ -50,27 +52,29 @@ export default class DoublesPanel extends React.Component {
 
     const cutoff = this.props.config.daysSincePlayedCutoffDoubles
 
-    return <div className={css.scrollContainer}>
-      <div className={css.twoColumns}>
-        <div className={css.header1}>doubles ladder</div>
-        <div className={css.body1}>
-          <DoublesLadder
-            userId={userId}
-            players={players}
-            cutoff={cutoff}
-          />
-        </div>
-        <div className={css.header2}>doubles matches</div>
-        <div className={css.body2}>
-          <MatchesPanel
-            userId={userId}
-            players={players}
-            playersPerSide={2}
-            onAddMatch={this.addMatchHandler}
-            {...this.state}
-          />
+    return (
+      <div className={css.scrollContainer}>
+        <div className={css.twoColumns}>
+          <div className={css.header1}>doubles ladder</div>
+          <div className={css.body1}>
+            <DoublesLadder
+              userId={userId}
+              players={players}
+              cutoff={cutoff}
+            />
+          </div>
+          <div className={css.header2}>doubles matches</div>
+          <div className={css.body2}>
+            <MatchesPanel
+              userId={userId}
+              players={players}
+              playersPerSide={2}
+              onAddMatch={this.addMatchHandler}
+              {...this.state}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    )
   }
 }

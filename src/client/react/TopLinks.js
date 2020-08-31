@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-handler-names */
+
 import React from 'react'
 import { text } from 'd3-fetch'
 import LoginModal from './LoginModal'
@@ -34,20 +36,25 @@ export default class TopLinks extends React.Component {
   }
 
   render () {
-    return <span id='top-links'>
-      <a id='singles' onClick={() => this.props.onGoTo('singles')}>singles</a>
-      <a id='doubles' onClick={() => this.props.onGoTo('doubles')}>doubles</a>
-      {
-        this.props.userId
-          ? <>
-            <span style={{ paddingLeft: '15px', position: 'relative', top: '3px' }}>
-              <SettingsButton onClick={() => this.props.onGoTo('settings')} />
-            </span>
-            <a id='logout' onClick={this.logoutHandler}>log out</a>
-          </>
-          : <a id='settings' onClick={this.openModal}>log in</a>
-      }
-      <LoginModal show={this.state.isShowingModal} onClose={this.closeModal} onLogin={this.loginHandler} />
-    </span>
+    return (
+      <span id='top-links'>
+        <a id='tom' onClick={() => this.props.onGoTo('tom')}>Tom</a>
+        <a id='singles' onClick={() => this.props.onGoTo('singles')}>singles</a>
+        <a id='doubles' onClick={() => this.props.onGoTo('doubles')}>doubles</a>
+        {
+          this.props.userId
+            ? (
+              <>
+                <span style={{ paddingLeft: '15px', position: 'relative', top: '3px' }}>
+                  <SettingsButton onClick={() => this.props.onGoTo('settings')} />
+                </span>
+                <a id='logout' onClick={this.logoutHandler}>log out</a>
+              </>
+            )
+            : <a id='settings' onClick={this.openModal}>log in</a>
+        }
+        <LoginModal show={this.state.isShowingModal} onClose={this.closeModal} onLogin={this.loginHandler} />
+      </span>
+    )
   }
 }

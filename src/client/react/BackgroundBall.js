@@ -23,7 +23,7 @@ export default class BackgroundBall extends React.Component {
     const geometry = new SphereBufferGeometry(500, 60, 40)
     geometry.scale(-1, 1, 1)
     var material = new MeshBasicMaterial({
-      map: new TextureLoader().load('images/clay-court-hi-res.jpg')
+      map: new TextureLoader().load('images/tennis.jpg')
     })
 
     const mesh = new Mesh(geometry, material)
@@ -38,9 +38,11 @@ export default class BackgroundBall extends React.Component {
   }
 
   render () {
-    return <div
-      id='background-ball'
-      ref={this.main}
-    />
+    return (
+      <div
+        id='background-ball'
+        ref={this.main}
+      />
+    )
   }
 }

@@ -12,3 +12,15 @@
   position: relative;
   top: -2px;
 }
+
+.rungName {
+  cursor: pointer
+}
+
+.rungName:hover {
+  border-bottom: 0.5pt solid black;
+}
+
+.selected {
+  font-weight: bold;
+}

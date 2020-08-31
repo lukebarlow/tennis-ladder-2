@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-handler-names */
+
 /* this component contains both the tennis court panoramic
    background, and all the panels which rotate on the inside
    of the ball.
@@ -56,7 +58,7 @@ export default class Ball extends React.Component {
   }
 
   windowResizeHandler () {
-    for (let { camera, renderer } of this.scenes) {
+    for (const { camera, renderer } of this.scenes) {
       camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
       renderer.setSize(window.innerWidth, window.innerHeight)
@@ -77,7 +79,7 @@ export default class Ball extends React.Component {
     const z = -1 * Math.sin(phi) * Math.cos(theta)
     const target = new Vector3(x, y, z)
 
-    for (let { scene, camera, renderer } of this.scenes) {
+    for (const { scene, camera, renderer } of this.scenes) {
       camera.lookAt(target)
       renderer.render(scene, camera)
     }
@@ -111,19 +113,21 @@ export default class Ball extends React.Component {
 
   render () {
     const { userId, players, panels, config } = this.props
-    return <div onMouseDown={this.mouseDownHandler}>
-      <BackgroundBall
-        panels={panels}
-        onReady={this.ballReadyHandler}
-      />
-      <CssBall
-        userId={userId}
-        players={players}
-        panels={panels}
-        config={config}
-        onReady={this.ballReadyHandler}
-        onChange={this.props.onChange}
-      />
-    </div>
+    return (
+      <div onMouseDown={this.mouseDownHandler}>
+        <BackgroundBall
+          panels={panels}
+          onReady={this.ballReadyHandler}
+        />
+        <CssBall
+          userId={userId}
+          players={players}
+          panels={panels}
+          config={config}
+          onReady={this.ballReadyHandler}
+          onChange={this.props.onChange}
+        />
+      </div>
+    )
   }
 }

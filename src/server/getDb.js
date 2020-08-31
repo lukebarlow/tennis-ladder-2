@@ -126,17 +126,6 @@ module.exports = (connectionString) => {
 
   /* adjust the ladder positions of players according to match results */
   async function adjustSinglesLadder (winner, loser, winnerNewRating, loserNewRating) {
-    // var { winner, loser } = matchWinnerAndLoser(match)
-    // // greater ladder position means lower down the ladder
-
-    // if (!winner) {
-    //   console.log('no clear winner, so no movement')
-    //   return
-    // }
-
-    // const winnerDetails = await getPlayer({ _id: winner })
-    // const loserDetails = await getPlayer({ _id: loser })
-
     // change the ladder position
     if (winner.ladderPosition > loser.ladderPosition) {
       await moveToSinglesPosition({ _id: winner._id }, loser.ladderPosition)
@@ -178,19 +167,19 @@ module.exports = (connectionString) => {
     each player
   */
   async function adjustDoublesLadder (winners, losers, ratingsMoveBy) {
-    for (let winner of winners) {
+    for (const winner of winners) {
       // console.log('goint to change winner', winner._id)
       await changeDoublesRating(winner._id, ratingsMoveBy)
     }
 
-    for (let loser of losers) {
+    for (const loser of losers) {
       await changeDoublesRating(loser._id, -ratingsMoveBy)
     }
   }
 
   async function lastPlayed (collection, playerId) {
     const result = await collection.aggregate([
-      { $match: { $or: [{ 'sideA': playerId }, { 'sideB': playerId }] } },
+      { $match: { $or: [{ sideA: playerId }, { sideB: playerId }] } },
       { $group: { _id: null, total: { $max: '$date' } } },
       { $sort: { total: -1 } }
     ])
@@ -218,7 +207,7 @@ module.exports = (connectionString) => {
       .sort({ ladderPosition: 1 })
       .toArray()
 
-    for (let player of players) {
+    for (const player of players) {
       player.lastPlayedSingles = await lastPlayedSingles(player._id)
       player.daysSincePlayedSingles = daysSince(player.lastPlayedSingles)
 
@@ -230,11 +219,11 @@ module.exports = (connectionString) => {
   }
 
   async function getRecentSinglesMatches () {
-    return db.singlesMatch.findAsCursor().sort({ date: -1 }).limit(50).toArray()
+    return db.singlesMatch.findAsCursor().sort({ date: -1 }).toArray()
   }
 
   async function getRecentDoublesMatches () {
-    return db.doublesMatch.findAsCursor().sort({ date: -1 }).limit(50).toArray()
+    return db.doublesMatch.findAsCursor().sort({ date: -1 }).toArray()
   }
 
   const firstIfArray = (a) => Array.isArray(a) ? a[0] : a
@@ -333,6 +322,10 @@ module.exports = (connectionString) => {
     return db.player.update({ name: name }, { $set: { password: hashPassword(password) } })
   }
 
+  async function setIsAdmin (name, isAdmin) {
+    return db.player.update({ name: name }, { $set: { isAdmin } })
+  }
+
   async function getSettings (userId) {
     userId = mongoist.ObjectId(userId)
     const result = await db.player.find({ _id: userId })
@@ -342,8 +335,7 @@ module.exports = (connectionString) => {
   async function saveSettings (userId, settings) {
     userId = mongoist.ObjectId(userId)
     return db.player.update({ _id: userId },
-      { $set: { settings: settings }
-      })
+      { $set: { settings: settings }})
   }
 
   async function findSinglesChallengesBetween (idA, idB) {
@@ -365,7 +357,8 @@ module.exports = (connectionString) => {
     // console.log('***** challenges ****', challenges.length)
     // return challenges
 
-    return db.singlesChallenge.find({ $or: [
+    return db.singlesChallenge.find({
+ $or: [
       {
         challenger: idA,
         challenged: idB,
@@ -376,7 +369,8 @@ module.exports = (connectionString) => {
         challenged: idA,
         resolved: false
       }
-    ] })
+    ] 
+})
   }
 
   async function addSinglesChallenge (challenge) {
@@ -428,6 +422,7 @@ module.exports = (connectionString) => {
     addSinglesMatch,
     addDoublesMatch,
     setPassword,
+    setIsAdmin,
     authenticate,
     getRecentSinglesMatches,
     getRecentDoublesMatches,

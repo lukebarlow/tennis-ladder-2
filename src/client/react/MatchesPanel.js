@@ -1,6 +1,9 @@
+/* eslint-disable react/jsx-handler-names */
+
 import React from 'react'
 import Matches from './Matches'
 import NewMatchModal from './NewMatchModal'
+import MatchStats from './MatchStats'
 
 export default class SinglesMatches extends React.Component {
   constructor () {
@@ -21,26 +24,45 @@ export default class SinglesMatches extends React.Component {
   }
 
   render () {
-    if (!this.props.matches) {
+    const { players, userId, playersPerSide, onAddMatch, selectedPlayers } = this.props
+    let { matches } = this.props
+
+    if (selectedPlayers?.length) {
+      const ids = selectedPlayers.map(p => p._id)
+      matches = matches.filter(m => {
+        return ids.every(id => (
+          id === m.sideA || id === m.sideB
+        ))
+      })
+    }
+
+    if (!matches) {
       return 'loading...'
     } else {
-      return <span>
-        {
-          this.props.userId && <>
-            <button onClick={this.showNewMatchModal}>record a match</button>
-            <br />
-          </>
-        }
-        <Matches matches={this.props.matches} players={this.props.players} />
-        <NewMatchModal
-          userId={this.props.userId}
-          players={this.props.players}
-          playersPerSide={this.props.playersPerSide}
-          show={this.state.showNewMatchModal}
-          onClose={this.closeNewMatchModal}
-          onAddMatch={this.props.onAddMatch}
-        />
-      </span>
+      return (
+        <div style={{ marginLeft: 10 }}>
+          {
+            userId && (
+              <>
+                <button onClick={this.showNewMatchModal}>record a match</button>
+                <br />
+              </>
+            )
+          }
+          {
+            selectedPlayers?.length ? <MatchStats {... { players, matches, selectedPlayers }} /> : null
+          }
+          <Matches matches={matches} players={players} />
+          <NewMatchModal
+            userId={userId}
+            players={players}
+            playersPerSide={playersPerSide}
+            show={this.state.showNewMatchModal}
+            onClose={this.closeNewMatchModal}
+            onAddMatch={onAddMatch}
+          />
+        </div>
+      )
     }
   }
 }

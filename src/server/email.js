@@ -20,7 +20,7 @@ function playerName (id, players) {
 
 function sideName (side, players) {
   if (!Array.isArray(side)) {
-    side = [ side ]
+    side = [side]
   }
   return side.map((id) => playerName(id, players)).join(' and ')
 }

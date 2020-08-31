@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-handler-names */
+
 /* The overall App */
 
 import React from 'react'
@@ -48,21 +50,23 @@ export default class App extends React.Component {
   }
 
   render () {
-    return <>
-      <Ball
-        userId={this.state.userId}
-        config={this.state.config}
-        panels={panels}
-        selectedPanel={this.state.selectedPanel}
-        players={this.state.players}
-        onChange={this.changeHandler}
-      />
-      <TopLinks
-        userId={this.state.userId}
-        onLogin={this.loginHandler}
-        onLogout={this.logoutHandler}
-        onGoTo={this.goToHandler}
-      />
-    </>
+    return (
+      <>
+        <Ball
+          userId={this.state.userId}
+          config={this.state.config}
+          panels={panels}
+          selectedPanel={this.state.selectedPanel}
+          players={this.state.players}
+          onChange={this.changeHandler}
+        />
+        <TopLinks
+          userId={this.state.userId}
+          onLogin={this.loginHandler}
+          onLogout={this.logoutHandler}
+          onGoTo={this.goToHandler}
+        />
+      </>
+    )
   }
 }
