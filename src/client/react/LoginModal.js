@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-handler-names */
+
 import React from 'react'
 import {
   Modal
@@ -64,7 +66,7 @@ export default class LoginModal extends React.Component {
   render () {
     return (
       <Modal show={this.props.show} onHide={this.props.onClose}>
-        <Modal.Header >
+        <Modal.Header>
           <CloseButton onClick={this.props.onClose} />
         </Modal.Header>
         <Modal.Body>

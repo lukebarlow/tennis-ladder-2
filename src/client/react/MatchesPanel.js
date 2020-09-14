@@ -24,7 +24,15 @@ export default class SinglesMatches extends React.Component {
   }
 
   render () {
-    const { players, userId, playersPerSide, onAddMatch, selectedPlayers } = this.props
+    const {
+      players,
+      userId,
+      playersPerSide,
+      onAddMatch,
+      selectedPlayers,
+      onTopMatchChange,
+      scrollNotifier
+    } = this.props
     let { matches } = this.props
 
     if (selectedPlayers?.length) {
@@ -50,9 +58,16 @@ export default class SinglesMatches extends React.Component {
             )
           }
           {
-            selectedPlayers?.length ? <MatchStats {... { players, matches, selectedPlayers }} /> : null
+            selectedPlayers?.length ? (
+              <MatchStats {... { players, matches, selectedPlayers }} />)
+              : null
           }
-          <Matches matches={matches} players={players} />
+          <Matches
+            matches={matches}
+            players={players}
+            onTopMatchChange={onTopMatchChange}
+            scrollNotifier={scrollNotifier}
+          />
           <NewMatchModal
             userId={userId}
             players={players}

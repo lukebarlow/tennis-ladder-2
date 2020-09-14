@@ -26,18 +26,19 @@ export default class App extends React.Component {
   }
 
   async init () {
-    const userId = await text('./userId')
+    const { userId, isAdmin } = await json('./userDetails')
     const players = await json('./players')
     const config = await json('./config')
-    this.setState({ userId, players, config })
+    this.setState({ userId, isAdmin, players, config })
   }
 
-  loginHandler (userId) {
-    this.setState({ userId })
+  async loginHandler (userId) {
+    const { isAdmin } = await json('./userDetails')
+    this.setState({ userId, isAdmin })
   }
 
   logoutHandler () {
-    this.setState({ userId: null })
+    this.setState({ userId: null, isAdmin: false })
   }
 
   goToHandler (location) {
@@ -50,18 +51,21 @@ export default class App extends React.Component {
   }
 
   render () {
+    const { userId, config, selectedPanel, isAdmin, players } = this.state
     return (
       <>
         <Ball
-          userId={this.state.userId}
-          config={this.state.config}
+          userId={userId}
+          isAdmin={isAdmin}
+          config={config}
           panels={panels}
-          selectedPanel={this.state.selectedPanel}
-          players={this.state.players}
+          selectedPanel={selectedPanel}
+          players={players}
           onChange={this.changeHandler}
         />
         <TopLinks
-          userId={this.state.userId}
+          userId={userId}
+          isAdmin={isAdmin}
           onLogin={this.loginHandler}
           onLogout={this.logoutHandler}
           onGoTo={this.goToHandler}

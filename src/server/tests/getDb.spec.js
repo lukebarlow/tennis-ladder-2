@@ -1,5 +1,7 @@
 /* global test expect afterEach afterAll jest */
 
+import '@babel/polyfill'
+
 const getDb = require('../getDb')
 
 jest.mock('../email')
@@ -31,22 +33,22 @@ test('no players when the database is initialised', async () => {
 
 test('add player', async () => {
   db = getDb(uniqueTestDbName())
-  await db.addPlayer('test-player', 'pw', 1, 't@p.w')
+  await db.addPlayer('test-player', 'pw', 't@p.w')
   const players = await db.getPlayers()
   expect(players.length).toBe(1)
 })
 
 test('no two players with same name', async () => {
   db = getDb(uniqueTestDbName())
-  await db.addPlayer('test-player', 'pw', 1, 't@p.w')
-  await db.addPlayer('test-player', 'pw2', 2, 't@p.w2')
+  await db.addPlayer('test-player', 'pw', 't@p.w')
+  await db.addPlayer('test-player', 'pw2', 't@p.w2')
   const players = await db.getPlayers()
   expect(players.length).toBe(1)
 })
 
 test('get player', async () => {
   db = getDb(uniqueTestDbName())
-  await db.addPlayer('test-player', 'pw', 1, 't@p.w')
+  await db.addPlayer('test-player', 'pw', 't@p.w')
   const player = await db.getPlayer({ name: 'test-player' })
   expect(player.name).toBe('test-player')
   expect(player.ladderPosition).toBe(1)
@@ -54,21 +56,21 @@ test('get player', async () => {
 
 test('authenticate', async () => {
   db = getDb(uniqueTestDbName())
-  const player = await db.addPlayer('test-player', 'pw', 1, 't@p.w')
+  const player = await db.addPlayer('test-player', 'pw', 't@p.w')
   const result = await db.authenticate('test-player', 'pw')
   expect(result).toBe(player._id.toString())
 })
 
 test('authenticate wrong password', async () => {
   db = getDb(uniqueTestDbName())
-  await db.addPlayer('test-player', 'pw', 1, 't@p.w')
+  await db.addPlayer('test-player', 'pw', 't@p.w')
   const result = await db.authenticate('test-player', 'wrong password')
   expect(result).toBe(false)
 })
 
 test('change password', async () => {
   db = getDb(uniqueTestDbName())
-  const player = await db.addPlayer('test-player', 'pw', 1, 't@p.w')
+  const player = await db.addPlayer('test-player', 'pw', 't@p.w')
   const changed = await db.changePassword(player._id.toString(), 'pw', 'new password')
   const result = await db.authenticate('test-player', 'new password')
   expect(changed).toBe(true)
@@ -77,7 +79,7 @@ test('change password', async () => {
 
 test('change password wrong old password', async () => {
   db = getDb(uniqueTestDbName())
-  const player = await db.addPlayer('test-player', 'pw', 1, 't@p.w')
+  const player = await db.addPlayer('test-player', 'pw', 't@p.w')
   const changed = await db.changePassword(player._id.toString(), 'wrong password', 'new password')
   const result = await db.authenticate('test-player', 'pw')
   expect(changed).toBe(false)
@@ -86,7 +88,7 @@ test('change password wrong old password', async () => {
 
 test('setPassword', async () => {
   db = getDb(uniqueTestDbName())
-  const player = await db.addPlayer('test-player', 'pw', 1, 't@p.w')
+  const player = await db.addPlayer('test-player', 'pw', 't@p.w')
   await db.setPassword('test-player', 'pw2')
   const result = await db.authenticate('test-player', 'pw2')
   expect(result).toBe(player._id.toString())
@@ -94,16 +96,16 @@ test('setPassword', async () => {
 
 test('add two players and check that one is moved down', async () => {
   db = getDb(uniqueTestDbName())
-  await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  await db.addPlayer('player-2', 'pw', 1, 't@p.w')
+  await db.addPlayer('player-1', 'pw', 't@p.w')
+  await db.addPlayer('player-2', 'pw', 't@p.w')
   const player1 = await db.getPlayer({ name: 'player-1' })
   expect(player1.ladderPosition).toBe(2)
 })
 
 test('move to position', async () => {
   db = getDb(uniqueTestDbName())
-  await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  await db.addPlayer('player-2', 'pw', 1, 't@p.w')
+  await db.addPlayer('player-1', 'pw', 't@p.w')
+  await db.addPlayer('player-2', 'pw', 't@p.w')
   const player1 = await db.getPlayer({ name: 'player-1' })
   expect(player1.ladderPosition).toBe(2)
   await db.moveToSinglesPosition({ name: 'player-1' }, 1)
@@ -122,8 +124,8 @@ test('getRecentSinglesMatches', async () => {
 test('addSinglesMatch', async () => {
   const dbName = uniqueTestDbName()
   db = getDb(dbName)
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
+  const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+  const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
   const match = {
     sideA: player1._id,
     sideB: player2._id,
@@ -137,8 +139,8 @@ test('addSinglesMatch', async () => {
 test('addSinglesMatch - win position', async () => {
   const dbName = uniqueTestDbName()
   db = getDb(dbName)
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
+  const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+  const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
   const match = {
     sideA: player1._id,
     sideB: player2._id,
@@ -152,8 +154,8 @@ test('addSinglesMatch - win position', async () => {
 test('addSinglesMatch - ranking change', async () => {
   const dbName = uniqueTestDbName()
   db = getDb(dbName)
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
+  const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+  const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
   const match = {
     sideA: player1._id,
     sideB: player2._id,
@@ -168,28 +170,26 @@ test('addSinglesMatch - ranking change', async () => {
 
 test('addSinglesMatch - no ladder movement on draw', async () => {
   db = getDb(uniqueTestDbName())
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
+  const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+  const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
   const match = {
     sideA: player1._id,
     sideB: player2._id,
     score: [[4, 6], [6, 4]]
   }
   await db.addSinglesMatch(match)
-  // const player2AfterWinning = await db.getPlayer({ name: 'player-2' })
-  // expect(player2AfterWinning.ladderPosition).toBe(2)
 })
 
 test('addDoublesMatch', async () => {
   const dbName = uniqueTestDbName()
   db = getDb(dbName)
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
-  const player3 = await db.addPlayer('player-3', 'pw', 1, 't@p.w')
-  const player4 = await db.addPlayer('player-4', 'pw', 2, 't@p.w')
+  const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+  const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
+  const player3 = await db.addPlayer('player-3', 'pw', 't@p.w')
+  const player4 = await db.addPlayer('player-4', 'pw', 't@p.w')
   const match = {
-    sideA: [ player1._id, player2._id ],
-    sideB: [ player3._id, player4._id ],
+    sideA: [player1._id, player2._id],
+    sideB: [player3._id, player4._id],
     score: [[6, 4]]
   }
   await db.addDoublesMatch(match)
@@ -200,13 +200,13 @@ test('addDoublesMatch', async () => {
 test('addDoublesMatch - check ratings changes', async () => {
   const dbName = uniqueTestDbName()
   db = getDb(dbName)
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
-  const player3 = await db.addPlayer('player-3', 'pw', 1, 't@p.w')
-  const player4 = await db.addPlayer('player-4', 'pw', 2, 't@p.w')
+  const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+  const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
+  const player3 = await db.addPlayer('player-3', 'pw', 't@p.w')
+  const player4 = await db.addPlayer('player-4', 'pw', 't@p.w')
   const match = {
-    sideA: [ player1._id, player2._id ],
-    sideB: [ player3._id, player4._id ],
+    sideA: [player1._id, player2._id],
+    sideB: [player3._id, player4._id],
     score: [[6, 4]]
   }
   await db.addDoublesMatch(match)
@@ -223,13 +223,13 @@ test('addDoublesMatch - check ratings changes', async () => {
 test('addDoublesMatch - mismatched teams', async () => {
   const dbName = uniqueTestDbName()
   db = getDb(dbName)
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w', { doublesRating: 1200 })
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w', { doublesRating: 800 })
-  const player3 = await db.addPlayer('player-3', 'pw', 1, 't@p.w', { doublesRating: 1200 })
-  const player4 = await db.addPlayer('player-4', 'pw', 2, 't@p.w', { doublesRating: 1200 })
+  const player1 = await db.addPlayer('player-1', 'pw', 't@p.w', { doublesRating: 1200 })
+  const player2 = await db.addPlayer('player-2', 'pw', 't@p.w', { doublesRating: 800 })
+  const player3 = await db.addPlayer('player-3', 'pw', 't@p.w', { doublesRating: 1200 })
+  const player4 = await db.addPlayer('player-4', 'pw', 't@p.w', { doublesRating: 1200 })
   const match = {
-    sideA: [ player1._id, player2._id ],
-    sideB: [ player3._id, player4._id ],
+    sideA: [player1._id, player2._id],
+    sideB: [player3._id, player4._id],
     score: [[6, 4]]
   }
   await db.addDoublesMatch(match)
@@ -243,53 +243,53 @@ test('addDoublesMatch - mismatched teams', async () => {
   expect(player4AfterLosing.doublesRating).toBe(1176)
 })
 
-test('addSinglesChallenge', async () => {
-  db = getDb(uniqueTestDbName())
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
-  const challenge = {
-    challenger: player1._id,
-    challenged: player2._id
-  }
-  await db.addSinglesChallenge(challenge)
-})
+// test('addSinglesChallenge', async () => {
+//   db = getDb(uniqueTestDbName())
+//   const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+//   const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
+//   const challenge = {
+//     challenger: player1._id,
+//     challenged: player2._id
+//   }
+//   await db.addSinglesChallenge(challenge)
+// })
 
-test('getOutstandingSinglesChallenges', async () => {
-  db = getDb(uniqueTestDbName())
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
-  const player3 = await db.addPlayer('player-3', 'pw', 2, 't@p.w')
-  await db.addSinglesChallenge({
-    challenger: player1._id,
-    challenged: player2._id
-  })
-  await db.addSinglesChallenge({
-    challenger: player1._id,
-    challenged: player3._id
-  })
-  const challenges = await db.getOutstandingSinglesChallenges()
-  expect(challenges.length).toBe(2)
-})
+// test('getOutstandingSinglesChallenges', async () => {
+//   db = getDb(uniqueTestDbName())
+//   const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+//   const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
+//   const player3 = await db.addPlayer('player-3', 'pw', 't@p.w')
+//   await db.addSinglesChallenge({
+//     challenger: player1._id,
+//     challenged: player2._id
+//   })
+//   await db.addSinglesChallenge({
+//     challenger: player1._id,
+//     challenged: player3._id
+//   })
+//   const challenges = await db.getOutstandingSinglesChallenges()
+//   expect(challenges.length).toBe(2)
+// })
 
-test('resolve challenge when adding match', async () => {
-  db = getDb(uniqueTestDbName())
-  const player1 = await db.addPlayer('player-1', 'pw', 1, 't@p.w')
-  const player2 = await db.addPlayer('player-2', 'pw', 2, 't@p.w')
-  const player3 = await db.addPlayer('player-3', 'pw', 2, 't@p.w')
-  await db.addSinglesChallenge({
-    challenger: player1._id,
-    challenged: player2._id
-  })
-  await db.addSinglesChallenge({
-    challenger: player1._id,
-    challenged: player3._id
-  })
-  const match = {
-    sideA: player1._id,
-    sideB: player2._id,
-    score: [[4, 6], [6, 4]]
-  }
-  await db.addSinglesMatch(match)
-  const challenges = await db.getOutstandingSinglesChallenges()
-  expect(challenges.length).toBe(1)
-})
+// test('resolve challenge when adding match', async () => {
+//   db = getDb(uniqueTestDbName())
+//   const player1 = await db.addPlayer('player-1', 'pw', 't@p.w')
+//   const player2 = await db.addPlayer('player-2', 'pw', 't@p.w')
+//   const player3 = await db.addPlayer('player-3', 'pw', 't@p.w')
+//   await db.addSinglesChallenge({
+//     challenger: player1._id,
+//     challenged: player2._id
+//   })
+//   await db.addSinglesChallenge({
+//     challenger: player1._id,
+//     challenged: player3._id
+//   })
+//   const match = {
+//     sideA: player1._id,
+//     sideB: player2._id,
+//     score: [[4, 6], [6, 4]]
+//   }
+//   await db.addSinglesMatch(match)
+//   const challenges = await db.getOutstandingSinglesChallenges()
+//   expect(challenges.length).toBe(1)
+// })

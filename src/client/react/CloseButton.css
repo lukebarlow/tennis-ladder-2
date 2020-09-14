@@ -3,7 +3,7 @@
   stroke: #ddd;
   cursor: pointer;
   transition: all 0.3s;
-  padding-left: calc(100% - 12px);
+  padding-left: calc(100% - 25px);
 }
 
 .closeButton:hover {

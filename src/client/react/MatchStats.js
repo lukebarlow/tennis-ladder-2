@@ -27,7 +27,7 @@ export default function ({ players, selectedPlayers, matches }) {
     return (
       <div className={css.stats}>
         {player.name} has played {matches.length} {matchNoun}<br />
-        W{win} L{lose} D{draw}
+        {win} wins, {lose} losses and {draw} draws.
       </div>
     )
   }

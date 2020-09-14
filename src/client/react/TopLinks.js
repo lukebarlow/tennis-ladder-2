@@ -48,12 +48,21 @@ export default class TopLinks extends React.Component {
                 <span style={{ paddingLeft: '15px', position: 'relative', top: '3px' }}>
                   <SettingsButton onClick={() => this.props.onGoTo('settings')} />
                 </span>
+                {
+                  this.props.isAdmin && (
+                    <a id='admin' onClick={() => this.props.onGoTo('admin')}>admin</a>
+                  )
+                }
                 <a id='logout' onClick={this.logoutHandler}>log out</a>
               </>
             )
             : <a id='settings' onClick={this.openModal}>log in</a>
         }
-        <LoginModal show={this.state.isShowingModal} onClose={this.closeModal} onLogin={this.loginHandler} />
+        <LoginModal
+          show={this.state.isShowingModal}
+          onClose={this.closeModal}
+          onLogin={this.loginHandler}
+        />
       </span>
     )
   }

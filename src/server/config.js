@@ -7,6 +7,6 @@ module.exports = {
   },
   siteName: process.env.SITE_NAME,
   domainName: process.env.DOMAIN_NAME,
-  mongoDbName: process.env.MONGODB_URI,
+  mongoDbUri: process.env.MONGODB_URI,
   port: process.env.PORT
 }

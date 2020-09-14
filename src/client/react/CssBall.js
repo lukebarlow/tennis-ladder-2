@@ -32,13 +32,13 @@ export default class CssBall extends React.Component {
     window.cssCamera = camera
     const scene = this.scene = new Scene()
 
-    for (let entry of Object.entries(this.props.panels)) {
-      const panel = entry[1]
+    for (const [name, panel] of Object.entries(this.props.panels)) {
       var element = document.createElement('div')
       element.setAttribute('class', css.card)
-
       if (panel.component) {
         this.panelRenderings.push({
+          name,
+          panel,
           component: panel.component,
           element: element
         })
@@ -66,8 +66,11 @@ export default class CssBall extends React.Component {
   }
 
   renderAllPanels () {
-    for (let { component, element } of this.panelRenderings) {
+    for (const { component, element, panel } of this.panelRenderings) {
       render(React.createElement(component, this.props), element)
+      if (panel.visibleIf) {
+        element.style.display = panel.visibleIf(this.props) ? 'block' : 'none'
+      }
     }
   }
 

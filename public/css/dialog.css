@@ -11,7 +11,7 @@ See http://twitter.github.io/bootstrap/
   display: none;
 }
 
-.modal-backdrop, .modal-backdrop.fade.in {
+.modal-backdrop, .modal-backdrop.fade.show {
   opacity: .8;
   filter: alpha(opacity=80);
 }
@@ -34,11 +34,11 @@ See http://twitter.github.io/bootstrap/
   transition: opacity .15s linear;
 }
 
-.fade.in {
+.fade.show {
   opacity: 1;
 }
 
-#link-dialog.in {
+#link-dialog.show {
   top: 302px;
 }
 
@@ -65,7 +65,7 @@ See http://twitter.github.io/bootstrap/
   color:black;
 }
 
-.modal.fade.in {
+.modal.fade.show {
   top: 25%;
 }
 
@@ -119,7 +119,7 @@ See http://twitter.github.io/bootstrap/
     max-width:80%;
   }
 
-  .modal.fade.in {
+  .modal.fade.show {
     top: 10%;
   }
 

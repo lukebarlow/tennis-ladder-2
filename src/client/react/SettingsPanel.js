@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-handler-names */
+
 import React from 'react'
 import { text } from 'd3-fetch'
 
@@ -51,34 +53,36 @@ export default class SettingsPanel extends React.Component {
     }
 
     if (!user) {
-      return ''
+      return null
     }
 
-    return <div style={{ overflowY: 'scroll' }} className={css.settingsGrid}>
-      <div className={css.prompt}>name</div>
-      <div>
-        { user.name }
+    return (
+      <div style={{ overflowY: 'scroll' }} className={css.settingsGrid}>
+        <div className={css.prompt}>name</div>
+        <div>
+          {user.name}
+        </div>
+        <div className={css.prompt}>password</div>
+        <div>
+          <button onClick={this.openModal}>change password</button>
+        </div>
+        <div className={css.prompt}>email address</div>
+        <div>
+          <input type='text' ref={(input) => { this.email = input }} defaultValue={user.settings.email} />
+        </div>
+        <div />
+        <div className={css.saveButtonContainer}>
+          {
+            this.state.saving
+              ? 'saving...'
+              : <button className={css.saveButton} onClick={this.saveChanges}>save changes</button>
+          }
+        </div>
+        <ChangePasswordModal
+          show={this.state.isShowingModal}
+          onClose={this.closeModal}
+        />
       </div>
-      <div className={css.prompt}>password</div>
-      <div>
-        <button onClick={this.openModal}>change password</button>
-      </div>
-      <div className={css.prompt}>email address</div>
-      <div>
-        <input type='text' ref={(input) => { this.email = input }} defaultValue={user.settings.email} />
-      </div>
-      <div />
-      <div className={css.saveButtonContainer}>
-        {
-          this.state.saving
-            ? 'saving...'
-            : <button className={css.saveButton} onClick={this.saveChanges}>save changes</button>
-        }
-      </div>
-      <ChangePasswordModal
-        show={this.state.isShowingModal}
-        onClose={this.closeModal}
-      />
-    </div>
+    )
   }
 }

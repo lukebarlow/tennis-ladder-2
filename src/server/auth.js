@@ -4,6 +4,7 @@ var db = require('./getDb')()
 
 module.exports = {
   userId: userId,
+  userDetails: userDetails,
   checkAuth: checkAuth,
   login: login,
   logout: logout,
@@ -14,6 +15,15 @@ module.exports = {
 
 function userId (req, res) {
   res.send(req.session.userId || '')
+}
+
+async function userDetails (req, res) {
+  const userId = req.session.userId
+  const isAdmin = await db.getIsAdmin(userId)
+
+  console.log('isAdmin is', isAdmin)
+
+  res.send({ userId, isAdmin })
 }
 
 function checkAuth (req, res, next) {

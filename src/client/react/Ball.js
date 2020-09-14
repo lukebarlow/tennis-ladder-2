@@ -28,11 +28,13 @@ export default class Ball extends React.Component {
     this.mouseDownHandler = this.mouseDownHandler.bind(this)
     this.mouseUpHandler = this.mouseUpHandler.bind(this)
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this)
+    this.imageLoadedHandler = this.imageLoadedHandler.bind(this)
     this.scenes = []
     this.latitude = 0
     this.longitude = -90
     this.targetLatitude = 0
     this.targetLongitude = -90
+    this.animating = false
   }
 
   componentDidMount () {
@@ -44,17 +46,27 @@ export default class Ball extends React.Component {
     const { position } = this.props.panels[this.props.selectedPanel]
     const [x, y, z] = position
     const h = Math.sqrt(x * x + z * z)
-    this.targetLongitude = ThreeMath.radToDeg(Math.atan2(x, -z))
 
-    while (this.targetLongitude - this.longitude > 180) {
-      this.targetLongitude -= 360
+    let targetLongitude = ThreeMath.radToDeg(Math.atan2(x, -z))
+
+    while (targetLongitude - this.longitude > 180) {
+      targetLongitude -= 360
     }
 
-    while (this.longitude - this.targetLongitude > 180) {
-      this.targetLongitude += 360
+    while (this.longitude - targetLongitude > 180) {
+      targetLongitude += 360
     }
 
-    this.targetLatitude = ThreeMath.radToDeg(Math.atan2(-y, h))
+    const targetLatitude = ThreeMath.radToDeg(Math.atan2(-y, h))
+
+    if (targetLatitude !== this.targetLatitude || targetLongitude !== this.targetLongitude) {
+      this.targetLatitude = targetLatitude
+      this.targetLongitude = targetLongitude
+      if (!this.animating) {
+        this.animating = true
+        this.tick()
+      }
+    }
   }
 
   windowResizeHandler () {
@@ -69,9 +81,16 @@ export default class Ball extends React.Component {
     this.scenes.push({ scene, camera, renderer })
   }
 
+  imageLoadedHandler () {
+    this.tick()
+  }
+
   tick () {
-    this.latitude += (this.targetLatitude - this.latitude) / 30
-    this.longitude += (this.targetLongitude - this.longitude) / 30
+    const dLat = (this.targetLatitude - this.latitude) / 30
+    const dLon = (this.targetLongitude - this.longitude) / 30
+
+    this.latitude += dLat
+    this.longitude += dLon
     const phi = ThreeMath.degToRad(90 - this.latitude)
     const theta = ThreeMath.degToRad(this.longitude)
     const x = Math.sin(phi) * Math.sin(theta)
@@ -84,7 +103,13 @@ export default class Ball extends React.Component {
       renderer.render(scene, camera)
     }
 
-    window.requestAnimationFrame(this.tick)
+    if (Math.abs(dLat) < 0.001 && Math.abs(dLon) < 0.001) {
+      this.animating = false
+    }
+
+    if (this.animating) {
+      window.requestAnimationFrame(this.tick)
+    }
   }
 
   mouseDownHandler () {
@@ -109,18 +134,22 @@ export default class Ball extends React.Component {
       this.latitude = Math.sign(this.latitude) * 89
     }
     this.targetLatitude = this.latitude
+    this.tick()
+
+    event.preventDefault()
   }
 
   render () {
-    const { userId, players, panels, config } = this.props
+    const { userId, isAdmin, players, panels, config } = this.props
     return (
       <div onMouseDown={this.mouseDownHandler}>
         <BackgroundBall
-          panels={panels}
           onReady={this.ballReadyHandler}
+          onImageLoaded={this.imageLoadedHandler}
         />
         <CssBall
           userId={userId}
+          isAdmin={isAdmin}
           players={players}
           panels={panels}
           config={config}

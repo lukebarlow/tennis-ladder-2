@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 
 import { timeFormat } from 'd3-time-format'
 const formatTimeWithoutYear = timeFormat('%a %-e %b')
@@ -25,7 +25,7 @@ function getPlayerNames (ids, players) {
   return names.join(', ')
 }
 
-export default ({ matches, players }) => {
+export default ({ matches, players, onTopMatchChange, scrollNotifier }) => {
   function ratingMoveCell (match, side) {
     // only show ratings movements for doubles at the moment
     if (!Array.isArray(match.sideA)) {
@@ -38,10 +38,44 @@ export default ({ matches, players }) => {
     )
   }
 
+  const main = useRef(null)
+  const matchesRef = useRef({ matches })
+  // const matchElements = useRef([])
+  const currentTopMatch = useRef(null)
+
+  window.main = main
+
+  matchesRef.current.matches = matches
+
+  useEffect(() => {
+    if (!scrollNotifier) {
+      return
+    }
+    scrollNotifier.on('scroll', (scrollTop) => {
+      // find the top match in the scroll position
+      const matchNodes = Array.from(main.current.childNodes)
+      const matches = matchesRef.current.matches
+      const top = matchNodes.find(e => (e.offsetTop) > scrollTop)
+      const i = matchNodes.indexOf(top)
+      let match = matches[i]
+
+      const date = match.date
+
+      match = matches.find(m => m.date === date)
+      if (match !== currentTopMatch) {
+        currentTopMatch.current = match
+        onTopMatchChange(match)
+      }
+    })
+  }, [scrollNotifier])
+
   return (
-    <span>
+    <span ref={main}>
       {matches.map((match, i) => (
-        <div key={i} className='match'>
+        <div
+          key={i}
+          className='match'
+        >
           {formatTime(new Date(match.date))}
           <table>
             <tbody>

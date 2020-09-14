@@ -11,6 +11,12 @@ import ScoreSelect from './ScoreSelect'
 
 const validSet = ([a, b]) => typeof a === 'number' && typeof b === 'number'
 
+function today () {
+  const d = new Date()
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset())
+  return d.toJSON().slice(0, 10)
+}
+
 export default class NewMatchModal extends React.Component {
   constructor ({ playersPerSide }) {
     super()
@@ -27,6 +33,7 @@ export default class NewMatchModal extends React.Component {
 
   getInitialState (playersPerSide) {
     return {
+      date: new Date(),
       score: [[]],
       sideA: playersPerSide === 1 ? ['USER_ID'] : ['USER_ID', ''],
       sideB: playersPerSide === 1 ? [''] : ['', '']
@@ -102,6 +109,7 @@ export default class NewMatchModal extends React.Component {
           <h1>record a match</h1>
           <br />
           <div className='match'>
+            {/* <input type='date' value={today()} onChange={this.dateSelectHandler()} /> */}
             <table>
               <tbody>
                 <tr>

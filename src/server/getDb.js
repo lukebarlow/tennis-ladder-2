@@ -10,7 +10,7 @@ const matchWinnerAndLoser = require('./matchWinnerAndLoser')
 
 module.exports = (connectionString) => {
   if (!connectionString) {
-    connectionString = require('./config').mongoDbName
+    connectionString = require('./config').mongoDbUri
   }
 
   const db = mongoist(connectionString, { useNewUrlParser: true })
@@ -68,7 +68,7 @@ module.exports = (connectionString) => {
     )
   }
 
-  async function addPlayer (name, password, position, email, otherDetails) {
+  async function addPlayer (name, password, email, otherDetails) {
     // check name is unique
     const existingPlayer = await db.player.findOne({ name: name })
     if (existingPlayer) {
@@ -97,8 +97,74 @@ module.exports = (connectionString) => {
 
     // now insert the player
     const result = await db.player.insert(playerDetails)
-    await moveToSinglesPosition({ name: name }, position)
+    // await moveToSinglesPosition({ name: name }, position)
     return result
+  }
+
+  async function calculateLadderAfterMatch (match, winner, loser) {
+    // this method assumes the match being passed is not yet in the database
+    const day = 1000 * 60 * 60 * 24
+    const lookback = process.env.DAYS_SINCE_PLAYED_CUTOFF_SINGLES * day
+    const dateFilter = { date: { $gt: match.date - lookback } }
+    const previousMatches = db.singlesMatch.findAsCursor(dateFilter)
+      .sort({ date: 1, sideA: 1, sideB: 1 })
+      .toArray()
+
+    // keep track of when each player last played
+    const playedSinceCutoff = new Set()
+    for (const m of previousMatches) {
+      playedSinceCutoff.add(m.sideA)
+      playedSinceCutoff.add(m.sideB)
+    }
+    playedSinceCutoff.add(winner)
+    playedSinceCutoff.add(loser)
+
+    // start with ladder from previous match, then filter and mutate
+    let ladder = previousMatches.slice(-1)[0].ladderAfterMatch
+    ladder = ladder.filter(p => playedSinceCutoff.has(p))
+
+    if (winner && loser) {
+      const i = ladder.indexOf(winner)
+      const j = ladder.indexOf(loser)
+
+      // if neither player is already in the ladder, they enter as
+      // spots 1 and 2
+      if (i === -1 && j === -1) {
+        console.log('BOTH ENTERING')
+        ladder.push(winner)
+        ladder.push(loser)
+      // if just loser is entering, they go one spot below winner
+      } else if (j === -1) {
+        console.log('ADDING LOSER')
+        ladder.splice(i + 1, 0, loser)
+      // if just the winner is entering, they go one spot above the winner
+      } else if (i === -1) {
+        console.log('ADDING WINNER')
+        ladder.splice(j, 0, winner)
+      } else if (i > j) { // both players are in, but winner was lower down
+        console.log('MOVING WINNER UP')
+        ladder.splice(i, 1)
+        ladder.splice(j, 0, winner)
+      } else {
+        console.log('NO CHANGE')
+      }
+    } else {
+      // if new players enter on a draw, then
+      // add them one spot above Luke
+      const i = ladder.indexOf(match.sideA)
+      const j = ladder.indexOf(match.sideB)
+
+      const luke = await this.getPlayer({ name: 'Luke' })
+      const l = ladder.indexOf(luke._id)
+
+      if (i === -1) {
+        ladder.splice(l, 0, match.sideA)
+      }
+      if (j === -1) {
+        ladder.splice(l, 0, match.sideB)
+      }
+    }
+    return ladder
   }
 
   async function getSinglesMatchDetails (match) {
@@ -114,13 +180,20 @@ module.exports = (connectionString) => {
     const { newRatingA, newRatingB, ratingsMoveBy } = eloScoring(
       winnerDetails.singlesRating, loserDetails.singlesRating, 1)
 
+    // get the ladder order by looking at previous matches and
+    // then modifying if necessary. The time cutoff will need
+
+    // get all matches in the cutoff timespan, so we can
+    const ladderAfterMatch = calculateLadderAfterMatch(match, winner, loser)
+
     return {
       winner: winnerDetails,
       loser: loserDetails,
       wonBy,
       winnerNewRating: newRatingA,
       loserNewRating: newRatingB,
-      ratingsMoveBy
+      ratingsMoveBy,
+      ladderAfterMatch
     }
   }
 
@@ -219,7 +292,9 @@ module.exports = (connectionString) => {
   }
 
   async function getRecentSinglesMatches () {
-    return db.singlesMatch.findAsCursor().sort({ date: -1 }).toArray()
+    return db.singlesMatch.findAsCursor()
+      .sort({ date: -1, sideA: -1, sideB: -1 })
+      .toArray()
   }
 
   async function getRecentDoublesMatches () {
@@ -247,11 +322,13 @@ module.exports = (connectionString) => {
       wonBy,
       ratingsMoveBy,
       winnerNewRating,
-      loserNewRating
+      loserNewRating,
+      ladderAfterMatch
     } = await getSinglesMatchDetails(match)
 
     match.wonBy = wonBy
     match.ratingsMoveBy = ratingsMoveBy
+    match.ladderAfterMatch = ladderAfterMatch
 
     await db.singlesMatch.insert(match)
 
@@ -286,8 +363,6 @@ module.exports = (connectionString) => {
     if (winners && losers) {
       await adjustDoublesLadder(winners, losers, ratingsMoveBy)
     }
-
-    // TODO. maybe return the function before sending emails
 
     const players = await getPlayers()
     email.sendEmailsAboutMatch(players, match)
@@ -326,51 +401,39 @@ module.exports = (connectionString) => {
     return db.player.update({ name: name }, { $set: { isAdmin } })
   }
 
+  async function getIsAdmin (userId) {
+    userId = mongoist.ObjectId(userId)
+    const result = await db.player.find({ _id: userId })
+    return (result && result[0]) ? !!result[0].isAdmin : false
+  }
+
   async function getSettings (userId) {
     userId = mongoist.ObjectId(userId)
     const result = await db.player.find({ _id: userId })
-    return (result && result[0] && result[0].settings) || {}
+    return (result && result[0]) ? result[0].settings : {}
   }
 
   async function saveSettings (userId, settings) {
     userId = mongoist.ObjectId(userId)
     return db.player.update({ _id: userId },
-      { $set: { settings: settings }})
+      { $set: { settings: settings } })
   }
 
   async function findSinglesChallengesBetween (idA, idB) {
-    // console.log('query is')
-    // console.log({ $or: [
-    //   {
-    //     challenger: idA,
-    //     challenged: idB,
-    //     resolved: false
-    //   },
-    //   {
-    //     challenger: idB,
-    //     challenged: idA,
-    //     resolved: false
-    //   }
-    // ] })
-
-    // const challenges = await db.singlesChallenge.find({ resolved: false })
-    // console.log('***** challenges ****', challenges.length)
-    // return challenges
-
     return db.singlesChallenge.find({
- $or: [
-      {
-        challenger: idA,
-        challenged: idB,
-        resolved: false
-      },
-      {
-        challenger: idB,
-        challenged: idA,
-        resolved: false
-      }
-    ] 
-})
+      $or: [
+        {
+          challenger: idA,
+          challenged: idB,
+          resolved: false
+        },
+        {
+          challenger: idB,
+          challenged: idA,
+          resolved: false
+        }
+      ]
+    })
   }
 
   async function addSinglesChallenge (challenge) {
@@ -423,6 +486,7 @@ module.exports = (connectionString) => {
     addDoublesMatch,
     setPassword,
     setIsAdmin,
+    getIsAdmin,
     authenticate,
     getRecentSinglesMatches,
     getRecentDoublesMatches,

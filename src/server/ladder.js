@@ -64,19 +64,6 @@ async function addSinglesChallenge (req, res) {
   res.send('true')
 }
 
-// async function addPlayer (req, res) {
-//   var { name, password, position, email } = url.parse(req.url, true).query
-
-//   console.log('adding')
-//   console.log('ame', name)
-//   console.log('password', password)
-//   console.log('position', position)
-//   console.log('email', email)
-
-//   await db.addPlayer(name, password, position, email)
-//   res.send('true')
-// }
-
 async function singlesChallenges (req, res) {
   const challenges = await db.getOutstandingSinglesChallenges()
   res.send(JSON.stringify(challenges || []))

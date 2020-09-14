@@ -38,6 +38,7 @@ app.use('/config', (req, res) => {
 })
 
 app.use('/userId', auth.userId)
+app.use('/userDetails', auth.userDetails)
 app.use('/players', ladder.players)
 
 // app.use('/addPlayer', ladder.addPlayer)
