@@ -44,8 +44,8 @@ app.use('/players', ladder.players)
 // app.use('/addPlayer', ladder.addPlayer)
 app.get('/singlesChallenges', ladder.singlesChallenges)
 
-app.use('/recentSinglesMatches', ladder.recentSinglesMatches)
-app.use('/recentDoublesMatches', ladder.recentDoublesMatches)
+app.use('/singlesMatches', ladder.singlesMatches)
+app.use('/doublesMatches', ladder.doublesMatches)
 
 // app.get('/addSinglesMatch', auth.checkAuth, ladder.addSinglesMatch)
 // app.get('/addDoublesMatch', auth.checkAuth, ladder.addDoublesMatch)

@@ -4,15 +4,12 @@ import css from './Ladder.css'
 
 export default ({ players, userId, cutoff }) => {
   const rungs = Array.from(players)
-    .filter((r) => (
-      r.daysSincePlayedDoubles
-    ))
+    // .filter((player) => (
+    //   player.daysSincePlayedDoubles
+    // ))
     .sort((a, b) => (b.doublesRating || 1200) - (a.doublesRating || 1200))
 
-  const opacity = (rung) => (
-    1
-    // rung.daysSincePlayedDoubles > (cutoff / 2) ? 0.3 : 1
-  )
+  const opacity = (rung) => 1
 
   if (!rungs) {
     return null

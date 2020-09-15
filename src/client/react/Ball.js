@@ -141,6 +141,7 @@ export default class Ball extends React.Component {
 
   render () {
     const { userId, isAdmin, players, panels, config } = this.props
+
     return (
       <div onMouseDown={this.mouseDownHandler}>
         <BackgroundBall

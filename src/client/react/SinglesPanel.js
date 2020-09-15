@@ -37,11 +37,11 @@ export default class SinglesPanel extends React.Component {
 
   async _load () {
     try {
-      const challenges = await json('./singlesChallenges')
-      const matches = await json('./recentSinglesMatches')
+      // const challenges = await json('./singlesChallenges')
+      const matches = await json('./singlesMatches')
       this.setState({
         matches,
-        challenges,
+        // challenges,
         ladder: matches[0]?.ladderAfterMatch,
         error: null
       })

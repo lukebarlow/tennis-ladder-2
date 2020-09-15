@@ -20,7 +20,7 @@ export default class DoublesPanel extends React.Component {
 
   async _load () {
     try {
-      const matches = await json('./recentDoublesMatches')
+      const matches = await json('./doublesMatches')
       this.setState({
         matches,
         error: null
@@ -44,13 +44,23 @@ export default class DoublesPanel extends React.Component {
       return <span style={{ color: 'red' }}>{this.state.error}</span>
     }
 
-    const { userId, players } = this.props
+    let { userId, players } = this.props
 
     if (!players) {
       return ''
     }
 
-    const cutoff = this.props.config.daysSincePlayedCutoffDoubles
+    const idsOfAllDoublesPlayers = new Set()
+    for (const match of this.state.matches) {
+      for (const id of match.sideA) {
+        idsOfAllDoublesPlayers.add(id)
+      }
+      for (const id of match.sideB) {
+        idsOfAllDoublesPlayers.add(id)
+      }
+    }
+
+    players = players.filter(p => idsOfAllDoublesPlayers.has(p._id))
 
     return (
       <div className={css.scrollContainer}>
@@ -60,7 +70,6 @@ export default class DoublesPanel extends React.Component {
             <DoublesLadder
               userId={userId}
               players={players}
-              cutoff={cutoff}
             />
           </div>
           <div className={css.header2}>doubles matches</div>

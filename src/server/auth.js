@@ -20,9 +20,6 @@ function userId (req, res) {
 async function userDetails (req, res) {
   const userId = req.session.userId
   const isAdmin = await db.getIsAdmin(userId)
-
-  console.log('isAdmin is', isAdmin)
-
   res.send({ userId, isAdmin })
 }
 

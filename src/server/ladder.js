@@ -35,9 +35,9 @@ async function addDoublesMatch (req, res) {
   res.send('true')
 }
 
-async function recentSinglesMatches (req, res) {
+async function singlesMatches (req, res) {
   try {
-    const matches = await db.getRecentSinglesMatches()
+    const matches = await db.getSinglesMatches()
     res.send(JSON.stringify(matches))
   } catch (e) {
     console.warn('Error trying to get recent matches')
@@ -47,9 +47,9 @@ async function recentSinglesMatches (req, res) {
   }
 }
 
-async function recentDoublesMatches (req, res) {
+async function doublesMatches (req, res) {
   try {
-    const matches = await db.getRecentDoublesMatches()
+    const matches = await db.getDoublesMatches()
     res.send(JSON.stringify(matches))
   } catch (e) {
     console.warn('Error trying to get recent matches')
@@ -81,8 +81,8 @@ module.exports = {
   // addPlayer: addPlayer,
   addSinglesMatch,
   addDoublesMatch,
-  recentSinglesMatches,
-  recentDoublesMatches,
+  singlesMatches,
+  doublesMatches,
   addSinglesChallenge,
   singlesChallenges
   // invite: invite
