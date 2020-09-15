@@ -16,8 +16,8 @@ export default {
     component: DoublesPanel
   },
   tom: {
-    position: [-0.1, -512, 0.1],
-    rotation: [-Math.PI / 2, 0, Math.PI * 3 / 4],
+    position: [0.1, -512, 0.1],
+    rotation: [-Math.PI / 2, 0, Math.PI * 5 / 4],
     component: TomPanel
   },
   settings: {
