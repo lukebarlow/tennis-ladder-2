@@ -44,7 +44,7 @@ export default class DoublesPanel extends React.Component {
       return <span style={{ color: 'red' }}>{this.state.error}</span>
     }
 
-    let { userId, players } = this.props
+    const { userId, players } = this.props
 
     if (!players) {
       return ''
@@ -60,7 +60,7 @@ export default class DoublesPanel extends React.Component {
       }
     }
 
-    players = players.filter(p => idsOfAllDoublesPlayers.has(p._id))
+    // players = players.filter(p => idsOfAllDoublesPlayers.has(p._id))
 
     return (
       <div className={css.scrollContainer}>
