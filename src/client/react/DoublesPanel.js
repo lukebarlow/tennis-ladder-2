@@ -60,7 +60,7 @@ export default class DoublesPanel extends React.Component {
       }
     }
 
-    // players = players.filter(p => idsOfAllDoublesPlayers.has(p._id))
+    const doublesPlayers = players.filter(p => idsOfAllDoublesPlayers.has(p._id))
 
     return (
       <div className={css.scrollContainer}>
@@ -69,7 +69,7 @@ export default class DoublesPanel extends React.Component {
           <div className={css.body1}>
             <DoublesLadder
               userId={userId}
-              players={players}
+              players={doublesPlayers}
             />
           </div>
           <div className={css.header2}>doubles matches</div>
