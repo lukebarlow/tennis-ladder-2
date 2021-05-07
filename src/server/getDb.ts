@@ -10,7 +10,7 @@ const calculateLadderAfterMatch = require('./calculateLadderAfterMatch')
 
 // the db layer object for tenn16
 
-module.exports = (connectionString) => {
+export default (connectionString: string = null) => {
   if (!connectionString) {
     connectionString = require('./config').mongoDbUri
   }
@@ -207,7 +207,7 @@ module.exports = (connectionString) => {
     if (!date) {
       return null
     }
-    return Math.round((new Date() - new Date(date)) / (1000 * 60 * 60 * 24))
+    return Math.round((new Date().getTime() - new Date(date).getTime()) / (1000 * 60 * 60 * 24))
   }
 
   // gets the players, sorted by ladder position
@@ -234,7 +234,7 @@ module.exports = (connectionString) => {
 
   async function getSinglesMatchesWithinCutoff (before = new Date().getTime()) {
     const day = 1000 * 60 * 60 * 24
-    const lookback = process.env.DAYS_SINCE_PLAYED_CUTOFF_SINGLES * day
+    const lookback = parseInt(process.env.DAYS_SINCE_PLAYED_CUTOFF_SINGLES) * day
     const dateFilter = { date: { $gt: before - lookback } }
     return await db.singlesMatch.findAsCursor(dateFilter)
       .sort({ date: 1, sideA: 1, sideB: 1 })

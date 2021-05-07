@@ -3,7 +3,7 @@
 /* The overall App */
 
 import React from 'react'
-import { text, json } from 'd3-fetch'
+import { json } from 'd3-fetch'
 
 import TopLinks from './TopLinks'
 import Ball from './Ball'
@@ -26,14 +26,14 @@ export default class App extends React.Component {
   }
 
   async init () {
-    const { userId, isAdmin } = await json('./userDetails')
-    const players = await json('./players')
-    const config = await json('./config')
+    const { userId, isAdmin } = await json('/.netlify/functions/userDetails')
+    const players = await json('/.netlify/functions/players')
+    const config = await json('/.netlify/functions/config')
     this.setState({ userId, isAdmin, players, config })
   }
 
   async loginHandler (userId) {
-    const { isAdmin } = await json('./userDetails')
+    const { isAdmin } = await json('/.netlify/functions/userDetails')
     this.setState({ userId, isAdmin })
   }
 
@@ -46,7 +46,7 @@ export default class App extends React.Component {
   }
 
   async changeHandler () {
-    const players = await json('./players')
+    const players = await json('/.netlify/functions/players')
     this.setState({ players })
   }
 

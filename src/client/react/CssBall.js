@@ -12,10 +12,15 @@ import {
   Scene
 } from 'three'
 
+// import {
+//   CSS3DObject,
+//   CSS3DRenderer
+// } from '../CSS3DRenderer'
+
 import {
   CSS3DObject,
   CSS3DRenderer
-} from '../CSS3DRenderer'
+} from 'three/examples/jsm/renderers/CSS3DRenderer'
 
 import css from './CssBall.css'
 

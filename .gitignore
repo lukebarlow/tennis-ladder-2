@@ -5,3 +5,6 @@
 *.env
 /coverage/
 /.vscode/
+
+# Local Netlify folder
+.netlify

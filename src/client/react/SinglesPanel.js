@@ -38,7 +38,8 @@ export default class SinglesPanel extends React.Component {
   async _load () {
     try {
       // const challenges = await json('./singlesChallenges')
-      const matches = await json('./singlesMatches')
+      const matches = await json('/.netlify/functions/singlesMatches')
+      
       this.setState({
         matches,
         // challenges,

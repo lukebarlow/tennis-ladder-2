@@ -20,7 +20,7 @@ export default class DoublesPanel extends React.Component {
 
   async _load () {
     try {
-      const matches = await json('./doublesMatches')
+      const matches = await json('/.netlify/functions/doublesMatches')
       this.setState({
         matches,
         error: null

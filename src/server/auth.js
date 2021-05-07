@@ -41,7 +41,7 @@ async function login (req, res) {
 function logout (req, res) {
   delete req.session.userId
   res.send('true')
-};
+}
 
 async function changePassword (req, res) {
   var post = req.body
