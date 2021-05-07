@@ -216,12 +216,12 @@ export default (connectionString: string = null) => {
     // .sort({ ladderPosition: 1 })
     // .toArray()
 
-    for (const player of players) {
-      player.lastPlayedSingles = await lastPlayedSingles(player._id)
-      player.daysSincePlayedSingles = daysSince(player.lastPlayedSingles)
-      player.lastPlayedDoubles = await lastPlayedDoubles(player._id)
-      player.daysSincePlayedDoubles = daysSince(player.lastPlayedDoubles)
-    }
+    // for (const player of players) {
+    //   player.lastPlayedSingles = await lastPlayedSingles(player._id)
+    //   player.daysSincePlayedSingles = daysSince(player.lastPlayedSingles)
+    //   player.lastPlayedDoubles = await lastPlayedDoubles(player._id)
+    //   player.daysSincePlayedDoubles = daysSince(player.lastPlayedDoubles)
+    // }
 
     return players
   }
