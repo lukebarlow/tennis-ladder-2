@@ -24,7 +24,7 @@ export default class BackgroundBall extends React.Component {
     const geometry = new SphereBufferGeometry(500, 60, 40)
     geometry.scale(-1, 1, 1)
     var material = new MeshBasicMaterial({
-      map: new TextureLoader().load('images/beside-the-court-original.jpg', () => {
+      map: new TextureLoader().load('images/beside-the-court.jpg', () => {
         onImageLoaded()
       })
     })
