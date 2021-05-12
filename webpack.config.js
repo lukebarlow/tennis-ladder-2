@@ -1,5 +1,9 @@
 const { resolve } = require('path')
 const webpack = require('webpack')
+
+// const ThreeMinifierPlugin = require('@yushijinhun/three-minifier-webpack')
+// const threeMinifier = new ThreeMinifierPlugin()
+
 var env = process.env.NODE_ENV
 
 const config = {
@@ -43,6 +47,7 @@ const config = {
   },
 
   plugins: [
+    
     // new webpack.HotModuleReplacementPlugin(),
     // enable HMR globally
 

@@ -12,11 +12,6 @@ import {
   Scene
 } from 'three'
 
-// import {
-//   CSS3DObject,
-//   CSS3DRenderer
-// } from '../CSS3DRenderer'
-
 import {
   CSS3DObject,
   CSS3DRenderer
@@ -33,8 +28,6 @@ export default class CssBall extends React.Component {
 
   componentDidMount () {
     const camera = this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000)
-
-    window.cssCamera = camera
     const scene = this.scene = new Scene()
 
     for (const [name, panel] of Object.entries(this.props.panels)) {
@@ -53,7 +46,10 @@ export default class CssBall extends React.Component {
 
       var object = new CSS3DObject(element)
       object.position.fromArray(panel.position)
-      object.rotation.fromArray(panel.rotation)
+
+      const [ x, y, z] = panel.rotation
+      object.rotation.set(x, y, z, 'YXZ')
+
       scene.add(object)
     }
 

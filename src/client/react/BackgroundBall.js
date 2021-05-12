@@ -1,13 +1,10 @@
 import React from 'react'
 
 import {
-  TextureLoader,
+  CubeTextureLoader,
   WebGLRenderer,
   PerspectiveCamera,
-  Mesh,
-  MeshBasicMaterial,
-  Scene,
-  SphereBufferGeometry
+  Scene
 } from 'three'
 
 export default class BackgroundBall extends React.Component {
@@ -21,16 +18,19 @@ export default class BackgroundBall extends React.Component {
     const container = this.main.current
     const camera = this.camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1100)
     const scene = this.scene = new Scene()
-    const geometry = new SphereBufferGeometry(500, 60, 40)
-    geometry.scale(-1, 1, 1)
-    var material = new MeshBasicMaterial({
-      map: new TextureLoader().load('images/beside-the-court.jpg', () => {
-        onImageLoaded()
-      })
-    })
 
-    const mesh = new Mesh(geometry, material)
-    scene.add(mesh)
+    const loader = new CubeTextureLoader()
+    loader.setPath( 'images/beside-the-court/beside-' )
+
+    const textureCube = loader.load( [ 
+      'pos-x.jpg', 'neg-x.jpg', 
+      'pos-y.jpg', 'neg-y.jpg', 
+      'pos-z.jpg', 'neg-z.jpg' 
+    ], () => {
+      onImageLoaded()
+    } )
+
+    scene.background = textureCube
 
     const renderer = this.renderer = new WebGLRenderer()
     renderer.setPixelRatio(window.devicePixelRatio)

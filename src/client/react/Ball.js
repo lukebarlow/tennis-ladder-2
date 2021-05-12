@@ -19,9 +19,31 @@ import {
 import CssBall from './CssBall'
 import BackgroundBall from './BackgroundBall'
 
+function latitudeAndLogitudeFromPosition(position, currentLongitude) {
+  const [x, y, z] = position
+  const h = Math.sqrt(x * x + z * z)
+
+  let longitude = ThreeMath.radToDeg(Math.atan2(x, -z))
+
+  while (longitude - currentLongitude > 180) {
+    longitude -= 360
+  }
+
+  while (currentLongitude - longitude > 180) {
+    longitude += 360
+  }
+
+  const latitude = ThreeMath.radToDeg(Math.atan2(-y, h))
+
+  return {
+    longitude,
+    latitude
+  }
+}
+
 export default class Ball extends React.Component {
-  constructor () {
-    super()
+  constructor (props) {
+    super(props)
     this.ballReadyHandler = this.ballReadyHandler.bind(this)
     this.tick = this.tick.bind(this)
     this.windowResizeHandler = this.windowResizeHandler.bind(this)
@@ -30,34 +52,33 @@ export default class Ball extends React.Component {
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this)
     this.imageLoadedHandler = this.imageLoadedHandler.bind(this)
     this.scenes = []
-    this.latitude = 0
-    this.longitude = -90
-    this.targetLatitude = 0
-    this.targetLongitude = -90
+
+    const { position } = this.props.panels[this.props.selectedPanel]
+    const { 
+      latitude, 
+      longitude 
+    } = latitudeAndLogitudeFromPosition(position, this.longitude)
+
+    this.latitude = latitude
+    this.longitude = longitude
+    this.targetLatitude = latitude
+    this.targetLongitude = longitude
     this.animating = false
   }
 
   componentDidMount () {
+    
+
     window.addEventListener('resize', this.windowResizeHandler, false)
     this.tick()
   }
 
   componentDidUpdate () {
     const { position } = this.props.panels[this.props.selectedPanel]
-    const [x, y, z] = position
-    const h = Math.sqrt(x * x + z * z)
-
-    let targetLongitude = ThreeMath.radToDeg(Math.atan2(x, -z))
-
-    while (targetLongitude - this.longitude > 180) {
-      targetLongitude -= 360
-    }
-
-    while (this.longitude - targetLongitude > 180) {
-      targetLongitude += 360
-    }
-
-    const targetLatitude = ThreeMath.radToDeg(Math.atan2(-y, h))
+    const { 
+      latitude: targetLatitude, 
+      longitude: targetLongitude 
+    } = latitudeAndLogitudeFromPosition(position, this.longitude)
 
     if (targetLatitude !== this.targetLatitude || targetLongitude !== this.targetLongitude) {
       this.targetLatitude = targetLatitude
@@ -91,7 +112,7 @@ export default class Ball extends React.Component {
 
     this.latitude += dLat
     this.longitude += dLon
-    const phi = ThreeMath.degToRad(90 - this.latitude)
+    const phi = ThreeMath.degToRad(90 + this.latitude)
     const theta = ThreeMath.degToRad(this.longitude)
     const x = Math.sin(phi) * Math.sin(theta)
     const y = Math.cos(phi)
@@ -126,10 +147,10 @@ export default class Ball extends React.Component {
     const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0
     const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0
 
-    this.longitude -= movementX / 5
+    this.longitude -= movementX / 20
     this.targetLongitude = this.longitude
 
-    this.latitude += movementY / 4
+    this.latitude -= movementY / 8
     if (Math.abs(this.latitude) > 89) {
       this.latitude = Math.sign(this.latitude) * 89
     }
