@@ -20,7 +20,7 @@ export default class BackgroundBall extends React.Component {
     const scene = this.scene = new Scene()
 
     const loader = new CubeTextureLoader()
-    loader.setPath( 'images/beside-the-court/beside-' )
+    loader.setPath( 'images/beside-the-court-initial/beside-' )
 
     const textureCube = loader.load( [ 
       'pos-x.jpg', 'neg-x.jpg', 
