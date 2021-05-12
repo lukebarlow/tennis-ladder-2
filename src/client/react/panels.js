@@ -22,7 +22,7 @@ function panelPositionAndRotation (radius, around, up) {
 
 export default {
   singles: {
-    ...panelPositionAndRotation(RADIUS, 45, 15),
+    ...panelPositionAndRotation(RADIUS, 35, 4),
     component: SinglesPanel
   },
   doubles: {
@@ -30,8 +30,6 @@ export default {
     component: DoublesPanel
   },
   tom: {
-    // position: [0.1, 512, 0.1],
-    // rotation: [-Math.PI / 2, 0, Math.PI * 5 / 4],
     ...panelPositionAndRotation(RADIUS, 280, 50),
     component: TomPanel
   },
