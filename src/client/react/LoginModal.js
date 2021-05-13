@@ -51,7 +51,7 @@ export default class LoginModal extends React.Component {
     if (response === 'false') {
       userId = null
     } else {
-      userId = response
+      userId = JSON.parse(response)
     }
 
     if (userId) {
