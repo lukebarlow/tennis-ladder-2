@@ -22,7 +22,7 @@ function panelPositionAndRotation (radius, around, up) {
 
 export default {
   singles: {
-    ...panelPositionAndRotation(RADIUS, 35, 4),
+    ...panelPositionAndRotation(RADIUS, 35, 2),
     component: SinglesPanel
   },
   doubles: {
@@ -30,19 +30,17 @@ export default {
     component: DoublesPanel
   },
   tom: {
-    ...panelPositionAndRotation(RADIUS, 280, 50),
+    ...panelPositionAndRotation(RADIUS, 280, 65),
     component: TomPanel
   },
-  // settings: {
-  //   position: [0, -512, 0.1],
-  //   rotation: [Math.PI / 2, 0, Math.PI],
-  //   component: SettingsPanel,
-  //   visibleIf: ({ userId }) => userId
-  // },
-  // admin: {
-  //   position: [0, 0, 512],
-  //   rotation: [0, Math.PI, 0],
-  //   component: AdminPanel,
-  //   visibleIf: ({ isAdmin }) => isAdmin
-  // }
+  settings: {
+    ...panelPositionAndRotation(RADIUS, -90, -11),
+    component: SettingsPanel,
+    visibleIf: ({ userId }) => userId
+  },
+  admin: {
+    ...panelPositionAndRotation(RADIUS, 0, -89),
+    component: AdminPanel,
+    visibleIf: ({ isAdmin }) => isAdmin
+  }
 }

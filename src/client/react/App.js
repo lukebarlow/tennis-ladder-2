@@ -62,6 +62,11 @@ export default class App extends React.Component {
           selectedPanel={selectedPanel}
           players={players}
           onChange={this.changeHandler}
+          onDrag={() => {
+            if (selectedPanel) {
+              this.goToHandler(null)
+            }
+          }}
         />
         <TopLinks
           userId={userId}

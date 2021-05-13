@@ -1,3 +1,9 @@
+import * as _getDb from '../src/server/getDb'
+
+const getDb = _getDb.default
+
+console.log('get db is', getDb)
+
 let { _, name, password, email } = require('minimist')(process.argv.slice(2))
 
 name = name || _[0]
@@ -11,7 +17,7 @@ if (!name || !password || !email) {
 
 require('dotenv').config()
 
-const db = require('../src/server/getDb')()
+const db = getDb()
 
 db.addPlayer(name, password, email).then(() => {
   process.exit()

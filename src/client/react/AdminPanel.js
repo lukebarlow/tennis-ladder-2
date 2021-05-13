@@ -7,18 +7,22 @@ function useInput (options) {
   const input = (
     <input value={value} onChange={e => setValue(e.target.value)} type={type} />
   )
-  return [value, input]
+  return [value, input, setValue]
 }
 
 export default function () {
-  const [name, nameInput] = useInput()
-  const [password, passwordInput] = useInput()
-  const [email, emailInput] = useInput()
+  const [name, nameInput, setName] = useInput()
+  const [password, passwordInput, setPassword] = useInput()
+  const [email, emailInput, setEmail] = useInput()
 
   async function addPlayer () {
-    const url = `./addPlayer?name=${name}&password=${password}&email=${email}`
+    const url = `.netlify/functions/addPlayer?name=${name}&password=${password}&email=${email}`
     const result = await text(url)
     console.log('result is', result)
+    setName('')
+    setPassword('')
+    setEmail('')
+
   }
 
   return (

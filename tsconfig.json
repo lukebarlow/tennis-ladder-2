@@ -14,5 +14,5 @@
   "include": [
     "src/**/*.ts",
     "netlify/functions/**/*.ts"
-  ]
+, "src/server/getDb.js"  ]
 }

@@ -33,6 +33,7 @@ export default class CssBall extends React.Component {
     for (const [name, panel] of Object.entries(this.props.panels)) {
       var element = document.createElement('div')
       element.setAttribute('class', css.card)
+
       if (panel.component) {
         this.panelRenderings.push({
           name,
@@ -68,9 +69,20 @@ export default class CssBall extends React.Component {
 
   renderAllPanels () {
     for (const { component, element, panel } of this.panelRenderings) {
-      render(React.createElement(component, this.props), element)
-      if (panel.visibleIf) {
-        element.style.display = panel.visibleIf(this.props) ? 'block' : 'none'
+
+      if (!panel.visibleIf || panel.visibleIf(this.props)) {
+        render(React.createElement(component, this.props), element)
+      }
+      
+      if (panel.visibleIf && !panel.visibleIf(this.props)) {
+        element.classList.add(css.hidden)
+        // console.log('checking panel visibility')
+        // console.log(panel.visibleIf)
+        // console.log(this.props)
+        // console.log('display is', panel.visibleIf(this.props) ? 'block' : 'none')
+        // element.style.display = panel.visibleIf(this.props) ? 'block' : 'none'
+      } else {
+        element.classList.remove(css.hidden)
       }
     }
   }

@@ -57,7 +57,7 @@ export default class SinglesPanel extends React.Component {
   }
 
   async addMatchHandler (match) {
-    await json(`./addSinglesMatch?match=${JSON.stringify(match)}`)
+    await json(`.netlify/functions/addSinglesMatch?match=${JSON.stringify(match)}`)
     this.props.onChange()
     await this._load()
   }

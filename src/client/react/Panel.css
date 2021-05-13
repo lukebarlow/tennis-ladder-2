@@ -16,9 +16,9 @@
 .body {
   grid-area: body;
   overflow-y: scroll;
+  overflow-x: clip;
   -webkit-overflow-scrolling: touch;
 }
-
 
 @media only screen and (max-width: 600px) {
   .body {
@@ -27,6 +27,7 @@
 
   .scrollContainer {
     overflow-y: scroll;
+    overflow-x: clip;
     -webkit-overflow-scrolling: touch;
   }
 }

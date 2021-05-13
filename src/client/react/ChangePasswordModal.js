@@ -31,10 +31,10 @@ export default class LoginModal extends React.Component {
       newPassword: this.newPassword1.value
     }
 
-    const response = await text('changePassword', {
+    const response = await text('.netlify/functions/changePassword', {
       headers: { 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       method: 'POST',
-      body: encodeForPost(data)
+      body: JSON.stringify(data)
     })
 
     if (response === 'true') {

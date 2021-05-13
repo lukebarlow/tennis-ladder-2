@@ -67,25 +67,25 @@ export default class Ball extends React.Component {
   }
 
   componentDidMount () {
-    
-
     window.addEventListener('resize', this.windowResizeHandler, false)
     this.tick()
   }
 
-  componentDidUpdate () {
-    const { position } = this.props.panels[this.props.selectedPanel]
-    const { 
-      latitude: targetLatitude, 
-      longitude: targetLongitude 
-    } = latitudeAndLogitudeFromPosition(position, this.longitude)
+  componentDidUpdate (prevProps) {
+    if (prevProps.selectedPanel !== this.props.selectedPanel && this.props.selectedPanel) {
+      const { position } = this.props.panels[this.props.selectedPanel]
+      const { 
+        latitude: targetLatitude, 
+        longitude: targetLongitude 
+      } = latitudeAndLogitudeFromPosition(position, this.longitude)
 
-    if (targetLatitude !== this.targetLatitude || targetLongitude !== this.targetLongitude) {
-      this.targetLatitude = targetLatitude
-      this.targetLongitude = targetLongitude
-      if (!this.animating) {
-        this.animating = true
-        this.tick()
+      if (targetLatitude !== this.targetLatitude || targetLongitude !== this.targetLongitude) {
+        this.targetLatitude = targetLatitude
+        this.targetLongitude = targetLongitude
+        if (!this.animating) {
+          this.animating = true
+          this.tick()
+        }
       }
     }
   }
@@ -144,6 +144,10 @@ export default class Ball extends React.Component {
   }
 
   mouseMoveHandler (event) {
+    if (this.props.onDrag) {
+      this.props.onDrag()
+    }
+    
     const movementX = event.movementX || event.mozMovementX || event.webkitMovementX || 0
     const movementY = event.movementY || event.mozMovementY || event.webkitMovementY || 0
 

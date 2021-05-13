@@ -35,6 +35,7 @@
 
 .body1, .body2 {
   overflow-y: scroll;
+  overflow-x: clip;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -45,6 +46,7 @@
 
   .scrollContainer {
     overflow-y: scroll;
+    overflow-x: clip;
     -webkit-overflow-scrolling: touch;
   }
 

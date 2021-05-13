@@ -7,6 +7,7 @@ const eloScoring = require('./eloScoring')
 const matchWinnerAndLoser = require('./matchWinnerAndLoser')
 const getMatchName = require('./getMatchName')
 const calculateLadderAfterMatch = require('./calculateLadderAfterMatch')
+const { tokenMaxAge } = require('./config')
 
 // the db layer object for tenn16
 
@@ -319,6 +320,42 @@ export default (connectionString: string = null) => {
     return result.length > 0 ? result[0]._id.toString() : false
   }
 
+  const now = () => Date.now() / 1000
+
+  async function addSession (userId, token) {
+    return db.session.insert({
+      userId,
+      token,
+      lastTouched: now()
+    })
+  }
+
+  async function deleteOldSessions () {
+    const cutoff = now() - tokenMaxAge
+    db.session.remove({
+      lastTouched: { $lt: cutoff }
+    })
+  }
+
+  async function deleteSession (id) {
+    db.session.remove({
+      _id: id
+    })
+  }
+
+  async function findSession (token) {
+    // delete old sessions first
+    const result = await db.session.findOne({ token })
+    return result
+  }
+
+  async function updateSession (id) {
+    return db.session.update(
+      { _id: id }, 
+      { $set: { lastTouched: now() }}
+    )
+  }
+
   async function changePassword (userId, oldPassword, newPassword) {
     // first we check the auth
     userId = mongoist.ObjectId(userId)
@@ -445,7 +482,12 @@ export default (connectionString: string = null) => {
     getSettings,
     dropDatabase,
     close,
-    hashPassword
+    hashPassword,
+    addSession,
+    deleteOldSessions,
+    deleteSession,
+    findSession,
+    updateSession
     // checkForExpiredChallenges,
     // addSinglesChallenge,
     // getOutstandingSinglesChallenges,

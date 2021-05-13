@@ -34,7 +34,7 @@ export default class DoublesPanel extends React.Component {
   }
 
   async addMatchHandler (match) {
-    await json(`./addDoublesMatch?match=${JSON.stringify(match)}`)
+    await json(`.netlify/functions/addDoublesMatch?match=${JSON.stringify(match)}`)
     this.props.onChange()
     await this._load()
   }

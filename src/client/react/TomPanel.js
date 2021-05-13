@@ -16,8 +16,7 @@ export default function () {
             <img src='images/smythe-piggott-2015.jpg' style={{ width: '80%', alignSelf: 'center' }} />
           </center>
           <p>
-            We will be organising a doubles tennis tournament on a Sunday
-            around Tom's birthday in May 2021. All those interested please
+            We will be organising a doubles tennis tournament on a weekend in the summer of 2021. All those interested please
             drop me an email at <span>luke.bar</span>low@gm<span>ail.com</span>
           </p>
           Jem wrote the following about Tom<br />

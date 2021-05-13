@@ -40,10 +40,10 @@ export default class LoginModal extends React.Component {
       password: this.passwordInput.value
     }
 
-    const response = await text('login', {
+    const response = await text('/.netlify/functions/login', {
       headers: { 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       method: 'POST',
-      body: encodeForPost(data)
+      body: JSON.stringify(data)
     })
 
     let userId

@@ -7,8 +7,6 @@ var THREE = require('three')
 
 window.THREE = THREE
 
-debugger
-
 function CSS3DObject (element) {
   THREE.Object3D.call(this)
 

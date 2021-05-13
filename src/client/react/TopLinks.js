@@ -31,7 +31,7 @@ export default class TopLinks extends React.Component {
   }
 
   async logoutHandler () {
-    await text('logout')
+    await text('.netlify/functions/logout')
     this.props.onLogout()
   }
 

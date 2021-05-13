@@ -33,13 +33,11 @@ export default class SettingsPanel extends React.Component {
       return
     }
     user.settings.email = this.email.value
-    const data = { settings: JSON.stringify(user.settings) }
-
     this.setState({ saving: true })
-    await text('saveSettings', {
+    await text('.netlify/functions/saveSettings', {
       headers: { 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
       method: 'POST',
-      body: encodeForPost(data)
+      body: JSON.stringify(user.settings)
     })
     setTimeout(() => {
       this.setState({ saving: false })

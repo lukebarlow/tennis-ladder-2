@@ -10,6 +10,10 @@
   min-width: 300px;
 }
 
+.hidden {
+  display: none;
+}
+
 @media only screen and (orientation: portrait) and (max-width: 800px)  {
   .card {
     width: calc(100% - 300px);

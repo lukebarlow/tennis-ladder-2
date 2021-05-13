@@ -1,8 +1,7 @@
+import { Handler } from '@netlify/functions'
 import getDb from '../../src/server/getDb'
 
-
-// Docs on event and context https://www.netlify.com/docs/functions/#the-handler-method
-const handler = async (event) => {
+const handler: Handler = async (event) => {
   try {
     const db = getDb()
     const result = await db.getPlayers()
