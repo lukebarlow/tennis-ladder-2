@@ -6,11 +6,10 @@ import getDb from '../../src/server/getDb'
 
 const handler : Handler = async (event) => {
   const db = getDb()
-  const cookies = cookie.parse(event.headers.cookie)
+  const cookies = cookie.parse(event.headers.cookie || '')
   const token = cookies[tokenCookieName]
   await db.deleteOldSessions()
   const session = await db.findSession(token)
-  // check if this token is still good
 
   if (session) {
     await db.updateSession(session._id)
