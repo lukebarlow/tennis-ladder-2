@@ -4,11 +4,16 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 var config = require('./config')
 
 async function sendEmailsAboutMatch (players, match) {
-  const playersToSendTo = players.filter((player) => (
-    player.settings.emailAnyMatch ||
-    (player.settings.emailMyMatch && (player._id.equals(match.playerA._id) || player._id.equals(match.playerB._id)))
-  ))
+  const playersToSendTo = players
+    .filter(player => !!player.settings.email)
+    .filter(player => (
+      player.settings.emailAnyMatch ||
+      (player.settings.emailMyMatch && (player._id.equals(match.playerA._id) || player._id.equals(match.playerB._id)))
+    ))
   
+  console.log('emails to send to')
+  console.log(playersToSendTo.map(p => p.settings.email))
+
   for (let player of playersToSendTo) {
     await sendMatchReport(player, match, players)
   }
@@ -37,23 +42,15 @@ async function sendMatchReport (player, match, players) {
     console.log(`No email address for ${player.name}, so cannot send match`)
   }
 
-  console.log('Would send email to ', player.name, player.settings.email)
+  var emailDetails = {
+    from: config.email.sender,
+    to: player.settings.email,
+    subject: config.siteName + ' : ' + matchString(match, players),
+    text: ' ',
+    html: body()
+  }
 
-  // var emailDetails = {
-  //   from: config.email.sender,
-  //   // to: player.settings.email,
-  //   to: 'luke.barlow@gmail.com',
-  //   subject: config.siteName + ' : ' + matchString(match, players),
-  //   text: ' ',
-  //   html: body()
-  // }
-
-  // try {
-  // const result = await sgMail.send(emailDetails)
-  // console.log('sgMail result is', result)
-  // } catch (e) {
-  //   console.log('failed to send email', e)
-  // }
+  await sgMail.send(emailDetails)
 }
 
 async function sendTestEmail (email, text = '') {

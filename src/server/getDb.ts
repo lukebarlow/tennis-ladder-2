@@ -286,7 +286,7 @@ export default (connectionString: string = null) => {
 
     // TODO. maybe return the function before sending emails
     const players = await getPlayers()
-    email.sendEmailsAboutMatch(players, match)
+    await email.sendEmailsAboutMatch(players, match)
     return match
   }
 
