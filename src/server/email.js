@@ -8,6 +8,7 @@ async function sendEmailsAboutMatch (players, match) {
     player.settings.emailAnyMatch ||
     (player.settings.emailMyMatch && (player._id.equals(match.playerA._id) || player._id.equals(match.playerB._id)))
   ))
+  console.log('going to send to players', playersToSendTo)
   await Promise.all(playersToSendTo.map((player) => (
     sendMatchReport(player, match, players)
   )))
@@ -39,7 +40,8 @@ async function sendMatchReport (player, match, players) {
 
   var emailDetails = {
     from: config.email.sender,
-    to: player.settings.email,
+    // to: player.settings.email,
+    to: 'luke.barlow@gmail.com',
     subject: config.siteName + ' : ' + matchString(match, players),
     text: ' ',
     html: body()
@@ -50,6 +52,17 @@ async function sendMatchReport (player, match, players) {
   } catch (e) {
     console.log('failed to send email', e)
   }
+}
+
+async function sendTestEmail (email, text = '') {
+  const emailDetails = {
+    from: 'Tenn16 <tenn16@gmail.com>',
+    to: email,
+    subject: 'test email from tenn16 : ' + text,
+    text: 'this is a test',
+    html: 'html body'
+  }
+  await sgMail.send(emailDetails)
 }
 
 function body () {
@@ -135,7 +148,9 @@ function contactDetailsHtml (player) {
 }
 
 module.exports = {
-  sendEmailsAboutChallenge: sendEmailsAboutChallenge,
-  sendEmailsAboutMatch: sendEmailsAboutMatch
+  sendEmailsAboutChallenge,
+  sendEmailsAboutMatch,
+  sendTestEmail
+
   // sendInvitationEmails: sendInvitationEmails
 }

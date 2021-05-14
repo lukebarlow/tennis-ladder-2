@@ -16,7 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@netlify/functions": "^0.7.2",
-    "@sendgrid/mail": "^6.5.5",
+    "@sendgrid/mail": "^7.4.4",
     "@types/react": "^16.9.48",
     "@yushijinhun/three-minifier-webpack": "^0.3.0-alpha.0",
     "async": "^3.2.0",
