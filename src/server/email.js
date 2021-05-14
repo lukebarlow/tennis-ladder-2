@@ -37,20 +37,20 @@ async function sendMatchReport (player, match, players) {
     console.log(`No email address for ${player.name}, so cannot send match`)
   }
 
-  console.log('Sending email to ', player.name, player.settings.email)
+  console.log('Would send email to ', player.name, player.settings.email)
 
-  var emailDetails = {
-    from: config.email.sender,
-    // to: player.settings.email,
-    to: 'luke.barlow@gmail.com',
-    subject: config.siteName + ' : ' + matchString(match, players),
-    text: ' ',
-    html: body()
-  }
+  // var emailDetails = {
+  //   from: config.email.sender,
+  //   // to: player.settings.email,
+  //   to: 'luke.barlow@gmail.com',
+  //   subject: config.siteName + ' : ' + matchString(match, players),
+  //   text: ' ',
+  //   html: body()
+  // }
 
   // try {
-  const result = await sgMail.send(emailDetails)
-  console.log('sgMail result is', result)
+  // const result = await sgMail.send(emailDetails)
+  // console.log('sgMail result is', result)
   // } catch (e) {
   //   console.log('failed to send email', e)
   // }
