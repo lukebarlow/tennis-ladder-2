@@ -3,7 +3,6 @@
 import React from 'react'
 import Matches from './Matches'
 import NewMatchModal from './NewMatchModal'
-import MatchStats from './MatchStats'
 
 export default class SinglesMatches extends React.Component {
   constructor () {
@@ -37,11 +36,15 @@ export default class SinglesMatches extends React.Component {
 
     if (selectedPlayers?.length) {
       const ids = selectedPlayers.map(p => p._id)
-      matches = matches.filter(m => {
-        return ids.every(id => (
-          id === m.sideA || id === m.sideB
+      for (let match of matches) {
+        match.defocussed = !ids.every(id => (
+          id === match.sideA || id === match.sideB
         ))
-      })
+      }
+    } else {
+      for (let match of matches) {
+        match.defocussed = false
+      }
     }
 
     if (!matches) {
@@ -56,11 +59,6 @@ export default class SinglesMatches extends React.Component {
                 <br />
               </>
             )
-          }
-          {
-            selectedPlayers?.length ? (
-              <MatchStats {... { players, matches, selectedPlayers }} />)
-              : null
           }
           <Matches
             matches={matches}

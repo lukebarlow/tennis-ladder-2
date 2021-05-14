@@ -74,7 +74,7 @@ export default ({ matches, players, onTopMatchChange, scrollNotifier }) => {
       {matches.map((match, i) => (
         <div
           key={i}
-          className='match'
+          className={'match ' + (match.defocussed ? 'defocussed' : '')}
         >
           {formatTime(new Date(match.date))}
           <table>

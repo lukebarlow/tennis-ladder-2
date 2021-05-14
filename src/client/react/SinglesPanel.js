@@ -7,6 +7,7 @@ import { timeFormat } from 'd3-time-format'
 
 import SinglesLadder from './SinglesLadder'
 import MatchesPanel from './MatchesPanel'
+import MatchStats from './MatchStats'
 
 import css from './TwoPartPanel.css'
 
@@ -115,6 +116,11 @@ export default class SinglesPanel extends React.Component {
               matches && topMatch && topMatch !== matches[0] && (
                 <div style={{ paddingTop: 0, paddingBottom: 10 }}>(as of {formatTimeWithYear(new Date(topMatch.date))})</div>
               )
+            }
+            {
+            selectedPlayers?.length ? (
+              <MatchStats {... { players, matches, selectedPlayers }} />)
+              : null
             }
             <SinglesLadder
               ladder={(topMatch || matches?.[0])?.ladderAfterMatch}

@@ -26,7 +26,7 @@ export default function ({ players, selectedPlayers, matches }) {
     const { win, lose, draw } = winLoseDraw(player, matches)
     return (
       <div className={css.stats}>
-        {player.name} has played {matches.length} {matchNoun}<br />
+        <div style={{fontWeight: 400}}>{player.name}</div> has played {matches.length} {matchNoun}<br />
         {win} wins, {lose} losses and {draw} draws.
       </div>
     )
@@ -37,7 +37,7 @@ export default function ({ players, selectedPlayers, matches }) {
     const { win, lose, draw } = winLoseDraw(p1, matches)
     return (
       <div className={css.stats}>
-        {p1.name} v {p2.name}<br />
+        <div style={{fontWeight: 400}}>{p1.name} v {p2.name}</div>
         {matches.length} {matchNoun}<br />
         {p1.name} {win}, {p2.name} {lose}, with {draw} draws
       </div>
