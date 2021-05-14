@@ -8,10 +8,10 @@ async function sendEmailsAboutMatch (players, match) {
     player.settings.emailAnyMatch ||
     (player.settings.emailMyMatch && (player._id.equals(match.playerA._id) || player._id.equals(match.playerB._id)))
   ))
-  console.log('going to send to players', playersToSendTo)
-  await Promise.all(playersToSendTo.map((player) => (
-    sendMatchReport(player, match, players)
-  )))
+  
+  for (let player of playersToSendTo) {
+    await sendMatchReport(player, match, players)
+  }
 }
 
 function playerName (id, players) {
@@ -34,9 +34,10 @@ function matchString (match, players) {
 
 async function sendMatchReport (player, match, players) {
   if (!player.settings.email) {
-    console.log('No email address, so cannot send match report to ' + player.name)
-    console.log(player)
+    console.log(`No email address for ${player.name}, so cannot send match`)
   }
+
+  console.log('Sending email to ', player.name, player.settings.email)
 
   var emailDetails = {
     from: config.email.sender,
@@ -47,16 +48,17 @@ async function sendMatchReport (player, match, players) {
     html: body()
   }
 
-  try {
-    await sgMail.send(emailDetails)
-  } catch (e) {
-    console.log('failed to send email', e)
-  }
+  // try {
+  const result = await sgMail.send(emailDetails)
+  console.log('sgMail result is', result)
+  // } catch (e) {
+  //   console.log('failed to send email', e)
+  // }
 }
 
 async function sendTestEmail (email, text = '') {
   const emailDetails = {
-    from: 'Tenn16 <tenn16@gmail.com>',
+    from: config.email.sender,
     to: email,
     subject: 'test email from tenn16 : ' + text,
     text: 'this is a test',
