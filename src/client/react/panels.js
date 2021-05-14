@@ -34,12 +34,12 @@ export default {
     component: TomPanel
   },
   settings: {
-    ...panelPositionAndRotation(RADIUS, -90, -11),
+    ...panelPositionAndRotation(RADIUS, 0, -89),
     component: SettingsPanel,
     visibleIf: ({ userId }) => userId
   },
   admin: {
-    ...panelPositionAndRotation(RADIUS, 0, -89),
+    ...panelPositionAndRotation(RADIUS, -90, -11),
     component: AdminPanel,
     visibleIf: ({ isAdmin }) => isAdmin
   }

@@ -67,7 +67,7 @@ export default class SettingsLadder extends React.Component {
     //   return challenge ? daysToPlay(challenge.date) : false
     // }
 
-    const user = rungs.find((r) => r._id === userId)
+    // const user = rungs.find((r) => r._id === userId)
     // const userPosition = rungs.indexOf(user)
     if (!rungs) {
       return null
@@ -77,7 +77,7 @@ export default class SettingsLadder extends React.Component {
           {rungs.map((rung, i) => {
             const style = {
               opacity: opacity(rung),
-              fontWeight: rung === user ? '400' : 'inherit'
+              // fontWeight: rung === user ? '400' : 'inherit'
             }
             // const challengeDays = getChallengeDays(rung)
             return (

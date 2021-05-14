@@ -107,19 +107,28 @@ export default class SinglesPanel extends React.Component {
     }
 
     const cutoff = this.props.config.daysSincePlayedCutoffSingles
+    const historical = matches && topMatch && topMatch !== matches[0]
+
     return (
       <div className={css.scrollContainer}>
         <div className={css.twoColumns}>
           <div className={css.header1}>singles ladder</div>
           <div className={css.body1}>
             {
-              matches && topMatch && topMatch !== matches[0] && (
+              historical && (
                 <div style={{ paddingTop: 0, paddingBottom: 10 }}>(as of {formatTimeWithYear(new Date(topMatch.date))})</div>
               )
             }
             {
             selectedPlayers?.length ? (
-              <MatchStats {... { players, matches, selectedPlayers }} />)
+                <MatchStats 
+                  asOfDate={historical ? topMatch.date : null} 
+                  onClose={() => {
+                    this.setState({ selectedPlayers: [] })
+                  }}
+                  {... { matches, selectedPlayers }} 
+                />
+              )
               : null
             }
             <SinglesLadder
